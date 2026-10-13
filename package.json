@@ -1,0 +1,15 @@
+{
+  "name": "wangyao-asset",
+  "version": "1.0.0",
+  "private": true,
+  "description": "วังยาว • ทะเบียนสิ่งของ ซ่อม ยืมคืน (Google Apps Script + Vercel)",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "check": "node test/check.js",
+    "test": "node test/check.js && node test/backend.test.js",
+    "test:ui": "node test/ui.test.js",
+    "dev": "node test/server.js"
+  }
+}
