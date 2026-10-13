@@ -1,0 +1,2064 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f3f4ff">
+<title>วังยาว • ทะเบียนสิ่งของ ซ่อม ยืมคืน</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23a8e8d2'/%3E%3Cpath d='M46 16C26 16 16 28 16 44c0 2 1 4 2 4 6-14 14-20 24-24-8 6-14 13-18 24 18 0 24-14 22-32z' fill='%231f4a42'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.all.min.js" integrity="sha384-YB/DdIkloKoRpclWB8bNcYXWakt57USgtQPDzvnIDHYU0lasD5eWlXVo1S4ODukY" crossorigin="anonymous"></script>
+<script>
+  // สำรอง: CDN แรกโหลดไม่ได้ ลอง unpkg (ไฟล์เดียวกัน SRI เดียวกัน) ถ้ายังไม่ได้จะใช้ป๊อปอัปสำรองในหน้า
+  if (!window.Swal) document.write('<script src="https://unpkg.com/sweetalert2@11.14.5/dist/sweetalert2.all.min.js" integrity="sha384-YB/DdIkloKoRpclWB8bNcYXWakt57USgtQPDzvnIDHYU0lasD5eWlXVo1S4ODukY" crossorigin="anonymous"><\/script>');
+</script>
+<style>
+:root{
+  --ink:#3a3956; --muted:#7a7896; --muted-text:#5f5d7c;
+  --mint:#c9f2e3; --mint-ink:#1f7a5c; --mint-chip:#1b6e53;
+  --peach:#ffe8d4; --peach-ink:#b4601c; --peach-chip:#8f4a12;
+  --lav:#ece4ff; --lav-ink:#6d52c9;
+  --sky:#dcefff; --sky-ink:#2f6fa8; --sky-chip:#285f92;
+  --pink:#ffe1ec; --pink-ink:#c4456f; --pink-chip:#a3355b;
+  --butter:#fff3c6; --butter-chip:#7a5b00;
+  --gray:#efeef6; --gray-chip:#55536f;
+  --btn:linear-gradient(135deg,#a8e8d2,#a9d6fb); --btn-ink:#1f4a42;
+  --card:#ffffffd9; --line:#e6e3f3; --shadow:0 10px 30px -12px rgba(109,82,201,.22),0 2px 6px rgba(109,82,201,.06);
+  --r:22px; --focus:0 0 0 4px #d9ccff;
+  --side:264px;
+}
+*{box-sizing:border-box}
+html{font-size:14px}
+body{margin:0;font-family:'Prompt',system-ui,sans-serif;font-size:14px;color:var(--ink);min-height:100vh;
+  background:linear-gradient(135deg,#fff3f8 0%,#f3f4ff 50%,#ecfbf4 100%) fixed;line-height:1.55}
+body::before,body::after{content:"";position:fixed;z-index:-1;width:46vmax;height:46vmax;border-radius:50%;filter:blur(70px);opacity:.55;pointer-events:none}
+body::before{top:-18vmax;left:-14vmax;background:radial-gradient(circle,#ffd6e7,transparent 65%)}
+body::after{bottom:-20vmax;right:-14vmax;background:radial-gradient(circle,#c9f2e3,transparent 65%)}
+a{color:var(--lav-ink)}
+h1,h2,h3{margin:0;font-weight:600;color:var(--ink)}
+h1{font-size:22px}h2{font-size:18px}h3{font-size:15px}
+.muted{color:var(--muted-text)}
+.small{font-size:12.5px}
+.hidden{display:none!important}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:none;box-shadow:var(--focus);border-radius:12px}
+
+/* ปุ่ม */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:0 18px;border-radius:14px;border:0;cursor:pointer;
+  background:var(--btn);color:var(--btn-ink);font-weight:500;transition:transform .15s,box-shadow .15s;box-shadow:0 6px 16px -8px rgba(47,111,168,.45);white-space:nowrap;text-decoration:none}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 20px -8px rgba(47,111,168,.5)}
+.btn:active{transform:none}
+.btn:disabled{opacity:.55;cursor:not-allowed;transform:none}
+.btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line);box-shadow:none}
+.btn.lav{background:var(--lav);color:#4b3a91;box-shadow:none}
+.btn.pink{background:var(--pink);color:var(--pink-chip);box-shadow:none}
+.btn.peach{background:var(--peach);color:var(--peach-chip);box-shadow:none}
+.btn.sm{min-height:36px;padding:0 12px;border-radius:12px;font-size:13px}
+.btn.block{width:100%}
+.btn .ico{font-size:16px;line-height:1}
+.linkbtn{background:none;border:0;color:var(--lav-ink);cursor:pointer;padding:6px 4px;min-height:36px;text-decoration:underline;text-underline-offset:3px}
+
+/* การ์ด */
+.card{background:var(--card);backdrop-filter:blur(8px);border-radius:var(--r);box-shadow:var(--shadow);padding:18px;border:1px solid #ffffffb0}
+.grid{display:grid;gap:16px}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.spread{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.stack>*+*{margin-top:14px}
+
+/* ฟอร์ม */
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.field label{font-size:13px;font-weight:500;color:var(--ink)}
+.field .help{font-size:12px;color:var(--muted-text)}
+.input,select.input,textarea.input{width:100%;min-height:44px;padding:9px 13px;border-radius:14px;border:1px solid var(--line);background:#fff;transition:border .15s,box-shadow .15s}
+textarea.input{min-height:88px;resize:vertical}
+.input:focus{outline:none;border-color:#b9a6f3;box-shadow:var(--focus)}
+.req::after{content:" *";color:var(--pink-chip)}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.form-grid .full{grid-column:1/-1}
+.check{display:flex;gap:8px;align-items:center;min-height:44px;cursor:pointer}
+.check input{width:20px;height:20px;accent-color:#6d52c9}
+
+/* ชิป */
+.chip{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:999px;font-size:12.5px;font-weight:500;white-space:nowrap}
+.c-mint{background:var(--mint);color:var(--mint-chip)}.c-peach{background:var(--peach);color:var(--peach-chip)}
+.c-lav{background:var(--lav);color:var(--lav-ink)}.c-sky{background:var(--sky);color:var(--sky-chip)}
+.c-pink{background:var(--pink);color:var(--pink-chip)}.c-butter{background:var(--butter);color:var(--butter-chip)}
+.c-gray{background:var(--gray);color:var(--gray-chip)}
+
+/* ตาราง */
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:16px;border:1px solid var(--line);background:#fff}
+table.t{width:100%;border-collapse:collapse;min-width:640px}
+table.t th{background:#f6f3ff;text-align:left;font-weight:500;font-size:13px;padding:10px 12px;color:var(--ink);white-space:nowrap;position:sticky;top:0}
+table.t td{padding:10px 12px;border-top:1px solid #f0edf8;vertical-align:top}
+table.t tr.click{cursor:pointer}
+table.t tr.click:hover td{background:#faf8ff}
+table.t td.num,table.t th.num{text-align:right;white-space:nowrap}
+.code{font-family:ui-monospace,Consolas,monospace;font-size:12.5px;color:#4b3a91}
+.empty{padding:28px;text-align:center;color:var(--muted-text)}
+.pager{display:flex;gap:6px;align-items:center;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+
+/* โครงหน้า */
+#login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px 16px}
+.login-card{width:100%;max-width:420px;background:#ffffffcc;backdrop-filter:blur(12px);border-radius:28px;box-shadow:var(--shadow);padding:30px 26px;border:1px solid #fff}
+.logo{width:64px;height:64px;border-radius:20px;background:linear-gradient(135deg,#a8e8d2,#a9d6fb);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;box-shadow:0 10px 24px -10px rgba(47,111,168,.5)}
+.logo svg{width:36px;height:36px}
+.login-card h1{text-align:center}
+.login-card .sub{text-align:center;color:var(--muted-text);margin:4px 0 20px}
+.login-links{display:flex;justify-content:space-between;margin-top:10px;flex-wrap:wrap}
+#gbtn{display:flex;justify-content:center;margin-top:12px}
+
+#app{display:flex;min-height:100vh}
+#side{width:var(--side);flex:0 0 var(--side);padding:18px 14px;position:sticky;top:0;height:100vh;overflow-y:auto;background:#ffffff8c;backdrop-filter:blur(10px);border-right:1px solid #ffffffc0;z-index:40}
+.brand{display:flex;gap:10px;align-items:center;padding:4px 8px 18px}
+.brand .logo{width:42px;height:42px;border-radius:14px;margin:0}
+.brand .logo svg{width:24px;height:24px}
+.brand b{display:block;font-size:15px}
+.brand span{font-size:12px;color:var(--muted-text)}
+.nav a{display:flex;align-items:center;gap:10px;min-height:44px;padding:0 12px;border-radius:14px;color:var(--ink);text-decoration:none;margin-bottom:3px;transition:background .15s}
+.nav a:hover{background:#f6f3ff}
+.nav a.on{background:linear-gradient(135deg,#ece4ff,#dcefff);font-weight:500;box-shadow:inset 0 0 0 1px #fff}
+.nav .ic{width:22px;text-align:center;font-size:16px}
+.nav .badge{margin-left:auto;background:var(--pink);color:var(--pink-chip);border-radius:999px;font-size:12px;padding:1px 8px;font-weight:600}
+.nav .sep{font-size:11.5px;color:var(--muted-text);margin:14px 12px 6px;letter-spacing:.3px}
+#main{flex:1;min-width:0;display:flex;flex-direction:column}
+.topbar{display:flex;align-items:center;gap:12px;padding:14px 24px;position:sticky;top:0;z-index:30;background:#ffffffa6;backdrop-filter:blur(10px);border-bottom:1px solid #ffffffc0}
+.topbar h1{font-size:18px;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.who{display:flex;align-items:center;gap:8px}
+.who .name{font-weight:500}
+.avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#ffe1ec,#ece4ff);display:flex;align-items:center;justify-content:center;font-weight:600;color:#6d52c9}
+#menuBtn{display:none}
+.statusbar{display:flex;gap:14px;align-items:center;padding:7px 24px;font-size:12.5px;color:var(--muted-text);flex-wrap:wrap}
+.statusbar .dot{width:8px;height:8px;border-radius:50%;background:#46c29a;display:inline-block;margin-right:4px}
+.statusbar .dot.off{background:#e35d8a}
+#page{padding:8px 24px 40px;flex:1}
+.page-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:10px 0 16px;flex-wrap:wrap}
+.filters{display:grid;grid-template-columns:2fr repeat(4,minmax(0,1fr));gap:10px;margin-bottom:14px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.tab{min-height:40px;padding:0 14px;border-radius:12px;border:1px solid var(--line);background:#fff;cursor:pointer}
+.tab.on{background:linear-gradient(135deg,#ece4ff,#dcefff);border-color:#fff;font-weight:500}
+.tab .n{display:inline-block;margin-left:4px;background:#fff;border-radius:999px;padding:0 7px;font-size:12px}
+
+/* แดชบอร์ด */
+.stat{cursor:pointer;transition:transform .15s;border:0;text-align:left;width:100%}
+.stat:hover{transform:translateY(-3px)}
+.stat .k{font-size:13px;color:var(--muted-text)}
+.stat .v{font-size:30px;font-weight:600;line-height:1.2;margin-top:6px}
+.stat .ic{float:right;width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:20px}
+.donut-wrap{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.donut{width:170px;height:170px;border-radius:50%;position:relative;flex:0 0 170px}
+.donut::after{content:"";position:absolute;inset:34px;background:#fff;border-radius:50%}
+.donut .c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1;font-size:12px;color:var(--muted-text)}
+.donut .c b{font-size:22px;color:var(--ink)}
+.legend button{display:flex;align-items:center;gap:8px;border:0;background:none;cursor:pointer;min-height:32px;padding:0 6px;border-radius:10px;width:100%}
+.legend button:hover{background:#f6f3ff}
+.legend i{width:12px;height:12px;border-radius:4px;display:inline-block}
+.bars button{display:grid;grid-template-columns:120px 1fr 44px;gap:10px;align-items:center;width:100%;border:0;background:none;cursor:pointer;min-height:34px;padding:0 4px;border-radius:10px;text-align:left}
+.bars button:hover{background:#f6f3ff}
+.bars .bar{height:14px;border-radius:8px;background:linear-gradient(90deg,#c3b2f5,#9cc9f2)}
+.bars .lbl{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.list-item{display:flex;gap:10px;align-items:flex-start;padding:10px 4px;border-top:1px solid #f0edf8;cursor:pointer;border-radius:10px}
+.list-item:first-child{border-top:0}
+.list-item:hover{background:#faf8ff}
+.list-item .grow{flex:1;min-width:0}
+
+/* โมดอลฟอร์ม */
+.modal-back{position:fixed;inset:0;background:rgba(58,57,86,.28);backdrop-filter:blur(3px);z-index:1000;display:flex;align-items:flex-start;justify-content:center;padding:4vh 16px;overflow-y:auto}
+.modal{background:#fff;border-radius:24px;box-shadow:0 30px 60px -20px rgba(58,57,86,.35);width:100%;max-width:640px;margin:auto 0;animation:pop .18s ease}
+.modal.wide{max-width:920px}
+@keyframes pop{from{transform:translateY(10px);opacity:0}}
+.modal-h{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid #f0edf8;gap:10px}
+.modal-b{padding:18px 22px}
+.modal-f{display:flex;gap:10px;justify-content:flex-end;padding:14px 22px 20px;flex-wrap:wrap}
+.xbtn{width:44px;height:44px;border-radius:14px;border:0;background:#f6f3ff;cursor:pointer;font-size:20px;color:var(--ink)}
+.kv{display:grid;grid-template-columns:140px 1fr;gap:6px 14px}
+.kv dt{color:var(--muted-text)}
+.kv dd{margin:0;min-width:0;overflow-wrap:anywhere}
+.timeline{border-left:3px solid #ece4ff;margin-left:6px;padding-left:14px}
+.timeline .ev{position:relative;padding:4px 0 10px}
+.timeline .ev::before{content:"";position:absolute;left:-21px;top:9px;width:11px;height:11px;border-radius:50%;background:#c3b2f5;border:2px solid #fff}
+.files{display:flex;gap:8px;flex-wrap:wrap}
+.qrbox{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.qrbox svg{width:132px;height:132px;background:#fff;border-radius:12px;padding:4px;border:1px solid var(--line)}
+.picker{position:relative}
+.picker-row{display:flex;gap:8px}
+.picker-res{position:absolute;left:0;right:0;top:48px;background:#fff;border-radius:14px;box-shadow:var(--shadow);border:1px solid var(--line);z-index:5;max-height:280px;overflow:auto}
+.picker-res:empty{display:none}
+.picker-res button{display:block;width:100%;text-align:left;border:0;background:none;padding:9px 12px;min-height:44px;cursor:pointer;border-top:1px solid #f4f2fb}
+.picker-res button:hover{background:#f6f3ff}
+.picker-sel{margin-top:6px}
+.lines td .input{min-height:38px;padding:6px 10px}
+video.scan{width:100%;border-radius:16px;background:#222;max-height:50vh}
+.toast-fallback{position:fixed;top:16px;right:16px;z-index:3000;display:flex;flex-direction:column;gap:8px}
+.toast-fallback div{background:#fff;border-radius:14px;box-shadow:var(--shadow);padding:10px 16px;border-left:5px solid #a8e8d2}
+
+/* SweetAlert2 ธีมพาสเทล */
+.swal2-popup{font-family:'Prompt',sans-serif!important;border-radius:24px!important;color:var(--ink)!important;padding-bottom:1.4em!important}
+.swal2-title{color:var(--ink)!important;font-size:1.3em!important;font-weight:600!important}
+.swal2-html-container{color:var(--muted-text)!important;font-size:1em!important}
+.swal2-styled.swal2-confirm{background:var(--btn)!important;color:var(--btn-ink)!important;border-radius:14px!important;min-height:44px;font-weight:500!important;box-shadow:0 6px 16px -8px rgba(47,111,168,.45)!important}
+.swal2-styled.swal2-cancel{background:var(--lav)!important;color:#4b3a91!important;border-radius:14px!important;min-height:44px}
+.swal2-styled.swal2-deny{background:var(--pink)!important;color:var(--pink-chip)!important;border-radius:14px!important;min-height:44px}
+.swal2-styled:focus{box-shadow:var(--focus)!important}
+.swal2-popup.swal-error{background:#fff5f8!important;border:2px solid #ffd0e0}
+.swal2-popup.swal-error .swal2-title{color:var(--pink-chip)!important}
+.swal2-input,.swal2-textarea,.swal2-select{border-radius:14px!important;border:1px solid var(--line)!important;font-family:'Prompt',sans-serif!important}
+.swal2-toast{border-radius:16px!important}
+.swal2-loader{border-color:#a9d6fb transparent #a8e8d2 transparent!important}
+.busy-sub{font-size:13px;color:var(--peach-chip);min-height:18px}
+.swal2-container{z-index:2000!important}
+.swal2-container.swal2-backdrop-show{background:rgba(109,82,201,.16)!important;backdrop-filter:blur(2px)}
+.fb-back{position:fixed;inset:0;background:rgba(58,57,86,.3);z-index:2500;display:flex;align-items:center;justify-content:center;padding:16px}
+.fb-box{background:#fff;border-radius:22px;max-width:420px;width:100%;padding:22px;text-align:center;box-shadow:var(--shadow)}
+.fb-box.err{background:#fff5f8}
+.fb-box .fb-btns{display:flex;gap:8px;justify-content:center;margin-top:16px}
+
+@media (max-width:1100px){.g4{grid-template-columns:repeat(2,minmax(0,1fr))}.filters{grid-template-columns:1fr 1fr}}
+@media (max-width:900px){
+  #side{position:fixed;left:0;top:0;transform:translateX(-105%);transition:transform .2s;box-shadow:var(--shadow);background:#fffffff2}
+  body.nav-open #side{transform:none}
+  body.nav-open::after{content:"";position:fixed;inset:0;background:rgba(58,57,86,.25);z-index:35;filter:none;opacity:1;width:auto;height:auto;border-radius:0}
+  #menuBtn{display:inline-flex}
+  .topbar{padding:10px 16px}.statusbar{padding:6px 16px}#page{padding:6px 16px 32px}
+  .who .name,.who .role{display:none}
+  .g3,.g2{grid-template-columns:1fr}
+}
+@media (max-width:600px){
+  .g4{grid-template-columns:1fr 1fr}.form-grid{grid-template-columns:1fr}.filters{grid-template-columns:1fr}
+  .kv{grid-template-columns:1fr}.kv dt{margin-top:6px}
+  .modal-back{padding:0}.modal{border-radius:22px 22px 0 0;margin-top:auto;min-height:60vh}
+  .stat .v{font-size:24px}
+  .topbar .btn .txt{display:none}
+}
+@media print{#side,.topbar,.statusbar{display:none}}
+</style>
+</head>
+<body>
+<div id="login" class="hidden">
+  <div class="login-card">
+    <div class="logo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M18.5 4.5C10 4.5 5.5 9.5 5.5 16c0 1 .4 2 .9 2.2 2.4-5.6 5.6-8.2 9.6-9.8-3.2 2.4-5.6 5.3-7.2 9.8 7.6.2 10.4-5.8 9.7-13.7z" fill="#1f4a42"/></svg></div>
+    <h1 id="loginTitle">วังยาว</h1>
+    <p class="sub" id="loginSub">ทะเบียนสิ่งของ แจ้งซ่อม และยืมคืน</p>
+    <div id="loginBody"></div>
+  </div>
+</div>
+
+<div id="app" class="hidden">
+  <aside id="side" aria-label="เมนูหลัก">
+    <div class="brand">
+      <div class="logo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M18.5 4.5C10 4.5 5.5 9.5 5.5 16c0 1 .4 2 .9 2.2 2.4-5.6 5.6-8.2 9.6-9.8-3.2 2.4-5.6 5.3-7.2 9.8 7.6.2 10.4-5.8 9.7-13.7z" fill="#1f4a42"/></svg></div>
+      <div><b id="bizName">วังยาว</b><span>ทะเบียนสิ่งของและงานซ่อม</span></div>
+    </div>
+    <nav class="nav" id="nav"></nav>
+  </aside>
+  <div id="main">
+    <header class="topbar">
+      <button class="btn ghost sm" id="menuBtn" aria-label="เปิดเมนู">☰</button>
+      <h1 id="pageTitle">ภาพรวม</h1>
+      <div class="who">
+        <div class="avatar" id="avatar">ว</div>
+        <div><div class="name" id="meName"></div><div class="role small muted" id="meRole"></div></div>
+      </div>
+      <button class="btn ghost sm" data-act="change-password" title="เปลี่ยนรหัสผ่าน"><span class="ico">🔑</span><span class="txt">เปลี่ยนรหัสผ่าน</span></button>
+      <button class="btn lav sm" data-act="logout" title="ออกจากระบบ"><span class="ico">⎋</span><span class="txt">ออกจากระบบ</span></button>
+    </header>
+    <div class="statusbar">
+      <span><span class="dot" id="netDot"></span><span id="netText">ออนไลน์</span></span>
+      <span id="dataAt">ข้อมูลล่าสุด -</span>
+      <span id="latency">ตอบสนอง -</span>
+      <button class="linkbtn" data-act="refresh">รีเฟรช</button>
+    </div>
+    <main id="page"></main>
+  </div>
+</div>
+<div id="modalRoot"></div>
+<script>
+'use strict';
+/* =====================================================================
+ * วังยาว • หน้าเว็บไฟล์เดียว
+ * ข้อมูลทั้งหมดมาจาก state ชุดเดียว (ได้ตอนล็อกอิน / ทุกการบันทึก) เปลี่ยนหน้าไม่เรียกเซิร์ฟเวอร์
+ * ===================================================================== */
+const TZ = 'Asia/Bangkok';
+const $ = (s, el = document) => el.querySelector(s);
+const $$ = (s, el = document) => Array.from(el.querySelectorAll(s));
+const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const num = (v) => { const n = Number(String(v == null ? '' : v).replace(/,/g, '')); return isFinite(n) ? n : 0; };
+const rid = () => Array.from(crypto.getRandomValues(new Uint8Array(12)), (b) => b.toString(16).padStart(2, '0')).join('');
+const debounce = (fn, ms) => { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; };
+const todayStr = () => new Intl.DateTimeFormat('en-CA', { timeZone: TZ }).format(new Date());
+const addDays = (n) => new Intl.DateTimeFormat('en-CA', { timeZone: TZ }).format(new Date(Date.now() + n * 86400000));
+const toDate = (v) => (/^\d{4}-\d{2}-\d{2}$/.test(v) ? new Date(v + 'T00:00:00+07:00') : new Date(v));
+const fmtD = (v) => { if (!v) return '-'; const d = toDate(v); return isNaN(d) ? '-' : d.toLocaleDateString('th-TH', { timeZone: TZ, day: 'numeric', month: 'short', year: 'numeric' }); };
+const fmtDT = (v) => { if (!v) return '-'; const d = toDate(v); return isNaN(d) ? '-' : d.toLocaleString('th-TH', { timeZone: TZ, day: 'numeric', month: 'short', year: '2-digit', hour: '2-digit', minute: '2-digit' }); };
+const fmtT = (v) => { const d = toDate(v); return isNaN(d) ? '-' : d.toLocaleTimeString('th-TH', { timeZone: TZ, hour: '2-digit', minute: '2-digit' }); };
+const dayOf = (v) => (v ? new Intl.DateTimeFormat('en-CA', { timeZone: TZ }).format(toDate(v)) : '');
+const money = (v) => (v === '' || v == null ? '-' : num(v).toLocaleString('th-TH', { maximumFractionDigits: 2 }));
+const thMonth = (ym) => { const [y, m] = ym.split('-'); return new Date(Number(y), Number(m) - 1, 15).toLocaleDateString('th-TH', { month: 'long', year: 'numeric' }); };
+
+const COND = { READY: ['พร้อมใช้', 'mint'], IN_USE: ['ใช้งานอยู่', 'sky'], DAMAGED: ['ชำรุด', 'pink'], REPAIRING: ['ส่งซ่อม', 'peach'], LOANED: ['ถูกยืม', 'lav'], PENDING_DISPOSAL: ['รอจำหน่าย', 'butter'], DISPOSED: ['จำหน่ายแล้ว', 'gray'] };
+const COND_COLOR = { READY: '#8fdcc0', IN_USE: '#9cc9f2', DAMAGED: '#f5a3bf', REPAIRING: '#ffc79a', LOANED: '#c3b2f5', PENDING_DISPOSAL: '#f3dc85', DISPOSED: '#cfcde0' };
+const RST = { ASSESS: ['รอประเมิน', 'sky'], APPROVAL: ['รออนุมัติ', 'butter'], REPAIR: ['กำลังซ่อม', 'peach'], ACCEPT: ['รอตรวจรับ', 'lav'], DONE: ['เสร็จสิ้น', 'mint'], REJECT: ['ไม่อนุมัติ', 'gray'] };
+const LST = { OPEN: ['กำลังยืม', 'sky'], PARTIAL: ['คืนบางส่วน', 'peach'], RETURNED: ['คืนครบ', 'mint'], OVERDUE: ['เกินกำหนด', 'pink'] };
+const DST = { PENDING: ['รออนุมัติ', 'butter'], APPROVED: ['อนุมัติแล้ว', 'mint'], REJECTED: ['ไม่อนุมัติ', 'gray'] };
+const USTAT = { ACTIVE: ['ใช้งาน', 'mint'], PENDING: ['รออนุมัติ', 'butter'], INACTIVE: ['ปิดใช้งาน', 'gray'] };
+const NST = { PENDING: ['รอส่ง', 'butter'], SENDING: ['กำลังส่ง', 'sky'], SENT: ['ส่งแล้ว', 'mint'], FAILED: ['ล้มเหลว', 'pink'], UNKNOWN: ['ไม่ทราบผล', 'peach'] };
+const MKIND = { RECEIVE: 'รับเข้า', MOVE: 'ย้าย', LOAN: 'ยืม', RETURN: 'คืน', SPLIT: 'แยกล็อต', DISPOSE: 'จำหน่าย' };
+const CKIND = { PARTS: 'ค่าอะไหล่', LABOR: 'ค่าแรง', OUTSOURCE: 'จ้างภายนอก', OTHER: 'อื่นๆ', VOID: 'ยกเลิก' };
+const LKIND = { STORE: 'คลัง', BUILDING: 'อาคาร', FLOOR: 'ชั้น', ROOM: 'ห้อง', AREA: 'พื้นที่' };
+const OKIND = { groups: 'หมวด', units: 'หน่วย', brands: 'ยี่ห้อ', reasons: 'เหตุผลจำหน่าย', departments: 'แผนก' };
+const chip = (map, v) => { const x = map[v] || [v || '-', 'gray']; return `<span class="chip c-${x[1]}">${esc(x[0])}</span>`; };
+
+/* ---------------------------------------------------------------- SweetAlert2 + สำรอง */
+if (!window.Swal) {
+  // ป๊อปอัปสำรองเมื่อโหลด SweetAlert2 จาก CDN ไม่ได้
+  const FB = (() => {
+    let cur = null;
+    const close = () => { if (cur) { cur.el.remove(); cur = null; } };
+    const toastEl = () => { let b = $('.toast-fallback'); if (!b) { b = document.createElement('div'); b.className = 'toast-fallback'; document.body.appendChild(b); } return b; };
+    const fire = (o = {}) => new Promise((resolve) => {
+      if (typeof o === 'string') o = { title: o };
+      if (o.toast) {
+        const d = document.createElement('div'); d.textContent = o.title || o.text || ''; toastEl().appendChild(d);
+        setTimeout(() => d.remove(), o.timer || 2500); return resolve({ isConfirmed: true });
+      }
+      close();
+      const el = document.createElement('div'); el.className = 'fb-back';
+      const input = o.input ? (o.input === 'textarea' ? '<textarea class="input fb-in"></textarea>' : o.input === 'select'
+        ? `<select class="input fb-in">${Object.entries(o.inputOptions || {}).map(([k, v]) => `<option value="${esc(k)}">${esc(v)}</option>`).join('')}</select>`
+        : `<input class="input fb-in" type="${o.input === 'number' ? 'number' : o.input === 'password' ? 'password' : 'text'}">`) : '';
+      el.innerHTML = `<div class="fb-box ${o.customClass && o.customClass.popup === 'swal-error' ? 'err' : ''}" role="dialog"><h2 class="fb-title">${esc(o.title || '')}</h2>
+        <div class="muted" style="margin-top:8px">${o.html || esc(o.text || '')}</div>${o.inputLabel ? `<div style="margin-top:10px;text-align:left">${esc(o.inputLabel)}</div>` : ''}${input}
+        <div class="fb-btns">${o.showConfirmButton === false ? '' : `<button class="btn fb-ok">${esc(o.confirmButtonText || 'ตกลง')}</button>`}${o.showCancelButton ? `<button class="btn lav fb-no">${esc(o.cancelButtonText || 'ยกเลิก')}</button>` : ''}</div></div>`;
+      document.body.appendChild(el);
+      cur = { el };
+      const inEl = $('.fb-in', el); if (inEl && o.inputValue != null) inEl.value = o.inputValue;
+      const ok = $('.fb-ok', el), no = $('.fb-no', el);
+      if (ok) ok.onclick = async () => {
+        let v = inEl ? inEl.value : true;
+        if (o.inputValidator) { const m = await o.inputValidator(v); if (m) { alert(m); return; } }
+        if (o.preConfirm) { const r = await o.preConfirm(v); if (r === false) return; if (r !== undefined) v = r; }
+        close(); resolve({ isConfirmed: true, value: v });
+      };
+      if (no) no.onclick = () => { close(); resolve({ isConfirmed: false, isDismissed: true }); };
+      if (o.didOpen) o.didOpen(el);
+      if (o.timer) setTimeout(() => { if (cur && cur.el === el) { close(); resolve({ isConfirmed: false, isDismissed: true }); } }, o.timer);
+    });
+    return { fire, close, isVisible: () => !!cur, showLoading() { }, getTitle: () => (cur ? $('.fb-title', cur.el) : null), getHtmlContainer: () => (cur ? cur.el : null),
+      mixin: (d) => ({ fire: (o) => fire(Object.assign({}, d, typeof o === 'string' ? { title: o } : o)) }), showValidationMessage: (m) => alert(m), isLoading: () => false };
+  })();
+  window.Swal = FB;
+  window.__swalFallback = true;
+}
+const Toast = Swal.mixin({ toast: true, position: 'top-end', showConfirmButton: false, timer: 2200, timerProgressBar: true });
+const toast = (title, icon = 'success') => Toast.fire({ icon, title });
+let busyTimer = null;
+function busy(text) {
+  clearTimeout(busyTimer);
+  Swal.fire({ title: text, html: '<div class="busy-sub"></div>', allowOutsideClick: false, allowEscapeKey: false, showConfirmButton: false, didOpen: () => Swal.showLoading() });
+  busyTimer = setTimeout(() => { const s = $('.busy-sub'); if (s) s.textContent = 'ระบบยังทำงานอยู่ กรุณาอย่าปิดหน้านี้'; }, 8000);
+}
+function busyStep(text) { const t = Swal.getTitle && Swal.getTitle(); if (t) t.textContent = text; }
+function done(title) { clearTimeout(busyTimer); return Swal.fire({ icon: 'success', title, timer: 1800, showConfirmButton: false }); }
+function failBox(e) {
+  clearTimeout(busyTimer);
+  const code = e && e.code;
+  if (code === 'E_AUTH') return sessionExpired(e.message);
+  if (code === 'E_MUSTCHANGE') { Swal.close(); return changePassword(true); }
+  return Swal.fire({ icon: 'error', title: 'ทำรายการไม่สำเร็จ', text: (e && e.message) || 'เกิดข้อผิดพลาด', confirmButtonText: 'ตกลง', customClass: { popup: 'swal-error' } });
+}
+async function confirmBox(title, text, o = {}) {
+  const r = await Swal.fire(Object.assign({
+    icon: o.icon || 'question', title, text, showCancelButton: true, confirmButtonText: o.confirmText || 'ยืนยัน', cancelButtonText: 'ยกเลิก', reverseButtons: true, focusCancel: !!o.danger
+  }, o.input ? { input: o.input, inputLabel: o.inputLabel, inputValue: o.inputValue == null ? '' : o.inputValue, inputOptions: o.inputOptions, inputAttributes: o.inputAttributes,
+    inputValidator: (v) => (o.required && !String(v || '').trim() ? (o.requiredText || 'กรุณากรอกข้อมูล') : null) } : {}));
+  return r.isConfirmed ? { ok: true, value: r.value } : { ok: false };
+}
+
+/* ---------------------------------------------------------------- API */
+const API = {
+  token: sessionStorage.getItem('wy_token') || '',
+  setToken(t) { this.token = t || ''; if (t) sessionStorage.setItem('wy_token', t); else sessionStorage.removeItem('wy_token'); },
+  async post(body, isForm) {
+    const t0 = performance.now();
+    let res, j;
+    try {
+      res = await fetch('/api', { method: 'POST', headers: isForm ? {} : { 'Content-Type': 'application/json' }, body: isForm ? body : JSON.stringify(body), credentials: 'same-origin' });
+    } catch (e) {
+      throw Object.assign(new Error(navigator.onLine ? 'เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ กรุณาลองใหม่อีกครั้ง' : 'ไม่มีการเชื่อมต่ออินเทอร์เน็ต'), { code: 'E_NET' });
+    }
+    try { j = await res.json(); } catch (e) { throw Object.assign(new Error('เซิร์ฟเวอร์ตอบกลับผิดปกติ (HTTP ' + res.status + ')'), { code: 'E_NET' }); }
+    setLatency(performance.now() - t0);
+    if (!j.ok) throw Object.assign(new Error((j.error && j.error.message) || 'เกิดข้อผิดพลาด'), { code: (j.error && j.error.code) || 'E_SERVER' });
+    return j.data;
+  },
+  call(method, payload) { return this.post({ method, payload: payload || {} }); },
+  api(action, payload, requestId) { return this.post({ method: 'api', token: this.token, action, payload: payload || {}, requestId: requestId || rid(), rev: S.rev }); }
+};
+function setLatency(ms) { const el = $('#latency'); if (el) el.textContent = 'ตอบสนอง ' + (ms / 1000).toFixed(1) + ' วินาที'; }
+
+/* ---------------------------------------------------------------- State */
+const S = { rev: '', me: null, perms: {}, settings: {}, t: {}, idx: {}, at: null, memo: {} };
+const T = (n) => S.t[n] || [];
+function byId(n, id) { if (!id) return null; let m = S.idx[n]; if (!m) { m = new Map(T(n).map((x) => [x.id, x])); S.idx[n] = m; } return m.get(id) || null; }
+function memo(key, fn) { if (!(key in S.memo)) S.memo[key] = fn(); return S.memo[key]; }
+function applyState(st) {
+  if (!st) return;
+  if (!st.partial) S.t = {};
+  Object.entries(st.tables || {}).forEach(([n, tb]) => {
+    const rows = tb.r.map((r) => { const o = {}; tb.h.forEach((c, i) => { o[c] = r[i]; }); return o; });
+    if (st.delta && S.t[n]) {
+      const pos = new Map(S.t[n].map((x, i) => [x.id, i]));
+      rows.forEach((o) => { if (pos.has(o.id)) S.t[n][pos.get(o.id)] = o; else S.t[n].push(o); });
+    } else S.t[n] = rows;
+  });
+  S.rev = st.rev; S.me = st.me; S.perms = st.perms || {}; S.settings = st.settings || {};
+  S.at = new Date(); S.idx = {}; S.memo = {};
+  updateChrome();
+}
+const P = () => S.perms || {};
+const uname = (id) => { const u = byId('Users', id); return u ? u.name : (id === 'system' ? 'ระบบ' : '-'); };
+const locName = (id) => { const l = byId('Locations', id); return l ? l.name : (id ? '-' : '-'); };
+const locPath = (id) => { const l = byId('Locations', id); if (!l) return '-'; const p = l.parent && byId('Locations', l.parent); return p ? p.name + ' › ' + l.name : l.name; };
+const roleName = (id) => { const r = byId('Roles', id); return r ? r.name : id; };
+function optList(kind, includeInactive) {
+  return T('Options').filter((o) => o.kind === kind && (includeInactive || String(o.active).toUpperCase() === 'TRUE')).sort((a, b) => num(a.sortOrder) - num(b.sortOrder));
+}
+function optLabel(kind, v) {
+  if (!v) return '';
+  const map = memo('opt:' + kind, () => { const m = {}; optList(kind, true).forEach((o) => { m[o.label] = o.label; (safeJson(o.aliases) || []).forEach((a) => { if (!m[a]) m[a] = o.label; }); }); return m; });
+  return map[v] || v;
+}
+const safeJson = (s) => { try { return JSON.parse(s); } catch (e) { return null; } };
+function descendants(id) { const out = [id]; for (let i = 0; i < out.length; i++) T('Locations').forEach((l) => { if (l.parent === out[i] && !out.includes(l.id)) out.push(l.id); }); return out; }
+const activeLocs = () => memo('locs', () => T('Locations').filter((l) => String(l.active).toUpperCase() === 'TRUE').sort((a, b) => locPath(a.id).localeCompare(locPath(b.id), 'th')));
+const techs = () => T('Users').filter((u) => u.status === 'ACTIVE' && (u.role === 'TECH'));
+const activeUsers = () => T('Users').filter((u) => u.status === 'ACTIVE').sort((a, b) => a.name.localeCompare(b.name, 'th'));
+const isOpenRepair = (r) => ['ASSESS', 'APPROVAL', 'REPAIR', 'ACCEPT'].includes(r.status);
+const openRepairOf = (assetId) => T('Repairs').find((r) => r.asset === assetId && isOpenRepair(r));
+const pendingDisposalOf = (assetId) => T('Disposals').find((d) => (d.asset === assetId || d.disposedAsset === assetId) && d.status === 'PENDING');
+const isAvailable = (a) => num(a.qty) > 0 && !a.loan && ['READY', 'IN_USE', 'DAMAGED'].includes(a.condition);
+const loanOverdue = (l) => l.status !== 'RETURNED' && l.due && l.due < todayStr();
+const loanStatus = (l) => (loanOverdue(l) ? 'OVERDUE' : l.status);
+const assetLabel = (a) => (a ? `${a.name} (${a.code})` : '-');
+const qtyText = (a) => (a.type === 'QUANTITY' ? `${num(a.qty).toLocaleString('th-TH')} ${a.unit || ''}` : `1 ${a.unit || 'ชิ้น'}`);
+
+/* ---------------------------------------------------------------- การทำรายการที่เขียนข้อมูล */
+/**
+ * act: กล่องโหลดระหว่างทำงาน -> ส่งคำขอ (requestId กันซ้ำ) -> อัปเดต state จากคำตอบ (ไม่ refetch) -> อัปโหลดไฟล์ -> ป๊อปอัปสำเร็จ
+ */
+async function act(action, payload, o = {}) {
+  const requestId = rid();
+  busy(o.loading || 'กำลังบันทึกข้อมูล…');
+  try {
+    const r = await API.api(action, payload, requestId);
+    applyState(r.state);
+    const files = o.files || [];
+    if (files.length && o.entity) {
+      const entityId = typeof o.entityId === 'function' ? o.entityId(r.data) : o.entityId;
+      for (let i = 0; i < files.length; i++) {
+        busyStep(`กำลังอัปโหลดไฟล์ ${i + 1} / ${files.length}…`);
+        const st = await uploadFile(o.entity, entityId, files[i]);
+        if (st) applyState(st);
+      }
+    }
+    busyStep('บันทึกสำเร็จ กำลังอัปเดตข้อมูลล่าสุด…');
+    render(true);
+    if (o.close !== false) closeModal();
+    if (o.toast) { clearTimeout(busyTimer); Swal.close(); toast(o.success || 'บันทึกเรียบร้อย'); }
+    else await done(o.success || 'บันทึกเรียบร้อย');
+    if (o.after) o.after(r.data);
+    return r.data || {};
+  } catch (e) {
+    failBox(e);
+    return null;
+  }
+}
+
+/* ---------------------------------------------------------------- ไฟล์: บีบอัดภาพ + อัปโหลดแบบแบ่งส่วน */
+const PART = 2500000;
+async function compressImage(file) {
+  const maxPx = num(S.settings.imageMaxPx) || 1440, target = (num(S.settings.imageTargetKB) || 250) * 1024, hard = 512 * 1024;
+  let img;
+  try { img = await createImageBitmap(file); } catch (e) {
+    img = await new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = () => rej(new Error('อ่านไฟล์ภาพไม่ได้')); i.src = URL.createObjectURL(file); });
+  }
+  const w0 = img.width, h0 = img.height;
+  let edge = Math.min(maxPx, Math.max(w0, h0)), q = 0.86, best = null;
+  for (let i = 0; i < 12; i++) {
+    const s = edge / Math.max(w0, h0), cv = document.createElement('canvas');
+    cv.width = Math.max(1, Math.round(w0 * s)); cv.height = Math.max(1, Math.round(h0 * s));
+    const cx = cv.getContext('2d'); cx.fillStyle = '#fff'; cx.fillRect(0, 0, cv.width, cv.height); cx.drawImage(img, 0, 0, cv.width, cv.height);
+    const b = await new Promise((r) => cv.toBlob(r, 'image/jpeg', q));
+    best = b;
+    if (b.size <= target) break;
+    if (q > 0.62) q -= 0.08; else { edge = Math.round(edge * 0.82); q = 0.8; }
+    if (edge < 480 && b.size <= hard) break;
+  }
+  if (!best || best.size > hard) throw new Error('บีบอัดภาพให้เล็กกว่า 512 KB ไม่ได้');
+  return new File([best], (file.name || 'photo').replace(/\.[^.]+$/, '') + '.jpg', { type: 'image/jpeg' });
+}
+async function prepareFiles(list) {
+  const out = [];
+  for (const f of list) {
+    if (/^image\//.test(f.type)) out.push(await compressImage(f));
+    else if (f.type === 'application/pdf' || /\.pdf$/i.test(f.name)) { if (f.size > 5 * 1024 * 1024) throw new Error(`ไฟล์ ${f.name} ใหญ่เกิน 5 MB`); out.push(f); }
+    else throw new Error(`ไฟล์ ${f.name} ไม่รองรับ (ภาพหรือ PDF เท่านั้น)`);
+  }
+  return out;
+}
+async function uploadFile(entity, entityId, file) {
+  const parts = Math.max(1, Math.ceil(file.size / PART)), uploadId = rid() + rid().slice(0, 8);
+  let state = null;
+  for (let i = 0; i < parts; i++) {
+    const fd = new FormData();
+    fd.append('meta', JSON.stringify({ token: API.token, requestId: rid(), rev: S.rev, entity, entityId, name: file.name, part: i, parts, uploadId }));
+    fd.append('file', file.slice(i * PART, (i + 1) * PART), file.name);
+    const r = await API.post(fd, true);
+    if (r && r.state) state = r.state;
+  }
+  return state;
+}
+async function fetchFile(id) {
+  const chunks = []; let meta = null;
+  for (let i = 0; ; i++) {
+    const r = await API.api('getFile', { id, part: i });
+    meta = r.data; chunks.push(Uint8Array.from(atob(meta.data), (c) => c.charCodeAt(0)));
+    if (i + 1 >= meta.parts) break;
+  }
+  return { name: meta.name, mime: meta.mime, blob: new Blob(chunks, { type: meta.mime }) };
+}
+async function openFile(id) {
+  const f = byId('Files', id); if (!f) return;
+  const win = f.mime === 'application/pdf' ? window.open('', '_blank') : null;
+  busy('กำลังโหลดไฟล์…');
+  try {
+    const x = await fetchFile(id), url = URL.createObjectURL(x.blob);
+    if (win) { win.location.href = url; Swal.close(); clearTimeout(busyTimer); }
+    else { clearTimeout(busyTimer); Swal.fire({ title: x.name, imageUrl: url, imageAlt: x.name, confirmButtonText: 'ปิด', width: 720, footer: `<a href="${url}" download="${esc(x.name)}">ดาวน์โหลด</a>` }); }
+  } catch (e) { if (win) win.close(); failBox(e); }
+}
+function filesOf(entity, id) { return T('Files').filter((f) => f.entity === entity && f.entityId === id); }
+function filesHtml(entity, id) {
+  const fs = filesOf(entity, id);
+  return `<div class="files">${fs.length ? fs.map((f) => `<button class="btn ghost sm" data-act="open-file" data-id="${esc(f.id)}">${f.mime === 'application/pdf' ? '📄' : '🖼️'} ${esc(f.name)} <span class="muted small">${Math.round(num(f.size) / 1024)} KB</span></button>`).join('') : '<span class="muted small">ยังไม่มีไฟล์แนบ</span>'}
+    <button class="btn lav sm" data-act="attach" data-entity="${entity}" data-id="${esc(id)}">＋ แนบไฟล์</button></div>`;
+}
+
+/* ---------------------------------------------------------------- QR Code (encoder ในตัว: byte mode, ECC M) */
+const QR = (() => {
+  const ECC = [-1, 10, 16, 26, 18, 24, 16, 18, 22, 22, 26, 30, 22, 22, 24, 24, 28, 28, 26, 26, 26, 26, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28];
+  const BLK = [-1, 1, 1, 1, 2, 2, 4, 4, 4, 5, 5, 5, 8, 9, 9, 10, 10, 11, 13, 14, 16, 17, 17, 18, 20, 21, 23, 25, 26, 28, 29, 31, 33, 35, 37, 38, 40, 43, 45, 47, 49];
+  const rawMods = (v) => { let r = (16 * v + 128) * v + 64; if (v >= 2) { const n = Math.floor(v / 7) + 2; r -= (25 * n - 10) * n - 55; if (v >= 7) r -= 36; } return r; };
+  const dataCw = (v) => Math.floor(rawMods(v) / 8) - ECC[v] * BLK[v];
+  const mul = (x, y) => { let z = 0; for (let i = 7; i >= 0; i--) { z = (z << 1) ^ ((z >>> 7) * 0x11D); z ^= ((y >>> i) & 1) * x; } return z & 255; };
+  const divisor = (d) => { const r = new Array(d).fill(0); r[d - 1] = 1; let root = 1; for (let i = 0; i < d; i++) { for (let j = 0; j < d; j++) { r[j] = mul(r[j], root); if (j + 1 < d) r[j] ^= r[j + 1]; } root = mul(root, 2); } return r; };
+  const rem = (data, dv) => { const r = new Array(dv.length).fill(0); for (const b of data) { const f = b ^ r.shift(); r.push(0); dv.forEach((c, i) => { r[i] ^= mul(c, f); }); } return r; };
+  function encode(text) {
+    const bytes = Array.from(new TextEncoder().encode(text));
+    let v = 1;
+    for (; v <= 40; v++) if (4 + (v < 10 ? 8 : 16) + bytes.length * 8 <= dataCw(v) * 8) break;
+    if (v > 40) throw new Error('ข้อความยาวเกินไปสำหรับ QR');
+    const bits = [];
+    const put = (val, len) => { for (let i = len - 1; i >= 0; i--) bits.push((val >>> i) & 1); };
+    put(4, 4); put(bytes.length, v < 10 ? 8 : 16); bytes.forEach((b) => put(b, 8));
+    const cap = dataCw(v) * 8;
+    put(0, Math.min(4, cap - bits.length)); put(0, (8 - bits.length % 8) % 8);
+    for (let p = 0xEC; bits.length < cap; p ^= 0xEC ^ 0x11) put(p, 8);
+    const data = []; for (let i = 0; i < bits.length; i += 8) data.push(parseInt(bits.slice(i, i + 8).join(''), 2));
+    // ECC + interleave
+    const nb = BLK[v], el = ECC[v], raw = Math.floor(rawMods(v) / 8), nShort = nb - raw % nb, shortLen = Math.floor(raw / nb), dv = divisor(el);
+    const blocks = []; let k = 0;
+    for (let i = 0; i < nb; i++) { const d = data.slice(k, k + shortLen - el + (i < nShort ? 0 : 1)); k += d.length; const e = rem(d, dv); if (i < nShort) d.push(0); blocks.push(d.concat(e)); }
+    const cw = [];
+    for (let i = 0; i < blocks[0].length; i++) blocks.forEach((b, j) => { if (i !== shortLen - el || j >= nShort) cw.push(b[i]); });
+    // วาดโมดูล
+    const n = v * 4 + 17, M = Array.from({ length: n }, () => new Array(n).fill(false)), F = Array.from({ length: n }, () => new Array(n).fill(false));
+    const set = (x, y, d) => { M[y][x] = d; F[y][x] = true; };
+    for (let i = 0; i < n; i++) { set(6, i, i % 2 === 0); set(i, 6, i % 2 === 0); }
+    [[3, 3], [n - 4, 3], [3, n - 4]].forEach(([cx, cy]) => { for (let dy = -4; dy <= 4; dy++) for (let dx = -4; dx <= 4; dx++) { const x = cx + dx, y = cy + dy; if (x >= 0 && x < n && y >= 0 && y < n) { const d = Math.max(Math.abs(dx), Math.abs(dy)); set(x, y, d !== 2 && d !== 4); } } });
+    const al = []; if (v > 1) { const na = Math.floor(v / 7) + 2, step = v === 32 ? 26 : Math.ceil((v * 4 + 4) / (na * 2 - 2)) * 2; al.push(6); for (let p = n - 7; al.length < na; p -= step) al.splice(1, 0, p); }
+    al.forEach((ax, i) => al.forEach((ay, j) => { if ((i === 0 && j === 0) || (i === 0 && j === al.length - 1) || (i === al.length - 1 && j === 0)) return; for (let dy = -2; dy <= 2; dy++) for (let dx = -2; dx <= 2; dx++) set(ax + dx, ay + dy, Math.max(Math.abs(dx), Math.abs(dy)) !== 1); }));
+    const fmt = (mask) => {
+      const d = (0 << 3) | mask; let r = d; for (let i = 0; i < 10; i++) r = (r << 1) ^ ((r >>> 9) * 0x537);
+      const b = ((d << 10) | r) ^ 0x5412, g = (i) => ((b >>> i) & 1) === 1;
+      for (let i = 0; i <= 5; i++) set(8, i, g(i));
+      set(8, 7, g(6)); set(8, 8, g(7)); set(7, 8, g(8));
+      for (let i = 9; i < 15; i++) set(14 - i, 8, g(i));
+      for (let i = 0; i < 8; i++) set(n - 1 - i, 8, g(i));
+      for (let i = 8; i < 15; i++) set(8, n - 15 + i, g(i));
+      set(8, n - 8, true);
+    };
+    fmt(0);
+    if (v >= 7) { let r = v; for (let i = 0; i < 12; i++) r = (r << 1) ^ ((r >>> 11) * 0x1F25); const b = (v << 12) | r; for (let i = 0; i < 18; i++) { const bit = ((b >>> i) & 1) === 1, a = n - 11 + i % 3, c = Math.floor(i / 3); set(a, c, bit); set(c, a, bit); } }
+    let bi = 0;
+    for (let right = n - 1; right >= 1; right -= 2) {
+      if (right === 6) right = 5;
+      for (let vert = 0; vert < n; vert++) for (let j = 0; j < 2; j++) {
+        const x = right - j, up = ((right + 1) & 2) === 0, y = up ? n - 1 - vert : vert;
+        if (!F[y][x] && bi < cw.length * 8) { M[y][x] = ((cw[bi >>> 3] >>> (7 - (bi & 7))) & 1) === 1; bi++; }
+      }
+    }
+    const masks = [(x, y) => (x + y) % 2 === 0, (x, y) => y % 2 === 0, (x) => x % 3 === 0, (x, y) => (x + y) % 3 === 0, (x, y) => (Math.floor(x / 3) + Math.floor(y / 2)) % 2 === 0,
+      (x, y) => (x * y) % 2 + (x * y) % 3 === 0, (x, y) => ((x * y) % 2 + (x * y) % 3) % 2 === 0, (x, y) => ((x + y) % 2 + (x * y) % 3) % 2 === 0];
+    const apply = (m) => { for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) if (!F[y][x] && masks[m](x, y)) M[y][x] = !M[y][x]; };
+    const penalty = () => {
+      let p = 0, dark = 0;
+      for (let y = 0; y < n; y++) { let run = 1; for (let x = 1; x < n; x++) { if (M[y][x] === M[y][x - 1]) { run++; if (run === 5) p += 3; else if (run > 5) p++; } else run = 1; } }
+      for (let x = 0; x < n; x++) { let run = 1; for (let y = 1; y < n; y++) { if (M[y][x] === M[y - 1][x]) { run++; if (run === 5) p += 3; else if (run > 5) p++; } else run = 1; } }
+      for (let y = 0; y < n - 1; y++) for (let x = 0; x < n - 1; x++) { const c = M[y][x]; if (c === M[y][x + 1] && c === M[y + 1][x] && c === M[y + 1][x + 1]) p += 3; }
+      M.forEach((r) => r.forEach((c) => { if (c) dark++; }));
+      p += Math.floor(Math.abs(dark * 20 - n * n * 10) / (n * n)) * 10;
+      return p;
+    };
+    let best = 0, bestP = Infinity;
+    for (let m = 0; m < 8; m++) { apply(m); fmt(m); const pp = penalty(); if (pp < bestP) { bestP = pp; best = m; } apply(m); }
+    apply(best); fmt(best);
+    return M;
+  }
+  function svg(text, label) {
+    const M = encode(text), n = M.length, q = 4;
+    let d = '';
+    M.forEach((r, y) => r.forEach((c, x) => { if (c) d += `M${x + q},${y + q}h1v1h-1z`; }));
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${n + q * 2} ${n + q * 2}" shape-rendering="crispEdges" role="img" aria-label="${esc(label || 'QR')}"><rect width="100%" height="100%" fill="#fff"/><path d="${d}" fill="#1f1d33"/></svg>`;
+  }
+  return { encode, svg };
+})();
+const baseUrl = () => (S.settings.webUrl || location.origin).replace(/\/+$/, '');
+const assetQrUrl = (a) => baseUrl() + '/?asset=' + encodeURIComponent(a.id);
+const locQrUrl = (l) => baseUrl() + '/?location=' + encodeURIComponent(l.id);
+
+/* ---------------------------------------------------------------- สแกน QR */
+function resolveScan(text) {
+  text = String(text || '').trim();
+  try {
+    const u = new URL(text);
+    if (u.searchParams.get('asset')) return { type: 'asset', id: u.searchParams.get('asset') };
+    if (u.searchParams.get('location')) return { type: 'location', id: u.searchParams.get('location') };
+  } catch (e) { }
+  const a = T('Assets').find((x) => x.code.toLowerCase() === text.toLowerCase() || x.id === text);
+  if (a) return { type: 'asset', id: a.id };
+  const l = T('Locations').find((x) => x.id === text || x.name === text);
+  if (l) return { type: 'location', id: l.id };
+  return null;
+}
+function openScanner(onResult, title) {
+  let stream = null, timer = null, stopped = false;
+  const stop = () => { stopped = true; clearInterval(timer); if (stream) stream.getTracks().forEach((t) => t.stop()); };
+  const hasBD = 'BarcodeDetector' in window;
+  openModal({
+    title: title || 'สแกน QR', onClose: stop,
+    body: `<div class="stack">${hasBD ? '<video class="scan" playsinline muted></video><p class="muted small" id="scanMsg">เล็งกล้องไปที่ QR</p>' : '<p class="muted">เบราว์เซอร์นี้ยังไม่รองรับการสแกนด้วยกล้อง กรุณาพิมพ์รหัสแทน</p>'}
+      <div class="field"><label for="scanCode">หรือพิมพ์รหัสสิ่งของ / รหัสสถานที่</label><div class="row"><input id="scanCode" class="input" style="flex:1" placeholder="เช่น WYA-20261013-00001"><button class="btn" id="scanGo" type="button">ค้นหา</button></div></div></div>`,
+    footer: '<button class="btn lav" data-act="close-modal" type="button">ปิด</button>'
+  });
+  const finish = (txt) => {
+    const r = resolveScan(txt);
+    if (!r) { toast('ไม่พบรหัส "' + txt + '"', 'warning'); return; }
+    stop(); closeModal(); onResult(r);
+  };
+  $('#scanGo').onclick = () => finish($('#scanCode').value);
+  $('#scanCode').onkeydown = (e) => { if (e.key === 'Enter') { e.preventDefault(); finish(e.target.value); } };
+  if (hasBD) {
+    const video = $('video.scan');
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } }).then((s) => {
+      if (stopped) { s.getTracks().forEach((t) => t.stop()); return; }
+      stream = s; video.srcObject = s; video.play();
+      const det = new window.BarcodeDetector({ formats: ['qr_code'] });
+      timer = setInterval(async () => { try { const c = await det.detect(video); if (c[0]) finish(c[0].rawValue); } catch (e) { } }, 350);
+    }).catch(() => { const m = $('#scanMsg'); if (m) m.textContent = 'เปิดกล้องไม่ได้ (ไม่ได้อนุญาต) กรุณาพิมพ์รหัสแทน'; });
+  }
+}
+
+/* ---------------------------------------------------------------- โมดอล + ฟอร์ม */
+let modalOnClose = null;
+function openModal({ title, body, footer, wide, onClose, locked }) {
+  closeModal(true);
+  modalOnClose = onClose || null;
+  const root = $('#modalRoot');
+  root.innerHTML = `<div class="modal-back" ${locked ? 'data-locked="1"' : ''}><div class="modal ${wide ? 'wide' : ''}" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+    <div class="modal-h"><h2 id="mTitle">${esc(title)}</h2>${locked ? '' : '<button class="xbtn" data-act="close-modal" aria-label="ปิด" type="button">×</button>'}</div>
+    <div class="modal-b">${body}</div>${footer ? `<div class="modal-f">${footer}</div>` : ''}</div></div>`;
+  const back = $('.modal-back', root);
+  back.addEventListener('mousedown', (e) => { if (e.target === back && !locked) closeModal(); });
+  setTimeout(() => { const f = $('.modal-b input:not([type=hidden]), .modal-b select, .modal-b textarea', root); if (f && window.innerWidth > 700) f.focus(); }, 30);
+}
+function closeModal(silent) {
+  const root = $('#modalRoot');
+  if (!root.firstChild) return;
+  if (modalOnClose) { const f = modalOnClose; modalOnClose = null; try { f(); } catch (e) { } }
+  root.innerHTML = '';
+  void silent;
+}
+const modalOpen = () => !!$('#modalRoot').firstChild;
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modalOpen() && !(Swal.isVisible && Swal.isVisible()) && !$('.modal-back[data-locked]')) closeModal(); });
+
+/** ช่องฟอร์ม: {name,label,type,value,options:[[v,l]],required,full,help,min,max,step,placeholder,attrs} */
+function fieldHtml(f) {
+  const id = (f.idp || 'f_') + f.name, req = f.required ? 'required' : '', v = f.value == null ? '' : f.value;
+  const attrs = `id="${id}" name="${esc(f.name)}" ${req} ${f.attrs || ''} ${f.min != null ? `min="${f.min}"` : ''} ${f.max != null ? `max="${f.max}"` : ''} ${f.step ? `step="${f.step}"` : ''} ${f.placeholder ? `placeholder="${esc(f.placeholder)}"` : ''}`;
+  let input;
+  if (f.type === 'select') input = `<select class="input" ${attrs}>${f.blank !== false ? `<option value="">${esc(f.blank || '— เลือก —')}</option>` : ''}${(f.options || []).map(([ov, ol]) => `<option value="${esc(ov)}" ${String(ov) === String(v) ? 'selected' : ''}>${esc(ol)}</option>`).join('')}</select>`;
+  else if (f.type === 'textarea') input = `<textarea class="input" ${attrs}>${esc(v)}</textarea>`;
+  else if (f.type === 'checkbox') return `<label class="check ${f.full ? 'full' : ''}"><input type="checkbox" ${attrs} ${v === true || v === 'TRUE' ? 'checked' : ''}> ${esc(f.label)}</label>`;
+  else if (f.type === 'files') input = `<input class="input" type="file" ${attrs} multiple accept="image/*,application/pdf" data-files="1">`;
+  else if (f.type === 'html') return `<div class="${f.full ? 'full' : ''}">${f.html}</div>`;
+  else input = `<input class="input" type="${f.type || 'text'}" value="${esc(v)}" ${attrs} ${f.type === 'number' ? 'inputmode="decimal"' : ''}>`;
+  return `<div class="field ${f.full ? 'full' : ''}"><label for="${id}" class="${f.required ? 'req' : ''}">${esc(f.label)}</label>${input}${f.help ? `<span class="help">${esc(f.help)}</span>` : ''}</div>`;
+}
+function readForm(form) {
+  const o = {};
+  $$('input,select,textarea', form).forEach((el) => {
+    if (!el.name || el.dataset.files) return;
+    if (el.type === 'checkbox') o[el.name] = el.checked;
+    else if (el.type === 'radio') { if (el.checked) o[el.name] = el.value; }
+    else o[el.name] = el.value.trim();
+  });
+  return o;
+}
+function formFiles(form) { const el = $('input[data-files]', form); return el ? Array.from(el.files || []) : []; }
+/** เปิดฟอร์มในโมดอล: onSubmit(values, form) คืน true เพื่อปิด */
+function openForm({ title, fields, submitText, onSubmit, wide, before, after, locked, onOpen }) {
+  openModal({
+    title, wide, locked,
+    body: `<form id="mForm" novalidate>${before || ''}<div class="form-grid">${fields.map(fieldHtml).join('')}</div>${after || ''}</form>`,
+    footer: `${locked ? '' : '<button class="btn lav" type="button" data-act="close-modal">ยกเลิก</button>'}<button class="btn" type="submit" form="mForm">${esc(submitText || 'บันทึก')}</button>`
+  });
+  const form = $('#mForm');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const bad = $$('[required]', form).find((el) => !String(el.value || '').trim());
+    if (bad) { const lb = $(`label[for="${bad.id}"]`, form); toast('กรุณากรอก ' + (lb ? lb.textContent.replace(' *', '') : 'ข้อมูลที่จำเป็น'), 'warning'); bad.focus(); return; }
+    const files = formFiles(form);
+    if (files.length > 6) { toast('แนบไฟล์ได้สูงสุด 6 ไฟล์ต่อครั้ง', 'warning'); return; }
+    const btn = $('button[type=submit][form=mForm]'); if (btn) btn.disabled = true;
+    try { await onSubmit(readForm(form), form); } finally { if (btn && document.body.contains(btn)) btn.disabled = false; }
+  });
+  if (onOpen) onOpen(form);
+  return form;
+}
+async function filesFrom(form) {
+  const raw = formFiles(form);
+  if (!raw.length) return [];
+  try { busy('กำลังเตรียมไฟล์…'); const f = await prepareFiles(raw); return f; }
+  catch (e) { failBox(e); return null; }
+}
+
+/* ---------------------------------------------------------------- ตัวเลือกสิ่งของ (ค้นหา/สแกน) */
+const PICKERS = {};
+function pickerHtml(id, label, placeholder) {
+  return `<div class="field full"><label class="req">${esc(label)}</label><div class="picker" data-picker="${id}">
+    <div class="picker-row"><input type="search" class="input picker-q" placeholder="${esc(placeholder || 'พิมพ์ชื่อ รหัส หรือ serial')}" autocomplete="off" aria-label="${esc(label)}">
+    <button type="button" class="btn ghost" data-act="picker-scan" data-picker="${id}" title="สแกน QR">📷</button></div>
+    <div class="picker-res" role="listbox"></div><input type="hidden" name="${id}"><div class="picker-sel"></div></div></div>`;
+}
+function pickerSearch(id, q) {
+  const cfg = PICKERS[id]; if (!cfg) return [];
+  q = q.toLowerCase().trim();
+  return T('Assets').filter((a) => cfg.filter(a) && (!q || a.name.toLowerCase().includes(q) || a.code.toLowerCase().includes(q) || String(a.serial || '').toLowerCase().includes(q))).slice(0, 15);
+}
+function pickerPick(id, assetId) {
+  const cfg = PICKERS[id], a = byId('Assets', assetId), root = $(`[data-picker="${id}"].picker`);
+  if (!cfg || !a || !root) return;
+  if (!cfg.filter(a)) { toast(`"${a.name}" ใช้กับรายการนี้ไม่ได้ (สถานะ: ${(COND[a.condition] || [a.condition])[0]})`, 'warning'); return; }
+  $('.picker-res', root).innerHTML = ''; $('.picker-q', root).value = '';
+  if (cfg.multi) { cfg.onPick(a, root); return; }
+  $('input[type=hidden]', root).value = a.id;
+  $('.picker-sel', root).innerHTML = `<span class="chip c-lav">✓ ${esc(assetLabel(a))} • ${esc(qtyText(a))} • ${esc(locName(a.location))}</span>`;
+  if (cfg.onPick) cfg.onPick(a, root);
+}
+document.addEventListener('input', debounce((e) => {
+  const q = e.target.closest && e.target.closest('.picker-q');
+  if (!q) return;
+  const root = q.closest('.picker'), id = root.dataset.picker, list = pickerSearch(id, q.value);
+  $('.picker-res', root).innerHTML = q.value.trim() ? (list.length ? list.map((a) => `<button type="button" data-act="picker-pick" data-picker="${id}" data-id="${esc(a.id)}"><b>${esc(a.name)}</b> <span class="code">${esc(a.code)}</span><br><span class="small muted">${esc(qtyText(a))} • ${esc(locPath(a.location))} • ${esc((COND[a.condition] || [''])[0])}</span></button>`).join('') : '<div class="empty small">ไม่พบสิ่งของที่ใช้ได้</div>') : '';
+}, 150));
+
+/* ---------------------------------------------------------------- พิมพ์ / CSV */
+function printDoc(title, body, win) {
+  const w = win || window.open('', '_blank');
+  if (!w) { failBox({ message: 'เบราว์เซอร์บล็อกหน้าต่างพิมพ์ กรุณาอนุญาตป๊อปอัปสำหรับเว็บนี้' }); return; }
+  const biz = esc(S.settings.businessName || 'วังยาวรีสอร์ท');
+  w.document.open();
+  w.document.write(`<!doctype html><html lang="th"><head><meta charset="utf-8"><title>${esc(title)}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600&display=swap" rel="stylesheet">
+  <style>@page{size:A4;margin:12mm}body{font-family:Prompt,sans-serif;font-size:11.5px;color:#222;margin:0}h1{font-size:17px;margin:0}h2{font-size:14px;margin:14px 0 6px}
+  .head{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2px solid #c3b2f5;padding-bottom:6px;margin-bottom:10px}
+  table{width:100%;border-collapse:collapse;margin-top:6px}th,td{border:1px solid #c9c6d9;padding:4px 6px;text-align:left;vertical-align:top}th{background:#f1eefc}
+  td.num,th.num{text-align:right}.muted{color:#555}.kv{display:grid;grid-template-columns:130px 1fr;gap:3px 10px}.sign{display:flex;gap:30px;margin-top:46px}
+  .sign div{flex:1;text-align:center;border-top:1px dotted #555;padding-top:6px}.imgs img{max-width:48%;max-height:230px;margin:4px;border:1px solid #ddd}
+  .labels{display:flex;flex-wrap:wrap;gap:6px}.lbl{width:62mm;border:1px dashed #999;border-radius:6px;padding:6px;text-align:center;page-break-inside:avoid}
+  .lbl svg{width:38mm;height:38mm}.lbl b{display:block;font-size:11px}.lbl small{display:block;font-family:monospace}
+  @media screen{body{padding:20px;background:#f6f6fb}.sheet{background:#fff;max-width:190mm;margin:auto;padding:12mm;box-shadow:0 4px 20px rgba(0,0,0,.1)}}</style></head>
+  <body><div class="sheet"><div class="head"><div><h1>${esc(title)}</h1><div class="muted">${biz}</div></div><div class="muted">พิมพ์เมื่อ ${esc(fmtDT(new Date().toISOString()))}</div></div>${body}</div>
+  <script>window.addEventListener('load',function(){setTimeout(function(){window.print()},500)})<\/script></body></html>`);
+  w.document.close();
+}
+function tableHtml(cols, rows, numCols) {
+  numCols = numCols || [];
+  return `<table><thead><tr>${cols.map((c, i) => `<th class="${numCols.includes(i) ? 'num' : ''}">${esc(c)}</th>`).join('')}</tr></thead><tbody>${rows.map((r) => `<tr>${r.map((c, i) => `<td class="${numCols.includes(i) ? 'num' : ''}">${esc(c)}</td>`).join('')}</tr>`).join('') || `<tr><td colspan="${cols.length}">ไม่มีข้อมูล</td></tr>`}</tbody></table>`;
+}
+function downloadCsv(name, cols, rows) {
+  const cell = (v) => { let s = String(v == null ? '' : v); if (/^[=+\-@\t\r]/.test(s)) s = "'" + s; return '"' + s.replace(/"/g, '""') + '"'; };
+  const csv = '﻿' + [cols].concat(rows).map((r) => r.map(cell).join(',')).join('\r\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+  a.download = name + '_' + todayStr() + '.csv';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  toast('ส่งออก CSV แล้ว');
+}
+
+/* ================================================================ เมนู / เราเตอร์ */
+const NAV = [
+  { id: 'dashboard', ic: '🏠', t: 'ภาพรวม' },
+  { id: 'activity', ic: '🕒', t: 'กิจกรรมวันนี้', show: () => P().admin || P().manager },
+  { id: 'assets', ic: '📦', t: 'ทะเบียนสิ่งของ' },
+  { id: 'repairs', ic: '🛠️', t: 'แจ้งซ่อม/งานช่าง' },
+  { id: 'approvals', ic: '✅', t: 'อนุมัติรายการ', badge: () => decisionItems().length },
+  { id: 'loans', ic: '🤝', t: 'ยืมคืน' },
+  { id: 'move', ic: '🚚', t: 'ย้าย/รับเข้าสถานที่' },
+  { id: 'disposals', ic: '🗑️', t: 'จำหน่าย' },
+  { id: 'reports', ic: '📊', t: 'รายงานและพิมพ์' },
+  { sep: 'ผู้ดูแลระบบ', show: () => P().admin },
+  { id: 'admin', ic: '⚙️', t: 'จัดการระบบ', show: () => P().admin },
+  { id: 'schema', ic: '🗂️', t: 'โครงสร้างฐานข้อมูล', show: () => P().admin }
+];
+const PAGES = {};
+const PAGE_SIZE = 25;
+function parseHash() { const h = location.hash.replace(/^#\/?/, '') || 'dashboard'; const [p, q] = h.split('?'); return { page: p || 'dashboard', q: new URLSearchParams(q || '') }; }
+function go(path) { if (location.hash === '#/' + path) render(); else location.hash = '#/' + path; document.body.classList.remove('nav-open'); }
+function updateQuery(patch, keepPage) {
+  const { page, q } = parseHash();
+  Object.entries(patch).forEach(([k, v]) => { if (v === '' || v == null) q.delete(k); else q.set(k, v); });
+  if (!keepPage && !('page' in patch)) q.delete('page');
+  history.replaceState(null, '', '#/' + page + (q.toString() ? '?' + q : ''));
+  const pg = PAGES[page];
+  if (pg && pg.list && $('#list')) $('#list').innerHTML = pg.list(q); else render();
+}
+function render(keepScroll) {
+  if (!S.me) return;
+  let { page, q } = parseHash();
+  const nav = NAV.find((n) => n.id === page);
+  if (!PAGES[page] || (nav && nav.show && !nav.show())) { page = 'dashboard'; q = new URLSearchParams(); }
+  const y = window.scrollY;
+  const pg = PAGES[page];
+  $('#pageTitle').textContent = pg.title;
+  document.title = pg.title + ' • วังยาว';
+  $('#page').innerHTML = pg.render(q);
+  if (pg.init) pg.init(q);
+  $$('#nav a').forEach((a) => a.classList.toggle('on', a.dataset.page === page));
+  if (keepScroll) window.scrollTo(0, y); else window.scrollTo(0, 0);
+}
+window.addEventListener('hashchange', () => render());
+function updateChrome() {
+  if (!S.me) return;
+  $('#meName').textContent = S.me.name;
+  $('#meRole').textContent = roleName(S.me.role);
+  $('#avatar').textContent = (S.me.name || '?').trim().charAt(0);
+  $('#bizName').textContent = S.settings.businessName || 'วังยาว';
+  $('#dataAt').textContent = 'ข้อมูลล่าสุด ' + (S.at ? S.at.toLocaleTimeString('th-TH', { timeZone: TZ }) : '-');
+  const { page } = parseHash();
+  $('#nav').innerHTML = NAV.filter((n) => !n.show || n.show()).map((n) => {
+    if (n.sep) return `<div class="sep">${esc(n.sep)}</div>`;
+    const b = n.badge ? n.badge() : 0;
+    return `<a href="#/${n.id}" data-page="${n.id}" class="${page === n.id ? 'on' : ''}"><span class="ic" aria-hidden="true">${n.ic}</span>${esc(n.t)}${b ? `<span class="badge" aria-label="รอ ${b} รายการ">${b}</span>` : ''}</a>`;
+  }).join('');
+}
+function pager(total, page, size) {
+  const pages = Math.max(1, Math.ceil(total / size));
+  if (pages <= 1) return `<div class="pager small muted">ทั้งหมด ${total.toLocaleString('th-TH')} รายการ</div>`;
+  return `<div class="pager"><span class="small muted">ทั้งหมด ${total.toLocaleString('th-TH')} รายการ • หน้า ${page}/${pages}</span>
+    <button class="btn ghost sm" data-act="page" data-page="${page - 1}" ${page <= 1 ? 'disabled' : ''}>‹ ก่อนหน้า</button>
+    <button class="btn ghost sm" data-act="page" data-page="${page + 1}" ${page >= pages ? 'disabled' : ''}>ถัดไป ›</button></div>`;
+}
+const pageOf = (q) => Math.max(1, Number(q.get('page')) || 1);
+const slicePage = (arr, q) => { const p = pageOf(q); return arr.slice((p - 1) * PAGE_SIZE, p * PAGE_SIZE); };
+const sel = (name, opts, v, all) => `<select class="input" data-filter="${name}" aria-label="${esc(all)}"><option value="">${esc(all)}</option>${opts.map(([k, l]) => `<option value="${esc(k)}" ${String(k) === String(v || '') ? 'selected' : ''}>${esc(l)}</option>`).join('')}</select>`;
+const locOptions = () => activeLocs().map((l) => [l.id, locPath(l.id)]);
+const optOptions = (kind) => optList(kind).map((o) => [o.label, o.label]);
+const empty = (t) => `<div class="empty">${esc(t || 'ไม่มีข้อมูล')}</div>`;
+
+/* ================================================================ งานที่ต้องตัดสินใจ / ติดตาม */
+function decisionItems() {
+  return memo('decisions', () => {
+    const p = P(), me = S.me ? S.me.id : '', out = [];
+    if (p.admin) {
+      T('Repairs').filter((r) => r.status === 'APPROVAL').forEach((r) => out.push({ k: 'repairApproval', id: r.id, t: `อนุมัติงานซ่อม ${r.code}`, s: assetLabel(byId('Assets', r.asset)) }));
+      T('BudgetRevisions').filter((b) => b.status === 'PENDING').forEach((b) => { const r = byId('Repairs', b.repair); out.push({ k: 'budget', id: b.id, t: `ขอแก้ไขวงเงิน ${r ? r.code : ''}`, s: b.reason }); });
+      T('Disposals').filter((d) => d.status === 'PENDING').forEach((d) => out.push({ k: 'disposal', id: d.id, t: `อนุมัติจำหน่าย ${d.code}`, s: assetLabel(byId('Assets', d.disposedAsset)) }));
+      T('Users').filter((u) => u.status === 'PENDING').forEach((u) => out.push({ k: 'user', id: u.id, t: `ผู้สมัครใหม่: ${u.name}`, s: u.department || '' }));
+    }
+    if (p.inspect) T('Repairs').filter((r) => r.status === 'ACCEPT').forEach((r) => out.push({ k: 'accept', id: r.id, t: `ตรวจรับงานซ่อม ${r.code}`, s: assetLabel(byId('Assets', r.asset)) }));
+    return out.concat(myWork().filter((x) => !out.some((o) => o.id === x.id)));
+  });
+}
+function myWork() {
+  const p = P(), me = S.me.id, out = [];
+  T('Repairs').forEach((r) => {
+    if (r.assigned === me && (r.status === 'ASSESS' || r.status === 'REPAIR')) out.push({ k: 'myRepair', id: r.id, t: `${r.status === 'ASSESS' ? 'ประเมินงานซ่อม' : 'ดำเนินการซ่อม'} ${r.code}`, s: assetLabel(byId('Assets', r.asset)) });
+    else if (p.assign && !r.assigned && isOpenRepair(r)) out.push({ k: 'assign', id: r.id, t: `มอบหมายช่าง ${r.code}`, s: r.issue });
+  });
+  return out;
+}
+function followItems() {
+  return memo('follow', () => {
+    const out = [], today = todayStr(), lim = addDays(num(S.settings.dueAlertDays) || 3);
+    T('Loans').forEach((l) => {
+      if (l.status === 'RETURNED' || !l.due) return;
+      if (l.due < today) out.push({ k: 'loan', id: l.id, t: `เกินกำหนดคืน ${l.code}`, s: `${l.borrower} • กำหนด ${fmtD(l.due)}`, c: 'pink' });
+      else if (l.due <= lim) out.push({ k: 'loan', id: l.id, t: `ใกล้ครบกำหนดคืน ${l.code}`, s: `${l.borrower} • กำหนด ${fmtD(l.due)}`, c: 'peach' });
+    });
+    T('Repairs').forEach((r) => { if (isOpenRepair(r) && r.due && r.due < today) out.push({ k: 'repair', id: r.id, t: `งานซ่อมเกินกำหนด ${r.code}`, s: `${uname(r.assigned)} • กำหนด ${fmtD(r.due)}`, c: 'pink' }); });
+    T('Repairs').forEach((r) => { if (r.owner === S.me.id && ['ASSESS', 'APPROVAL', 'REPAIR', 'ACCEPT'].includes(r.status)) out.push({ k: 'repair', id: r.id, t: `งานที่ฉันแจ้ง ${r.code}`, s: (RST[r.status] || [''])[0], c: 'sky' }); });
+    return out;
+  });
+}
+function itemList(items, emptyText) {
+  if (!items.length) return empty(emptyText);
+  return items.slice(0, 12).map((x) => `<div class="list-item" data-act="open-item" data-k="${x.k}" data-id="${esc(x.id)}" role="button" tabindex="0">
+    <span class="chip c-${x.c || 'lav'}">●</span><div class="grow"><div>${esc(x.t)}</div><div class="small muted">${esc(x.s || '')}</div></div><span class="muted">›</span></div>`).join('') + (items.length > 12 ? `<div class="small muted" style="padding:8px">และอีก ${items.length - 12} รายการ</div>` : '');
+}
+function openItem(k, id) {
+  if (['repairApproval', 'accept', 'myRepair', 'assign', 'repair'].includes(k)) return showRepair(id);
+  if (k === 'budget') { const b = byId('BudgetRevisions', id); return b && showRepair(b.repair); }
+  if (k === 'disposal') return showDisposal(id);
+  if (k === 'user') return go('approvals');
+  if (k === 'loan') return showLoan(id);
+}
+
+/* ================================================================ ภาพรวม */
+PAGES.dashboard = {
+  title: 'ภาพรวม',
+  render() {
+    const as = T('Assets').filter((a) => num(a.qty) > 0);
+    const units = as.filter((a) => a.type === 'UNIT' && a.condition !== 'DISPOSED').length;
+    const dec = decisionItems(), fol = followItems();
+    const rep = T('Repairs').filter((r) => r.status === 'REPAIR').length, acc = T('Repairs').filter((r) => r.status === 'ACCEPT').length;
+    const ready = as.filter((a) => a.location === 'CENTRAL' && a.condition === 'READY').reduce((s, a) => s + num(a.qty), 0);
+    const byCond = {}; as.filter((a) => a.condition !== 'DISPOSED').forEach((a) => { byCond[a.condition] = (byCond[a.condition] || 0) + num(a.qty); });
+    const total = Object.values(byCond).reduce((s, v) => s + v, 0);
+    let acc0 = 0;
+    const grad = total ? Object.entries(byCond).map(([c, v]) => { const a = acc0; acc0 += v / total * 360; return `${COND_COLOR[c]} ${a}deg ${acc0}deg`; }).join(',') : '#efeef6 0 360deg';
+    const tally = (key) => { const m = {}; as.filter((a) => a.condition !== 'DISPOSED').forEach((a) => { const k = key(a); m[k] = (m[k] || 0) + num(a.qty); }); return Object.entries(m).sort((a, b) => b[1] - a[1]).slice(0, 8); };
+    const bars = (rows, param, label) => { const max = Math.max(1, ...rows.map((r) => r[1])); return rows.length ? `<div class="bars">${rows.map(([k, v]) => `<button data-act="go" data-href="assets?${param}=${encodeURIComponent(k)}" title="${esc(label(k))}"><span class="lbl">${esc(label(k))}</span><span class="bar" style="width:${Math.max(4, v / max * 100)}%"></span><b class="num">${v.toLocaleString('th-TH')}</b></button>`).join('')}</div>` : empty(); };
+    const card = (k, v, ic, color, href) => `<button class="card stat" data-act="go" data-href="${href}"><span class="ic c-${color}" aria-hidden="true">${ic}</span><div class="k">${esc(k)}</div><div class="v">${v.toLocaleString('th-TH')}</div></button>`;
+    const today = (P().admin || P().manager) ? T('AuditLogs').filter((l) => l.day === todayStr()).length : null;
+    return `<div class="grid g4" style="margin-top:8px">
+      ${card('ครุภัณฑ์รายชิ้น', units, '📦', 'lav', 'assets?type=UNIT')}
+      ${card('รออนุมัติ / ตัดสินใจ', dec.length, '✅', 'butter', 'approvals')}
+      ${card('กำลังซ่อม / รอตรวจรับ', rep + acc, '🛠️', 'peach', 'repairs?status=' + (acc && !rep ? 'ACCEPT' : 'REPAIR'))}
+      ${card('พร้อมใช้ในสต๊อกกลาง', ready, '🏬', 'mint', 'assets?loc=CENTRAL&cond=READY')}
+    </div>
+    <div class="grid g2" style="margin-top:16px">
+      <div class="card"><div class="spread"><h2>งานที่ต้องตัดสินใจ</h2><span class="chip c-butter">${dec.length}</span></div><div style="margin-top:8px">${itemList(dec, 'ไม่มีงานรอการตัดสินใจ 🎉')}</div></div>
+      <div class="card"><div class="spread"><h2>งานที่ควรติดตาม</h2><span class="chip c-pink">${fol.length}</span></div><div style="margin-top:8px">${itemList(fol, 'ไม่มีงานค้าง')}</div></div>
+    </div>
+    <div class="grid g3" style="margin-top:16px">
+      <div class="card"><h2>สถานะสิ่งของ</h2><div class="donut-wrap" style="margin-top:12px">
+        <div class="donut" style="background:conic-gradient(${grad})" role="img" aria-label="สัดส่วนสถานะสิ่งของ"><div class="c"><b>${total.toLocaleString('th-TH')}</b>ชิ้นทั้งหมด</div></div>
+        <div class="legend" style="flex:1;min-width:150px">${Object.keys(COND).filter((c) => byCond[c]).map((c) => `<button data-act="go" data-href="assets?cond=${c}"><i style="background:${COND_COLOR[c]}"></i>${esc(COND[c][0])}<b style="margin-left:auto">${byCond[c].toLocaleString('th-TH')}</b></button>`).join('') || '<span class="muted">ยังไม่มีสิ่งของ</span>'}</div></div></div>
+      <div class="card"><h2>แยกตามหมวด</h2><div style="margin-top:10px">${bars(tally((a) => optLabel('groups', a.group) || 'ไม่ระบุ'), 'group', (k) => k)}</div></div>
+      <div class="card"><h2>แยกตามสถานที่</h2><div style="margin-top:10px">${bars(tally((a) => a.location), 'loc', (k) => locPath(k))}</div></div>
+    </div>
+    ${today != null ? `<div class="card" style="margin-top:16px"><div class="spread"><h2>กิจกรรมวันนี้</h2><a class="btn ghost sm" href="#/activity">ดูทั้งหมด (${today})</a></div>${activityTable(T('AuditLogs').filter((l) => l.day === todayStr()).slice(-8).reverse())}</div>` : ''}`;
+  }
+};
+
+/* ================================================================ กิจกรรมวันนี้ */
+const ACTION_TH = { LOGIN: 'เข้าสู่ระบบ', LOGIN_GOOGLE: 'เข้าสู่ระบบ (Google)', LOGOUT: 'ออกจากระบบ' };
+function activityTable(rows) {
+  if (!rows.length) return empty('ยังไม่มีกิจกรรม');
+  return `<div class="table-wrap" style="margin-top:10px"><table class="t"><thead><tr><th>เวลา</th><th>ผู้ใช้</th><th>รายการ</th></tr></thead><tbody>${rows.map((l) => `<tr><td>${esc(fmtT(l.at))}</td><td>${esc(uname(l.owner))}</td><td>${esc(l.detail || ACTION_TH[l.action] || l.action)}</td></tr>`).join('')}</tbody></table></div>`;
+}
+PAGES.activity = {
+  title: 'กิจกรรมวันนี้',
+  render(q) {
+    const users = [...new Set(T('AuditLogs').filter((l) => l.day === todayStr()).map((l) => l.owner))];
+    return `<div class="page-head"><div><h2>กิจกรรมวันนี้</h2><div class="muted small">${esc(fmtD(todayStr()))} • ใครทำอะไรเมื่อไร</div></div>
+      <div class="row">${sel('user', users.map((u) => [u, uname(u)]), q.get('user'), 'ผู้ใช้ทั้งหมด')}<button class="btn ghost" data-act="report" data-type="today">🖨️ พิมพ์</button></div></div>
+      <div class="card" id="list">${this.list(q)}</div>`;
+  },
+  list(q) {
+    const rows = T('AuditLogs').filter((l) => l.day === todayStr() && (!q.get('user') || l.owner === q.get('user'))).reverse();
+    return activityTable(rows);
+  }
+};
+
+/* ================================================================ ทะเบียนสิ่งของ */
+function assetsFiltered(q) {
+  const s = (q.get('q') || '').toLowerCase().trim(), loc = q.get('loc'), grp = q.get('group'), cond = q.get('cond'), type = q.get('type');
+  const locSet = loc ? new Set(descendants(loc)) : null;
+  return T('Assets').filter((a) => {
+    if (num(a.qty) <= 0) return false;
+    if (cond) { if (a.condition !== cond) return false; } else if (a.condition === 'DISPOSED') return false;
+    if (locSet && !locSet.has(a.location)) return false;
+    if (grp && optLabel('groups', a.group) !== grp) return false;
+    if (type && a.type !== type) return false;
+    if (s && !(a.name.toLowerCase().includes(s) || a.code.toLowerCase().includes(s) || String(a.serial || '').toLowerCase().includes(s))) return false;
+    return true;
+  }).sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
+}
+PAGES.assets = {
+  title: 'ทะเบียนสิ่งของ',
+  render(q) {
+    return `<div class="page-head"><h2>ทะเบียนสิ่งของ</h2><div class="row">
+      <button class="btn ghost" data-act="scan-asset">📷 สแกน QR</button>
+      <button class="btn ghost" data-act="print-labels">🏷️ พิมพ์ป้าย QR</button>
+      ${P().register ? '<button class="btn" data-act="asset-new">＋ ลงทะเบียน</button>' : ''}</div></div>
+      <div class="filters">
+        <input type="search" class="input" data-filter="q" value="${esc(q.get('q') || '')}" placeholder="ค้นหาชื่อ รหัส หรือ serial" aria-label="ค้นหา">
+        ${sel('loc', locOptions(), q.get('loc'), 'ทุกสถานที่')}
+        ${sel('group', optOptions('groups'), q.get('group'), 'ทุกหมวด')}
+        ${sel('cond', Object.entries(COND).map(([k, v]) => [k, v[0]]), q.get('cond'), 'ทุกสภาพ (ไม่รวมจำหน่าย)')}
+        ${sel('type', [['UNIT', 'รายชิ้น'], ['QUANTITY', 'คุมจำนวน (ล็อต)']], q.get('type'), 'ทุกรูปแบบ')}
+      </div><div id="list">${this.list(q)}</div>`;
+  },
+  list(q) {
+    const all = assetsFiltered(q), rows = slicePage(all, q), fin = P().finance;
+    if (!all.length) return `<div class="card">${empty('ไม่พบสิ่งของตามเงื่อนไข')}</div>`;
+    return `<div class="table-wrap"><table class="t"><thead><tr><th>รหัส</th><th>ชื่อสิ่งของ</th><th>หมวด</th><th class="num">จำนวน</th><th>สถานที่</th><th>สภาพ</th>${fin ? '<th class="num">ราคา</th>' : ''}</tr></thead><tbody>
+      ${rows.map((a) => `<tr class="click" data-act="asset-show" data-id="${esc(a.id)}" tabindex="0"><td class="code">${esc(a.code)}</td><td><b>${esc(a.name)}</b>${a.serial ? `<div class="small muted">SN: ${esc(a.serial)}</div>` : ''}</td>
+      <td>${esc(optLabel('groups', a.group))}</td><td class="num">${esc(qtyText(a))}</td><td>${esc(locPath(a.location))}</td><td>${chip(COND, a.condition)}</td>${fin ? `<td class="num">${money(a.price)}</td>` : ''}</tr>`).join('')}
+      </tbody></table></div>${pager(all.length, pageOf(q), PAGE_SIZE)}`;
+  }
+};
+function assetTimeline(a) {
+  const ev = [];
+  T('Movements').filter((m) => m.asset === a.id || m.destinationAsset === a.id).forEach((m) => ev.push({ at: m.at, t: `${MKIND[m.kind] || m.kind} ${num(m.qty)} ${a.unit || ''}${m.from || m.to ? ` • ${m.from ? locName(m.from) : '—'} → ${m.to ? locName(m.to) : '—'}` : ''}`, s: [m.note, m.reference, uname(m.owner)].filter(Boolean).join(' • ') }));
+  T('Repairs').filter((r) => r.asset === a.id).forEach((r) => ev.push({ at: r.created, t: `แจ้งซ่อม ${r.code} (${(RST[r.status] || [r.status])[0]})`, s: r.issue, act: 'repair-show', id: r.id }));
+  T('LoanLines').filter((l) => l.asset === a.id || l.original === a.id).forEach((l) => { const L = byId('Loans', l.loan); if (L) ev.push({ at: L.createdAt, t: `ยืม ${L.code} โดย ${L.borrower}`, s: `${num(l.qty)} ${a.unit || ''} • คืนแล้ว ${num(l.returned)}`, act: 'loan-show', id: L.id }); });
+  T('Disposals').filter((d) => d.asset === a.id || d.disposedAsset === a.id).forEach((d) => ev.push({ at: d.created, t: `เสนอจำหน่าย ${d.code} (${(DST[d.status] || [d.status])[0]})`, s: d.reason, act: 'disposal-show', id: d.id }));
+  ev.sort((x, y) => String(y.at).localeCompare(String(x.at)));
+  if (!ev.length) return empty('ยังไม่มีความเคลื่อนไหว');
+  return `<div class="timeline">${ev.map((e) => `<div class="ev"><div class="small muted">${esc(fmtDT(e.at))}</div>${e.act ? `<button class="linkbtn" style="padding:0;min-height:0;text-align:left" data-act="${e.act}" data-id="${esc(e.id)}">${esc(e.t)}</button>` : `<div>${esc(e.t)}</div>`}${e.s ? `<div class="small muted">${esc(e.s)}</div>` : ''}</div>`).join('')}</div>`;
+}
+function showAsset(id) {
+  const a = byId('Assets', id);
+  if (!a) { toast('ไม่พบสิ่งของนี้', 'warning'); return; }
+  const p = P(), busyNow = !isAvailable(a), batch = a.batch && a.batch !== a.id ? byId('Assets', a.batch) : null;
+  const rows = [['รหัส', `<span class="code">${esc(a.code)}</span>`], ['ชื่อ', esc(a.name)], ['หมวด', esc(optLabel('groups', a.group))], ['ยี่ห้อ', esc(optLabel('brands', a.brand) || '-')],
+    ['รูปแบบ', a.type === 'QUANTITY' ? 'คุมจำนวน (ล็อต)' : 'รายชิ้น'], ['จำนวน', esc(qtyText(a))], ['สถานที่', esc(locPath(a.location))], ['สภาพ', chip(COND, a.condition)],
+    ['ผู้รับผิดชอบ', esc(uname(a.responsible) === '-' ? '-' : uname(a.responsible))], ['Serial', esc(a.serial || '-')], ['ปีที่ได้มา (พ.ศ.)', esc(a.year || '-')],
+    ['วันที่ซื้อ', esc(fmtD(a.purchase))], ['วันที่รับเข้า', esc(fmtD(a.received))]];
+  if (p.finance) rows.push(['ราคา (บาท)', money(a.price)]);
+  if (batch) rows.push(['ล็อตต้นทาง', `<button class="linkbtn" data-act="asset-show" data-id="${esc(batch.id)}">${esc(batch.code)}</button>`]);
+  if (a.loan) { const L = byId('Loans', a.loan); if (L) rows.push(['ใบยืม', `<button class="linkbtn" data-act="loan-show" data-id="${esc(L.id)}">${esc(L.code)}</button>`]); }
+  rows.push(['หมายเหตุ', esc(a.note || '-')]);
+  const btn = (act, label, cls, cond) => (cond ? `<button class="btn ${cls || 'ghost'} sm" data-act="${act}" data-id="${esc(a.id)}">${label}</button>` : '');
+  openModal({
+    title: a.name, wide: true,
+    body: `<div class="grid g2"><dl class="kv">${rows.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${v}</dd>`).join('')}</dl>
+      <div class="stack"><div class="qrbox">${QR.svg(assetQrUrl(a), 'QR ' + a.code)}<div class="small muted" style="max-width:220px">สแกนเพื่อเปิดรายละเอียดสิ่งของนี้<br><span class="code" style="word-break:break-all">${esc(assetQrUrl(a))}</span></div></div>
+      <div><h3>ไฟล์แนบ</h3>${filesHtml('Assets', a.id)}</div></div></div>
+      <h3 style="margin:18px 0 8px">ไทม์ไลน์การเคลื่อนไหว</h3>${assetTimeline(a)}`,
+    footer: [btn('asset-edit', '✏️ แก้ไข', 'ghost', p.register && a.condition !== 'DISPOSED'), btn('asset-move', '🚚 ย้าย', 'ghost', p.register && !busyNow),
+      btn('repair-new', '🛠️ แจ้งซ่อม', 'peach', !busyNow && !openRepairOf(a.id) && !pendingDisposalOf(a.id)), btn('loan-new', '🤝 ยืม', 'lav', !busyNow && a.condition !== 'DAMAGED' && !openRepairOf(a.id)),
+      btn('disposal-new', '🗑️ เสนอจำหน่าย', 'pink', p.register && !busyNow && !openRepairOf(a.id) && !pendingDisposalOf(a.id)), btn('print-label', '🏷️ พิมพ์ป้าย', 'ghost', true)].join('')
+  });
+}
+function assetForm(a) {
+  const p = P(), isNew = !a;
+  a = a || { type: 'UNIT', condition: 'READY', location: 'CENTRAL', qty: 1 };
+  const editableCond = isNew || ['READY', 'IN_USE', 'DAMAGED'].includes(a.condition);
+  const fields = [
+    { name: 'name', label: 'ชื่อสิ่งของ', required: true, value: a.name, full: true, attrs: 'maxlength="150"' },
+    { name: 'group', label: 'หมวด', type: 'select', required: true, options: optOptions('groups'), value: optLabel('groups', a.group) },
+    { name: 'brand', label: 'ยี่ห้อ', type: 'select', options: optOptions('brands'), value: optLabel('brands', a.brand) },
+    { name: 'unit', label: 'หน่วยนับ', type: 'select', required: true, options: optOptions('units'), value: optLabel('units', a.unit) }
+  ];
+  if (isNew) {
+    fields.push({ name: 'type', label: 'รูปแบบทะเบียน', type: 'select', blank: false, options: [['UNIT', 'รายชิ้น (1 ชิ้น/ทะเบียน)'], ['QUANTITY', 'คุมจำนวน (ล็อต)']], value: 'UNIT' });
+    fields.push({ name: 'qty', label: 'จำนวน', type: 'number', min: 1, required: true, value: 1, help: 'รายชิ้น: สร้างทะเบียนตามจำนวน (สูงสุด 200) • ล็อต: จำนวนในล็อต' });
+    fields.push({ name: 'location', label: 'สถานที่รับเข้า', type: 'select', required: true, options: locOptions(), value: 'CENTRAL', blank: false });
+  } else if (a.type === 'QUANTITY') fields.push({ name: 'qty', label: 'จำนวนในล็อต (ปรับยอด)', type: 'number', min: 0, value: a.qty });
+  if (editableCond) fields.push({ name: 'condition', label: 'สภาพ', type: 'select', blank: false, options: [['READY', 'พร้อมใช้'], ['IN_USE', 'ใช้งานอยู่'], ['DAMAGED', 'ชำรุด']], value: a.condition });
+  if (p.finance) fields.push({ name: 'price', label: 'ราคาต่อหน่วย (บาท)', type: 'number', min: 0, step: '0.01', value: a.price });
+  fields.push(
+    { name: 'year', label: 'ปีที่ได้มา (พ.ศ.)', type: 'number', min: 2400, max: 2700, value: a.year, placeholder: String(new Date().getFullYear() + 543) },
+    { name: 'purchase', label: 'วันที่ซื้อ', type: 'date', value: a.purchase },
+    { name: 'received', label: 'วันที่รับเข้า', type: 'date', value: a.received || (isNew ? todayStr() : '') },
+    { name: 'responsible', label: 'ผู้รับผิดชอบ', type: 'select', options: activeUsers().map((u) => [u.id, u.name]), value: a.responsible },
+    { name: 'serial', label: 'Serial / เลขเครื่อง', value: a.serial, attrs: 'maxlength="100"' },
+    { name: 'note', label: 'หมายเหตุ', type: 'textarea', value: a.note, full: true }
+  );
+  if (isNew) fields.push({ name: 'files', label: 'ภาพ / เอกสาร (สูงสุด 6 ไฟล์)', type: 'files', full: true, help: 'ภาพจะถูกบีบอัดเป็น JPEG ไม่เกิน 512 KB อัตโนมัติ, PDF ไม่เกิน 5 MB' });
+  openForm({
+    title: isNew ? 'ลงทะเบียนสิ่งของ' : 'แก้ไขทะเบียน ' + a.code, fields, wide: true, submitText: isNew ? 'ลงทะเบียน' : 'บันทึกการแก้ไข',
+    onSubmit: async (v, form) => {
+      const files = await filesFrom(form); if (files === null) return;
+      if (!isNew) { v.id = a.id; v.version = a.version; }
+      await act('saveAsset', v, { success: isNew ? 'ลงทะเบียนเรียบร้อย' : 'แก้ไขทะเบียนเรียบร้อย', files, entity: 'Assets', entityId: (d) => d.id });
+    }
+  });
+}
+function printLabels(list) {
+  if (!list.length) return toast('ไม่มีรายการให้พิมพ์', 'warning');
+  if (list.length > 120) { list = list.slice(0, 120); toast('พิมพ์ได้ครั้งละไม่เกิน 120 ป้าย', 'info'); }
+  printDoc('ป้าย QR สิ่งของ', `<div class="labels">${list.map((a) => `<div class="lbl">${QR.svg(assetQrUrl(a))}<b>${esc(a.name)}</b><small>${esc(a.code)}</small><span class="muted">${esc(locName(a.location))}</span></div>`).join('')}</div>`);
+}
+
+/* ================================================================ งานซ่อม */
+const REPAIR_TABS = [['open', 'ยังไม่ปิด'], ['ASSESS', 'รอประเมิน'], ['APPROVAL', 'รออนุมัติ'], ['REPAIR', 'กำลังซ่อม'], ['ACCEPT', 'รอตรวจรับ'], ['DONE', 'เสร็จสิ้น'], ['REJECT', 'ไม่อนุมัติ'], ['all', 'ทั้งหมด']];
+const repairCost = (rid) => T('RepairCosts').filter((c) => c.repair === rid && c.kind !== 'VOID').reduce((s, c) => s + num(c.amount), 0);
+PAGES.repairs = {
+  title: 'แจ้งซ่อม / งานช่าง',
+  render(q) {
+    const st = q.get('status') || 'open', cnt = (k) => T('Repairs').filter((r) => (k === 'all' ? true : k === 'open' ? isOpenRepair(r) : r.status === k)).length;
+    return `<div class="page-head"><h2>${P().techOnly ? 'งานซ่อมที่ได้รับมอบหมาย' : 'งานซ่อม'}</h2><div class="row"><input type="search" class="input" style="width:240px" data-filter="q" value="${esc(q.get('q') || '')}" placeholder="ค้นหารหัส อาการ สิ่งของ" aria-label="ค้นหางานซ่อม">
+      <button class="btn" data-act="repair-new">＋ แจ้งซ่อม</button></div></div>
+      <div class="tabs" role="tablist">${REPAIR_TABS.map(([k, l]) => `<button class="tab ${st === k ? 'on' : ''}" data-act="filter" data-key="status" data-val="${k}" role="tab">${l}<span class="n">${cnt(k)}</span></button>`).join('')}</div>
+      <div id="list">${this.list(q)}</div>`;
+  },
+  list(q) {
+    const st = q.get('status') || 'open', s = (q.get('q') || '').toLowerCase().trim(), fin = P().finance;
+    const all = T('Repairs').filter((r) => (st === 'all' ? true : st === 'open' ? isOpenRepair(r) : r.status === st)).filter((r) => {
+      if (!s) return true; const a = byId('Assets', r.asset);
+      return r.code.toLowerCase().includes(s) || r.issue.toLowerCase().includes(s) || (a && (a.name.toLowerCase().includes(s) || a.code.toLowerCase().includes(s)));
+    }).sort((a, b) => String(b.created).localeCompare(String(a.created)));
+    if (!all.length) return `<div class="card">${empty('ไม่มีงานซ่อมในหมวดนี้')}</div>`;
+    const today = todayStr();
+    return `<div class="table-wrap"><table class="t"><thead><tr><th>รหัส</th><th>สิ่งของ</th><th>อาการ</th><th>ช่าง</th><th>สถานะ</th><th>กำหนดเสร็จ</th>${fin ? '<th class="num">วงเงิน</th>' : ''}</tr></thead><tbody>
+      ${slicePage(all, q).map((r) => { const a = byId('Assets', r.asset); return `<tr class="click" data-act="repair-show" data-id="${esc(r.id)}" tabindex="0"><td class="code">${esc(r.code)}<div class="small muted">${esc(fmtD(r.created))}</div></td>
+      <td>${esc(a ? a.name : '-')}<div class="small muted">${esc(a ? a.code : '')}</div></td><td>${esc(r.issue.length > 70 ? r.issue.slice(0, 70) + '…' : r.issue)}</td><td>${esc(r.assigned ? uname(r.assigned) : 'ยังไม่มอบหมาย')}</td>
+      <td>${chip(RST, r.status)}</td><td>${r.due ? `<span class="${isOpenRepair(r) && r.due < today ? 'chip c-pink' : ''}">${esc(fmtD(r.due))}</span>` : '-'}</td>${fin ? `<td class="num">${money(r.approved)}</td>` : ''}</tr>`; }).join('')}
+      </tbody></table></div>${pager(all.length, pageOf(q), PAGE_SIZE)}`;
+  }
+};
+function showRepair(id) {
+  const r = byId('Repairs', id);
+  if (!r) { toast('ไม่พบงานซ่อม (อาจไม่ได้รับมอบหมายให้คุณ)', 'warning'); return; }
+  const p = P(), me = S.me.id, a = byId('Assets', r.asset), actor = p.admin || p.assign || r.assigned === me;
+  const assess = T('RepairAssessments').filter((x) => x.repair === id).sort((x, y) => String(y.at).localeCompare(String(x.at)));
+  const notes = T('RepairNotes').filter((x) => x.repair === id).sort((x, y) => String(y.at).localeCompare(String(x.at)));
+  const costs = T('RepairCosts').filter((x) => x.repair === id && x.kind !== 'VOID');
+  const revs = T('BudgetRevisions').filter((x) => x.repair === id);
+  const kv = [['รหัส', `<span class="code">${esc(r.code)}</span>`], ['สิ่งของ', a ? `<button class="linkbtn" data-act="asset-show" data-id="${esc(a.id)}">${esc(assetLabel(a))}</button>` : '-'],
+    ['จำนวน', esc(num(r.qty) + ' ' + (a ? a.unit || '' : ''))], ['อาการ', esc(r.issue)], ['สถานะ', chip(RST, r.status)], ['ผู้แจ้ง', esc(uname(r.owner))],
+    ['สถานที่พบปัญหา', esc(locPath(r.reportedLocation))], ['ช่างผู้รับผิดชอบ', esc(r.assigned ? uname(r.assigned) : 'ยังไม่มอบหมาย')], ['วันที่แจ้ง', esc(fmtDT(r.created))], ['กำหนดเสร็จ', esc(fmtD(r.due))]];
+  if (p.finance) { kv.push(['วงเงินอนุมัติ', money(r.approved)]); kv.push(['ค่าใช้จ่ายจริง', costs.length ? money(repairCost(id)) : '-']); }
+  const B = (act, label, cls) => `<button class="btn ${cls || 'ghost'} sm" data-act="${act}" data-id="${esc(id)}">${label}</button>`;
+  const btns = [];
+  if ((r.status === 'ASSESS' || r.status === 'APPROVAL') && actor) btns.push(B('repair-assess', '📝 ประเมินผล', 'lav'));
+  if ((r.status === 'ASSESS' || r.status === 'APPROVAL') && (p.admin || p.assign || r.owner === me || r.assigned === me)) btns.push(B('repair-issue', '✏️ แก้อาการ'));
+  if (r.status === 'APPROVAL' && p.admin) { btns.push(B('repair-approve', '✔ อนุมัติ')); btns.push(B('repair-reject', '✖ ไม่อนุมัติ', 'pink')); }
+  if (r.status === 'REPAIR' && actor) { btns.push(B('repair-complete', '✔ ปิดงานซ่อม')); btns.push(B('repair-budget', '💰 ขอแก้วงเงิน', 'peach')); }
+  if (r.status === 'ACCEPT' && p.inspect) { btns.push(B('repair-accept', '✔ ตรวจรับ')); btns.push(B('repair-return', '↩ ส่งกลับแก้ไข', 'pink')); }
+  if (['REPAIR', 'ACCEPT', 'DONE'].includes(r.status) && p.finance) btns.push(B('repair-costs', '🧾 แก้ค่าใช้จ่าย'));
+  if (isOpenRepair(r) && (p.admin || p.assign || r.assigned === me)) btns.push(B('repair-forward', '👷 ' + (r.assigned ? 'ส่งต่องาน' : 'มอบหมายช่าง')));
+  btns.push(B('repair-note', '💬 บันทึกติดตาม'));
+  btns.push(B('repair-print', '🖨️ พิมพ์ใบส่งซ่อม'));
+  openModal({
+    title: 'งานซ่อม ' + r.code, wide: true,
+    body: `<dl class="kv">${kv.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${v}</dd>`).join('')}</dl>
+      ${assess.length ? `<h3 style="margin:18px 0 8px">ผลประเมิน</h3>${assess.map((x) => `<div class="card" style="padding:12px;margin-bottom:8px"><div class="spread"><b>${String(x.fixable).toUpperCase() === 'TRUE' ? '✔ ซ่อมได้' : '✖ ซ่อมไม่ได้'}</b><span class="small muted">${esc(fmtDT(x.at))} • ${esc(uname(x.owner))}</span></div>
+        <div class="small">${p.finance && x.estimate !== '' ? `ประมาณการ ${money(x.estimate)} บาท • ` : ''}${x.days !== '' ? `ระยะเวลา ${esc(x.days)} วัน` : ''}</div>${x.note ? `<div>${esc(x.note)}</div>` : ''}</div>`).join('')}` : ''}
+      ${revs.length ? `<h3 style="margin:18px 0 8px">คำขอแก้ไขวงเงิน</h3><div class="table-wrap"><table class="t"><thead><tr><th>วันที่</th>${p.finance ? '<th class="num">เดิม</th><th class="num">ใหม่</th>' : ''}<th>เหตุผล</th><th>สถานะ</th></tr></thead><tbody>${revs.map((b) => `<tr><td>${esc(fmtDT(b.at))}</td>${p.finance ? `<td class="num">${money(b.old)}</td><td class="num">${money(b.amount)}</td>` : ''}<td>${esc(b.reason)}${b.decisionNote ? `<div class="small muted">${esc(b.decisionNote)}</div>` : ''}</td><td>${chip({ PENDING: ['รอพิจารณา', 'butter'], APPROVED: ['อนุมัติ', 'mint'], REJECTED: ['ไม่อนุมัติ', 'gray'] }, b.status)}${b.status === 'PENDING' && p.admin ? ` <button class="btn sm" data-act="budget-approve" data-id="${esc(b.id)}">อนุมัติ</button> <button class="btn pink sm" data-act="budget-reject" data-id="${esc(b.id)}">ไม่อนุมัติ</button>` : ''}</td></tr>`).join('')}</tbody></table></div>` : ''}
+      ${costs.length ? `<h3 style="margin:18px 0 8px">ค่าใช้จ่ายจริง</h3><div class="table-wrap"><table class="t"><thead><tr><th>ประเภท</th><th>รายละเอียด</th>${p.finance ? '<th class="num">จำนวนเงิน</th>' : ''}</tr></thead><tbody>${costs.map((c) => `<tr><td>${esc(CKIND[c.kind] || c.kind)}</td><td>${esc(c.note || '-')}</td>${p.finance ? `<td class="num">${money(c.amount)}</td>` : ''}</tr>`).join('')}</tbody></table></div>` : ''}
+      <h3 style="margin:18px 0 8px">ไฟล์ / ภาพหลักฐาน</h3>${filesHtml('Repairs', id)}
+      <h3 style="margin:18px 0 8px">บันทึกติดตาม</h3>${notes.length ? `<div class="timeline">${notes.map((n) => `<div class="ev"><div class="small muted">${esc(fmtDT(n.at))} • ${esc(uname(n.fromUser || n.owner))}${n.toUser ? ' → ' + esc(uname(n.toUser)) : ''}</div><div>${esc(n.text)}</div></div>`).join('')}</div>` : empty('ยังไม่มีบันทึก')}`,
+    footer: btns.join('')
+  });
+}
+const reopenRepair = (id) => () => showRepair(id);
+function repairForm(assetId) {
+  const p = P();
+  PICKERS.rpAsset = { filter: (a) => isAvailable(a) && !openRepairOf(a.id) && !pendingDisposalOf(a.id), onPick: (a, root) => { const f = $('#rpQtyWrap'); f.classList.toggle('hidden', a.type !== 'QUANTITY'); $('#f_qty').value = a.type === 'QUANTITY' ? 1 : ''; $('#f_qty').max = a.qty; $('#f_reportedLocation').value = a.location; void root; } };
+  const fields = [
+    { type: 'html', full: true, html: pickerHtml('rpAsset', 'สิ่งของที่เสีย') },
+    { type: 'html', full: true, html: `<div id="rpQtyWrap" class="hidden">${fieldHtml({ name: 'qty', label: 'จำนวนที่เสีย', type: 'number', min: 1 })}</div>` },
+    { name: 'issue', label: 'อาการเสีย', type: 'textarea', required: true, full: true, placeholder: 'เช่น เปิดไม่ติด มีเสียงดัง น้ำรั่ว' },
+    { name: 'reportedLocation', label: 'สถานที่พบปัญหา', type: 'select', options: locOptions() }
+  ];
+  if (p.assign) {
+    fields.push({ name: 'assigned', label: 'มอบหมายช่าง', type: 'select', options: techs().map((u) => [u.id, u.name]), blank: '— ยังไม่มอบหมาย —' });
+    fields.push({ name: 'due', label: 'กำหนดเสร็จ', type: 'date', min: todayStr() });
+  }
+  fields.push({ name: 'files', label: 'ภาพหลักฐาน / เอกสาร (สูงสุด 6 ไฟล์)', type: 'files', full: true });
+  openForm({
+    title: 'แจ้งซ่อม', fields, submitText: 'ส่งแจ้งซ่อม',
+    onSubmit: async (v, form) => {
+      if (!v.rpAsset) return toast('กรุณาเลือกสิ่งของที่เสีย', 'warning');
+      const files = await filesFrom(form); if (files === null) return;
+      await act('createRepair', { asset: v.rpAsset, qty: v.qty, issue: v.issue, reportedLocation: v.reportedLocation, assigned: v.assigned, due: v.due },
+        { success: 'แจ้งซ่อมเรียบร้อย', files, entity: 'Repairs', entityId: (d) => d.id });
+    }
+  });
+  if (assetId) pickerPick('rpAsset', assetId);
+}
+function repairAction(id, kind) {
+  const r = byId('Repairs', id); if (!r) return;
+  const back = { after: reopenRepair(id) };
+  if (kind === 'assess') {
+    const last = T('RepairAssessments').filter((x) => x.repair === id).pop() || {};
+    return openForm({
+      title: 'ประเมินผลงานซ่อม ' + r.code, fields: [
+        { name: 'fixable', label: 'ผลประเมิน', type: 'select', blank: false, options: [['TRUE', 'ซ่อมได้'], ['FALSE', 'ซ่อมไม่ได้ / ไม่คุ้ม']], value: last.fixable || 'TRUE' },
+        { name: 'estimate', label: 'ประมาณการค่าใช้จ่าย (บาท)', type: 'number', min: 0, step: '0.01', value: last.estimate },
+        { name: 'days', label: 'ระยะเวลาที่ใช้ (วัน)', type: 'number', min: 0, value: last.days },
+        { name: 'note', label: 'รายละเอียด', type: 'textarea', full: true, value: last.note }],
+      submitText: 'บันทึกผลประเมิน',
+      onSubmit: (v) => act('assessRepair', Object.assign(v, { id, version: r.version, fixable: v.fixable === 'TRUE' }), Object.assign({ success: 'บันทึกผลประเมินเรียบร้อย' }, back))
+    });
+  }
+  if (kind === 'issue') return openForm({
+    title: 'แก้อาการเสีย ' + r.code, fields: [{ name: 'issue', label: 'อาการเสีย', type: 'textarea', required: true, full: true, value: r.issue }].concat(P().assign ? [{ name: 'due', label: 'กำหนดเสร็จ', type: 'date', value: r.due }] : []),
+    onSubmit: (v) => act('updateRepairIssue', Object.assign(v, { id, version: r.version }), Object.assign({ success: 'แก้ไขอาการเรียบร้อย' }, back))
+  });
+  if (kind === 'forward') return openForm({
+    title: (r.assigned ? 'ส่งต่องาน ' : 'มอบหมายช่าง ') + r.code, fields: [
+      { name: 'assigned', label: 'ช่างผู้รับงาน', type: 'select', required: true, options: techs().filter((u) => u.id !== r.assigned).map((u) => [u.id, u.name]) },
+      ...(P().assign ? [{ name: 'due', label: 'กำหนดเสร็จ', type: 'date', value: r.due }] : []),
+      { name: 'note', label: 'หมายเหตุ', type: 'textarea', full: true }],
+    submitText: 'ส่งงาน', onSubmit: (v) => act('forwardRepair', Object.assign(v, { id, version: r.version }), Object.assign({ success: 'ส่งต่องานเรียบร้อย' }, back))
+  });
+  if (kind === 'note') return openForm({
+    title: 'บันทึกติดตาม ' + r.code, fields: [{ name: 'text', label: 'ข้อความ', type: 'textarea', required: true, full: true }],
+    onSubmit: (v) => act('addRepairNote', { id, text: v.text }, Object.assign({ success: 'บันทึกเรียบร้อย' }, back))
+  });
+  if (kind === 'budget') return openForm({
+    title: 'ขอแก้ไขวงเงิน ' + r.code, before: P().finance ? `<p class="muted">วงเงินปัจจุบัน ${money(r.approved)} บาท</p>` : '', fields: [
+      { name: 'amount', label: 'วงเงินใหม่ (บาท)', type: 'number', min: 0, step: '0.01', required: true },
+      { name: 'reason', label: 'เหตุผล', type: 'textarea', required: true, full: true }],
+    submitText: 'ส่งคำขอ', onSubmit: (v) => act('requestBudgetRevision', Object.assign(v, { id }), Object.assign({ success: 'ส่งคำขอแก้ไขวงเงินแล้ว' }, back))
+  });
+  if (kind === 'complete' || kind === 'costs') {
+    const existing = kind === 'costs' ? T('RepairCosts').filter((c) => c.repair === id && c.kind !== 'VOID') : [];
+    const rowHtml = (c, i) => `<tr data-cost="${i}" data-id="${esc(c.id || '')}" data-version="${esc(c.version || '')}"><td><select class="input" name="kind" aria-label="ประเภท">${Object.entries(CKIND).filter(([k]) => k !== 'VOID').map(([k, l]) => `<option value="${k}" ${c.kind === k ? 'selected' : ''}>${l}</option>`).join('')}</select></td>
+      <td><input class="input" name="note" value="${esc(c.note || '')}" placeholder="รายละเอียด" aria-label="รายละเอียด"></td><td><input class="input" name="amount" type="number" min="0" step="0.01" value="${esc(c.amount || '')}" style="width:130px" aria-label="จำนวนเงิน"></td>
+      <td><button type="button" class="btn ghost sm" data-act="cost-remove" aria-label="ลบแถว">✕</button></td></tr>`;
+    const init = existing.length ? existing : [{ kind: 'PARTS' }, { kind: 'LABOR' }];
+    openForm({
+      title: (kind === 'complete' ? 'ปิดงานซ่อม ' : 'แก้ค่าใช้จ่าย ') + r.code, wide: true,
+      before: `${P().finance ? `<p class="muted">วงเงินอนุมัติ ${money(r.approved)} บาท</p>` : ''}<div class="table-wrap lines"><table class="t" style="min-width:560px"><thead><tr><th>ประเภท</th><th>รายละเอียด</th><th>จำนวนเงิน (บาท)</th><th></th></tr></thead><tbody id="costRows">${init.map(rowHtml).join('')}</tbody></table></div>
+        <button type="button" class="btn ghost sm" style="margin:10px 0 14px" data-act="cost-add">＋ เพิ่มรายการ</button>`,
+      fields: kind === 'complete' ? [{ name: 'note', label: 'สรุปงานซ่อม', type: 'textarea', full: true, placeholder: 'สิ่งที่ทำ อะไหล่ที่เปลี่ยน' }, { name: 'files', label: 'ภาพหลังซ่อม / ใบเสร็จ', type: 'files', full: true }] : [],
+      submitText: kind === 'complete' ? 'ปิดงาน ส่งตรวจรับ' : 'บันทึกค่าใช้จ่าย',
+      onSubmit: async (v, form) => {
+        const rows = $$('#costRows tr', form).map((tr) => ({ id: tr.dataset.id, version: tr.dataset.version, kind: $('[name=kind]', tr).value, note: $('[name=note]', tr).value.trim(), amount: $('[name=amount]', tr).value }));
+        const costs = rows.filter((c) => c.id || c.amount !== '');
+        if (kind === 'costs') existing.forEach((c) => { if (!rows.some((x) => x.id === c.id)) costs.push({ id: c.id, version: c.version, remove: true }); });
+        if (kind === 'complete') {
+          const files = await filesFrom(form); if (files === null) return;
+          return act('completeRepair', { id, version: r.version, note: v.note, costs }, { success: 'ปิดงานซ่อมเรียบร้อย รอตรวจรับ', files, entity: 'Repairs', entityId: id, after: reopenRepair(id) });
+        }
+        return act('editRepairCosts', { id, costs }, Object.assign({ success: 'แก้ค่าใช้จ่ายเรียบร้อย' }, back));
+      }
+    });
+    window.__costRow = rowHtml;
+  }
+}
+async function decideRepair(id, approve) {
+  const r = byId('Repairs', id); if (!r) return;
+  const last = T('RepairAssessments').filter((x) => x.repair === id).pop() || {};
+  const c = approve
+    ? await confirmBox('อนุมัติงานซ่อม ' + r.code, assetLabel(byId('Assets', r.asset)), { input: 'number', inputLabel: 'วงเงินอนุมัติ (บาท)', inputValue: last.estimate || '', required: true, requiredText: 'กรุณากรอกวงเงิน', confirmText: 'อนุมัติ', inputAttributes: { min: 0, step: '0.01' } })
+    : await confirmBox('ไม่อนุมัติงานซ่อม ' + r.code, 'สิ่งของจะถูกเปลี่ยนสภาพเป็น "ชำรุด"', { icon: 'warning', input: 'textarea', inputLabel: 'เหตุผล', required: true, requiredText: 'กรุณาระบุเหตุผล', confirmText: 'ไม่อนุมัติ', danger: true });
+  if (!c.ok) return;
+  await act('decideRepair', { id, version: r.version, decision: approve ? 'APPROVE' : 'REJECT', amount: approve ? c.value : '', reason: approve ? '' : c.value }, { success: approve ? 'อนุมัติงานซ่อมเรียบร้อย' : 'บันทึกไม่อนุมัติเรียบร้อย', close: false, after: () => { if (modalOpen()) showRepair(id); } });
+}
+async function acceptRepair(id, ok) {
+  const r = byId('Repairs', id); if (!r) return;
+  const c = ok ? await confirmBox('ตรวจรับงานซ่อม ' + r.code, 'ยืนยันว่าซ่อมเสร็จและใช้งานได้ สิ่งของจะกลับเป็น "พร้อมใช้"', { input: 'textarea', inputLabel: 'หมายเหตุ (ถ้ามี)', confirmText: 'ตรวจรับ' })
+    : await confirmBox('ส่งกลับแก้ไข ' + r.code, 'งานจะกลับไปสถานะ "กำลังซ่อม"', { icon: 'warning', input: 'textarea', inputLabel: 'สิ่งที่ต้องแก้ไข', required: true, confirmText: 'ส่งกลับ' });
+  if (!c.ok) return;
+  await act('acceptRepair', { id, version: r.version, decision: ok ? 'ACCEPT' : 'RETURN', note: c.value || '' }, { success: ok ? 'ตรวจรับงานเรียบร้อย' : 'ส่งกลับแก้ไขแล้ว', close: false, after: () => { if (modalOpen()) showRepair(id); } });
+}
+async function decideBudget(id, ok) {
+  const b = byId('BudgetRevisions', id); if (!b) return;
+  const c = await confirmBox((ok ? 'อนุมัติ' : 'ไม่อนุมัติ') + 'การแก้ไขวงเงิน', `จาก ${money(b.old)} เป็น ${money(b.amount)} บาท • ${b.reason}`, { icon: ok ? 'question' : 'warning', input: 'textarea', inputLabel: ok ? 'หมายเหตุ (ถ้ามี)' : 'เหตุผล', required: !ok, confirmText: ok ? 'อนุมัติ' : 'ไม่อนุมัติ' });
+  if (!c.ok) return;
+  await act('decideBudgetRevision', { id, version: b.version, decision: ok ? 'APPROVE' : 'REJECT', note: c.value || '' }, { success: ok ? 'อนุมัติวงเงินใหม่เรียบร้อย' : 'บันทึกไม่อนุมัติเรียบร้อย', close: false, after: () => { if (modalOpen()) showRepair(b.repair); } });
+}
+async function printRepair(id) {
+  const r = byId('Repairs', id); if (!r) return;
+  const w = window.open('', '_blank');
+  if (!w) return failBox({ message: 'เบราว์เซอร์บล็อกหน้าต่างพิมพ์ กรุณาอนุญาตป๊อปอัป' });
+  w.document.write('<p style="font-family:sans-serif">กำลังเตรียมเอกสาร…</p>');
+  const a = byId('Assets', r.asset), p = P(), imgs = filesOf('Repairs', id).filter((f) => /^image\//.test(f.mime)).slice(0, 6), srcs = [];
+  for (const f of imgs) { try { const x = await fetchFile(f.id); srcs.push(await new Promise((res) => { const fr = new FileReader(); fr.onload = () => res(fr.result); fr.readAsDataURL(x.blob); })); } catch (e) { } }
+  const last = T('RepairAssessments').filter((x) => x.repair === id).pop();
+  const costs = T('RepairCosts').filter((c) => c.repair === id && c.kind !== 'VOID');
+  printDoc('ใบส่งซ่อม ' + r.code, `<div class="kv"><b>เลขที่</b><span>${esc(r.code)}</span><b>วันที่แจ้ง</b><span>${esc(fmtDT(r.created))}</span><b>สิ่งของ</b><span>${esc(assetLabel(a))}</span>
+    <b>จำนวน</b><span>${esc(num(r.qty) + ' ' + (a ? a.unit : ''))}</span><b>Serial</b><span>${esc(a && a.serial || '-')}</span><b>สถานที่</b><span>${esc(locPath(r.reportedLocation))}</span>
+    <b>อาการเสีย</b><span>${esc(r.issue)}</span><b>ผู้แจ้ง</b><span>${esc(uname(r.owner))}</span><b>ช่างผู้รับผิดชอบ</b><span>${esc(uname(r.assigned))}</span>
+    <b>กำหนดเสร็จ</b><span>${esc(fmtD(r.due))}</span><b>สถานะ</b><span>${esc((RST[r.status] || [r.status])[0])}</span>
+    ${last ? `<b>ผลประเมิน</b><span>${String(last.fixable).toUpperCase() === 'TRUE' ? 'ซ่อมได้' : 'ซ่อมไม่ได้'} ${last.days ? '• ' + esc(last.days) + ' วัน' : ''} ${esc(last.note || '')}</span>` : ''}
+    ${p.finance ? `<b>วงเงินอนุมัติ</b><span>${money(r.approved)} บาท</span>` : ''}</div>
+    ${p.finance && costs.length ? `<h2>ค่าใช้จ่าย</h2>${tableHtml(['ประเภท', 'รายละเอียด', 'จำนวนเงิน'], costs.map((c) => [CKIND[c.kind] || c.kind, c.note, money(c.amount)]).concat([['', 'รวม', money(repairCost(id))]]), [2])}` : ''}
+    ${srcs.length ? `<h2>ภาพหลักฐาน</h2><div class="imgs">${srcs.map((s) => `<img src="${s}" alt="หลักฐาน">`).join('')}</div>` : ''}
+    <div class="sign"><div>ผู้แจ้งซ่อม</div><div>ช่างผู้ซ่อม</div><div>ผู้ตรวจรับ</div></div>`, w);
+}
+
+/* ================================================================ อนุมัติรายการ */
+PAGES.approvals = {
+  title: 'อนุมัติรายการ',
+  render() {
+    const p = P(), sec = (title, html, n) => `<div class="card" style="margin-bottom:16px"><div class="spread"><h2>${esc(title)}</h2><span class="chip c-butter">${n}</span></div><div style="margin-top:10px">${html}</div></div>`;
+    const tbl = (cols, rows) => (rows.length ? `<div class="table-wrap"><table class="t"><thead><tr>${cols.map((c) => `<th>${esc(c)}</th>`).join('')}</tr></thead><tbody>${rows.join('')}</tbody></table></div>` : empty('ไม่มีรายการรอ'));
+    let html = '';
+    if (p.admin) {
+      const reps = T('Repairs').filter((r) => r.status === 'APPROVAL');
+      html += sec('งานซ่อมรออนุมัติ', tbl(['รหัส', 'สิ่งของ', 'ผลประเมิน', 'จัดการ'], reps.map((r) => { const x = T('RepairAssessments').filter((y) => y.repair === r.id).pop() || {}; return `<tr><td class="code"><button class="linkbtn" data-act="repair-show" data-id="${esc(r.id)}">${esc(r.code)}</button></td><td>${esc(assetLabel(byId('Assets', r.asset)))}<div class="small muted">${esc(r.issue)}</div></td>
+        <td>${x.fixable ? (String(x.fixable).toUpperCase() === 'TRUE' ? '✔ ซ่อมได้' : '✖ ซ่อมไม่ได้') : '-'}${x.estimate !== undefined && x.estimate !== '' ? `<div class="small muted">ประมาณการ ${money(x.estimate)} บาท • ${esc(x.days)} วัน</div>` : ''}</td>
+        <td><div class="row"><button class="btn sm" data-act="repair-approve" data-id="${esc(r.id)}">อนุมัติ</button><button class="btn pink sm" data-act="repair-reject" data-id="${esc(r.id)}">ไม่อนุมัติ</button></div></td></tr>`; })), reps.length);
+      const bud = T('BudgetRevisions').filter((b) => b.status === 'PENDING');
+      html += sec('คำขอแก้ไขวงเงิน', tbl(['งานซ่อม', 'เดิม → ใหม่', 'เหตุผล', 'จัดการ'], bud.map((b) => { const r = byId('Repairs', b.repair); return `<tr><td class="code"><button class="linkbtn" data-act="repair-show" data-id="${esc(b.repair)}">${esc(r ? r.code : '-')}</button></td><td>${money(b.old)} → <b>${money(b.amount)}</b> ${chip({ INCREASE: ['เพิ่ม', 'peach'], DECREASE: ['ลด', 'mint'] }, b.direction)}</td><td>${esc(b.reason)}<div class="small muted">${esc(uname(b.owner))} • ${esc(fmtDT(b.at))}</div></td>
+        <td><div class="row"><button class="btn sm" data-act="budget-approve" data-id="${esc(b.id)}">อนุมัติ</button><button class="btn pink sm" data-act="budget-reject" data-id="${esc(b.id)}">ไม่อนุมัติ</button></div></td></tr>`; })), bud.length);
+      const dis = T('Disposals').filter((d) => d.status === 'PENDING');
+      html += sec('คำขอจำหน่าย', tbl(['รหัส', 'สิ่งของ', 'เหตุผล', 'จัดการ'], dis.map((d) => `<tr><td class="code"><button class="linkbtn" data-act="disposal-show" data-id="${esc(d.id)}">${esc(d.code)}</button></td><td>${esc(assetLabel(byId('Assets', d.disposedAsset)))}<div class="small muted">${esc(num(d.qty))} หน่วย</div></td><td>${esc(optLabel('reasons', d.reason))}<div class="small muted">${esc(d.note || '')}</div></td>
+        <td><div class="row"><button class="btn sm" data-act="disposal-approve" data-id="${esc(d.id)}">อนุมัติ</button><button class="btn pink sm" data-act="disposal-reject" data-id="${esc(d.id)}">ไม่อนุมัติ</button></div></td></tr>`)), dis.length);
+      const us = T('Users').filter((u) => u.status === 'PENDING');
+      html += sec('ผู้สมัครสมาชิกใหม่', tbl(['ชื่อ', 'ติดต่อ', 'แผนก', 'จัดการ'], us.map((u) => `<tr><td>${esc(u.name)}<div class="small muted">${esc(fmtDT(u.createdAt))}</div></td><td>${esc(u.email || '')}<div class="small">${esc(u.phone || '')}</div></td><td>${esc(u.department || '-')}</td>
+        <td><div class="row"><button class="btn sm" data-act="user-approve" data-id="${esc(u.id)}">อนุมัติ</button><button class="btn pink sm" data-act="user-reject" data-id="${esc(u.id)}">ไม่อนุมัติ</button></div></td></tr>`)), us.length);
+    }
+    if (p.inspect) {
+      const acc = T('Repairs').filter((r) => r.status === 'ACCEPT');
+      html += sec('งานซ่อมรอตรวจรับ', tbl(['รหัส', 'สิ่งของ', 'ช่าง', 'จัดการ'], acc.map((r) => `<tr><td class="code"><button class="linkbtn" data-act="repair-show" data-id="${esc(r.id)}">${esc(r.code)}</button></td><td>${esc(assetLabel(byId('Assets', r.asset)))}</td><td>${esc(uname(r.assigned))}</td>
+        <td><div class="row"><button class="btn sm" data-act="repair-accept" data-id="${esc(r.id)}">ตรวจรับ</button><button class="btn pink sm" data-act="repair-return" data-id="${esc(r.id)}">ส่งกลับ</button></div></td></tr>`)), acc.length);
+    }
+    const mine = myWork();
+    if (mine.length) html += sec('งานของฉัน', itemList(mine), mine.length);
+    if (!p.admin) {
+      const my = T('Repairs').filter((r) => r.owner === S.me.id && r.status === 'APPROVAL').map((r) => ({ k: 'repair', id: r.id, t: `${r.code} รออนุมัติ`, s: r.issue, c: 'butter' }))
+        .concat(T('Disposals').filter((d) => d.owner === S.me.id && d.status === 'PENDING').map((d) => ({ k: 'disposal', id: d.id, t: `${d.code} รออนุมัติจำหน่าย`, s: d.reason, c: 'butter' })));
+      html += sec('รายการของฉันที่รอผู้ดูแลพิจารณา', itemList(my, 'ไม่มีรายการรอพิจารณา'), my.length);
+    }
+    return `<div class="page-head"><h2>อนุมัติรายการ</h2><span class="muted small">${p.admin ? 'ผู้ดูแลระบบอนุมัติงานซ่อม วงเงิน การจำหน่าย และผู้สมัครใหม่' : ''}</span></div>${html}`;
+  }
+};
+async function approveUser(id, ok) {
+  const u = byId('Users', id); if (!u) return;
+  const roles = Object.fromEntries(T('Roles').filter((r) => String(r.active).toUpperCase() === 'TRUE').map((r) => [r.id, r.name]));
+  const c = ok ? await confirmBox('อนุมัติผู้สมัคร ' + u.name, 'เลือกบทบาทของผู้ใช้', { input: 'select', inputOptions: roles, inputValue: 'STAFF', confirmText: 'อนุมัติ' })
+    : await confirmBox('ไม่อนุมัติผู้สมัคร ' + u.name, 'บัญชีจะถูกปิดการใช้งาน', { icon: 'warning', input: 'text', inputLabel: 'เหตุผล (ถ้ามี)', confirmText: 'ไม่อนุมัติ', danger: true });
+  if (!c.ok) return;
+  await act('approveUser', { id, version: u.version, decision: ok ? 'APPROVE' : 'REJECT', role: ok ? c.value : '', reason: ok ? '' : c.value }, { success: ok ? 'อนุมัติผู้ใช้เรียบร้อย' : 'บันทึกไม่อนุมัติเรียบร้อย', close: false });
+}
+
+/* ================================================================ ยืมคืน */
+const LOAN_TABS = [['active', 'กำลังยืม'], ['OVERDUE', 'เกินกำหนด'], ['RETURNED', 'คืนครบ'], ['all', 'ทั้งหมด']];
+const loanMatch = (l, st) => (st === 'all' ? true : st === 'active' ? l.status !== 'RETURNED' : st === 'OVERDUE' ? loanOverdue(l) : l.status === st);
+PAGES.loans = {
+  title: 'ยืมคืน',
+  render(q) {
+    const st = q.get('status') || 'active';
+    return `<div class="page-head"><h2>ยืมคืน</h2><div class="row"><input type="search" class="input" style="width:240px" data-filter="q" value="${esc(q.get('q') || '')}" placeholder="ค้นหาเลขที่ ผู้ยืม" aria-label="ค้นหาใบยืม"><button class="btn" data-act="loan-new">＋ สร้างใบยืม</button></div></div>
+      <div class="tabs">${LOAN_TABS.map(([k, l]) => `<button class="tab ${st === k ? 'on' : ''}" data-act="filter" data-key="status" data-val="${k}">${l}<span class="n">${T('Loans').filter((x) => loanMatch(x, k)).length}</span></button>`).join('')}</div><div id="list">${this.list(q)}</div>`;
+  },
+  list(q) {
+    const st = q.get('status') || 'active', s = (q.get('q') || '').toLowerCase().trim();
+    const all = T('Loans').filter((l) => loanMatch(l, st) && (!s || l.code.toLowerCase().includes(s) || l.borrower.toLowerCase().includes(s))).sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
+    if (!all.length) return `<div class="card">${empty('ไม่มีใบยืม')}</div>`;
+    return `<div class="table-wrap"><table class="t"><thead><tr><th>เลขที่</th><th>ผู้ยืม</th><th class="num">รายการ</th><th>วันยืม</th><th>กำหนดคืน</th><th>สถานะ</th></tr></thead><tbody>
+      ${slicePage(all, q).map((l) => { const ls = T('LoanLines').filter((x) => x.loan === l.id); return `<tr class="click" data-act="loan-show" data-id="${esc(l.id)}" tabindex="0"><td class="code">${esc(l.code)}</td><td>${esc(l.borrower)}<div class="small muted">${esc(l.phone || '')}</div></td><td class="num">${ls.length}</td><td>${esc(fmtD(l.start))}</td><td>${esc(fmtD(l.due))}</td><td>${chip(LST, loanStatus(l))}</td></tr>`; }).join('')}
+      </tbody></table></div>${pager(all.length, pageOf(q), PAGE_SIZE)}`;
+  }
+};
+function loanForm(L, assetId) {
+  if (L) {
+    return openForm({
+      title: 'แก้ใบยืม ' + L.code, fields: [
+        { name: 'borrower', label: 'ชื่อผู้ยืม', required: true, value: L.borrower }, { name: 'phone', label: 'เบอร์โทร', type: 'tel', value: L.phone },
+        { name: 'responsible', label: 'ผู้รับผิดชอบ', type: 'select', options: activeUsers().map((u) => [u.id, u.name]), value: L.responsible },
+        { name: 'due', label: 'กำหนดคืน', type: 'date', required: true, value: L.due, min: L.start }, { name: 'note', label: 'หมายเหตุ', type: 'textarea', full: true, value: L.note }],
+      onSubmit: (v) => act('saveLoan', Object.assign(v, { id: L.id, version: L.version }), { success: 'แก้ไขใบยืมเรียบร้อย', after: () => showLoan(L.id) })
+    });
+  }
+  const lines = [];
+  const drawLines = () => {
+    $('#loanLines').innerHTML = lines.length ? `<div class="table-wrap lines"><table class="t" style="min-width:520px"><thead><tr><th>สิ่งของ</th><th>คงเหลือ</th><th>จำนวนยืม</th><th></th></tr></thead><tbody>${lines.map((a, i) => `<tr><td>${esc(a.name)}<div class="code">${esc(a.code)}</div></td><td>${esc(qtyText(a))}</td>
+      <td>${a.type === 'QUANTITY' ? `<input class="input" type="number" min="1" max="${num(a.qty)}" value="${num(a._q) || 1}" data-line-qty="${i}" style="width:110px" aria-label="จำนวนยืม">` : '1'}</td><td><button type="button" class="btn ghost sm" data-act="loan-line-remove" data-i="${i}" aria-label="ลบรายการ">✕</button></td></tr>`).join('')}</tbody></table></div>` : '<p class="muted small">ยังไม่ได้เลือกสิ่งของ</p>';
+  };
+  PICKERS.lnAsset = { multi: true, filter: (a) => isAvailable(a) && a.condition !== 'DAMAGED' && !openRepairOf(a.id) && !pendingDisposalOf(a.id), onPick: (a) => { if (lines.some((x) => x.id === a.id)) return toast('เลือกรายการนี้แล้ว', 'info'); lines.push(Object.assign({}, a)); drawLines(); } };
+  window.__loanLines = { lines, drawLines };
+  openForm({
+    title: 'สร้างใบยืม', wide: true, fields: [
+      { name: 'borrower', label: 'ชื่อผู้ยืม', required: true, placeholder: 'ชื่อ-สกุล / หน่วยงาน' }, { name: 'phone', label: 'เบอร์โทร', type: 'tel' },
+      { name: 'responsible', label: 'ผู้รับผิดชอบ', type: 'select', options: activeUsers().map((u) => [u.id, u.name]), value: S.me.id },
+      { name: 'destination', label: 'สถานที่ปลายทาง', type: 'select', options: locOptions(), blank: '— คงสถานที่เดิม —' },
+      { name: 'start', label: 'วันยืม', type: 'date', required: true, value: todayStr() }, { name: 'due', label: 'กำหนดคืน', type: 'date', required: true, value: addDays(7), min: todayStr() },
+      { type: 'html', full: true, html: pickerHtml('lnAsset', 'เพิ่มสิ่งของที่ยืม', 'พิมพ์ชื่อ/รหัส หรือสแกน QR แล้วกดเลือก') },
+      { type: 'html', full: true, html: '<div id="loanLines"></div>' },
+      { name: 'note', label: 'หมายเหตุ', type: 'textarea', full: true }, { name: 'files', label: 'เอกสารแนบ (ถ้ามี)', type: 'files', full: true }],
+    submitText: 'บันทึกการยืม',
+    onSubmit: async (v, form) => {
+      if (!lines.length) return toast('กรุณาเลือกสิ่งของอย่างน้อย 1 รายการ', 'warning');
+      $$('[data-line-qty]', form).forEach((el) => { lines[Number(el.dataset.lineQty)]._q = el.value; });
+      if (v.due < v.start) return toast('กำหนดคืนต้องไม่ก่อนวันยืม', 'warning');
+      const files = await filesFrom(form); if (files === null) return;
+      await act('saveLoan', { borrower: v.borrower, phone: v.phone, responsible: v.responsible, destination: v.destination, start: v.start, due: v.due, note: v.note, lines: lines.map((a) => ({ asset: a.id, qty: a.type === 'QUANTITY' ? a._q || 1 : 1 })) },
+        { success: 'บันทึกการยืมเรียบร้อย', files, entity: 'Loans', entityId: (d) => d.id });
+    }
+  });
+  drawLines();
+  if (assetId) pickerPick('lnAsset', assetId);
+}
+function showLoan(id) {
+  const L = byId('Loans', id); if (!L) return toast('ไม่พบใบยืม', 'warning');
+  const lines = T('LoanLines').filter((x) => x.loan === id), rets = T('LoanReturns').filter((x) => x.loan === id);
+  openModal({
+    title: 'ใบยืม ' + L.code, wide: true,
+    body: `<dl class="kv"><dt>ผู้ยืม</dt><dd>${esc(L.borrower)}</dd><dt>เบอร์โทร</dt><dd>${esc(L.phone || '-')}</dd><dt>ผู้รับผิดชอบ</dt><dd>${esc(uname(L.responsible))}</dd>
+      <dt>วันยืม</dt><dd>${esc(fmtD(L.start))}</dd><dt>กำหนดคืน</dt><dd>${esc(fmtD(L.due))}</dd><dt>สถานที่ปลายทาง</dt><dd>${esc(L.destination ? locPath(L.destination) : '-')}</dd>
+      <dt>สถานะ</dt><dd>${chip(LST, loanStatus(L))}</dd><dt>หมายเหตุ</dt><dd>${esc(L.note || '-')}</dd></dl>
+      <h3 style="margin:18px 0 8px">รายการที่ยืม</h3><div class="table-wrap"><table class="t"><thead><tr><th>สิ่งของ</th><th class="num">ยืม</th><th class="num">คืนแล้ว</th><th>จากสถานที่</th></tr></thead><tbody>
+      ${lines.map((l) => { const a = byId('Assets', l.asset) || byId('Assets', l.original); return `<tr><td><button class="linkbtn" data-act="asset-show" data-id="${esc(a ? a.id : '')}">${esc(a ? a.name : '-')}</button><div class="code">${esc(a ? a.code : '')}</div></td><td class="num">${num(l.qty)}</td><td class="num">${num(l.returned)}</td><td>${esc(locPath(l.origin))}</td></tr>`; }).join('')}</tbody></table></div>
+      ${rets.length ? `<h3 style="margin:18px 0 8px">ประวัติการคืน</h3><div class="table-wrap"><table class="t"><thead><tr><th>วันที่</th><th>สิ่งของ</th><th class="num">จำนวน</th><th>คืนที่</th><th>สภาพ</th></tr></thead><tbody>${rets.map((r) => { const a = byId('Assets', r.asset); return `<tr><td>${esc(fmtDT(r.at))}</td><td>${esc(a ? a.name : '-')}${r.note ? `<div class="small muted">${esc(r.note)}</div>` : ''}</td><td class="num">${num(r.qty)}</td><td>${esc(locPath(r.to))}</td><td>${chip(COND, r.condition)}</td></tr>`; }).join('')}</tbody></table></div>` : ''}
+      <h3 style="margin:18px 0 8px">เอกสารแนบ</h3>${filesHtml('Loans', id)}`,
+    footer: `${L.status !== 'RETURNED' ? `<button class="btn sm" data-act="loan-return" data-id="${esc(id)}">↩ รับคืน</button><button class="btn ghost sm" data-act="loan-edit" data-id="${esc(id)}">✏️ แก้ใบยืม</button>` : ''}<button class="btn ghost sm" data-act="loan-print" data-id="${esc(id)}">🖨️ พิมพ์ใบยืมคืน</button>`
+  });
+}
+function returnForm(id) {
+  const L = byId('Loans', id); if (!L) return;
+  const lines = T('LoanLines').filter((x) => x.loan === id && num(x.returned) < num(x.qty));
+  openForm({
+    title: 'รับคืน ' + L.code, wide: true,
+    before: `<div class="table-wrap lines"><table class="t" style="min-width:720px"><thead><tr><th>สิ่งของ</th><th>คงค้าง</th><th>จำนวนคืน</th><th>คืนที่</th><th>สภาพ</th><th>หมายเหตุ</th></tr></thead><tbody>
+      ${lines.map((l) => { const a = byId('Assets', l.asset), rem = num(l.qty) - num(l.returned); return `<tr data-line="${esc(l.id)}"><td>${esc(a ? a.name : '-')}<div class="code">${esc(a ? a.code : '')}</div></td><td>${rem}</td>
+      <td><input class="input" name="qty" type="number" min="0" max="${rem}" value="${rem}" style="width:90px" aria-label="จำนวนคืน"></td>
+      <td><select class="input" name="to" aria-label="คืนที่">${locOptions().map(([k, v]) => `<option value="${esc(k)}" ${k === (l.origin || 'CENTRAL') ? 'selected' : ''}>${esc(v)}</option>`).join('')}</select></td>
+      <td><select class="input" name="condition" aria-label="สภาพ"><option value="READY">พร้อมใช้</option><option value="DAMAGED">ชำรุด</option></select></td><td><input class="input" name="note" aria-label="หมายเหตุ"></td></tr>`; }).join('')}</tbody></table></div>`,
+    fields: [], submitText: 'บันทึกรับคืน',
+    onSubmit: (v, form) => {
+      const rows = $$('tr[data-line]', form).map((tr) => ({ line: tr.dataset.line, qty: $('[name=qty]', tr).value, to: $('[name=to]', tr).value, condition: $('[name=condition]', tr).value, note: $('[name=note]', tr).value.trim() })).filter((x) => num(x.qty) > 0);
+      if (!rows.length) return toast('กรุณาระบุจำนวนที่คืน', 'warning');
+      return act('returnLoan', { id, version: L.version, lines: rows }, { success: 'บันทึกการคืนเรียบร้อย', after: () => showLoan(id) });
+    }
+  });
+}
+function printLoan(id) {
+  const L = byId('Loans', id); if (!L) return;
+  const lines = T('LoanLines').filter((x) => x.loan === id);
+  printDoc('ใบยืม-คืน ' + L.code, `<div class="kv"><b>เลขที่</b><span>${esc(L.code)}</span><b>ผู้ยืม</b><span>${esc(L.borrower)} ${esc(L.phone || '')}</span><b>ผู้รับผิดชอบ</b><span>${esc(uname(L.responsible))}</span>
+    <b>วันยืม</b><span>${esc(fmtD(L.start))}</span><b>กำหนดคืน</b><span>${esc(fmtD(L.due))}</span><b>สถานที่ปลายทาง</b><span>${esc(L.destination ? locPath(L.destination) : '-')}</span><b>หมายเหตุ</b><span>${esc(L.note || '-')}</span></div>
+    <h2>รายการ</h2>${tableHtml(['#', 'รหัส', 'สิ่งของ', 'จำนวนยืม', 'คืนแล้ว', 'สภาพเมื่อคืน'], lines.map((l, i) => { const a = byId('Assets', l.asset) || {}; const r = T('LoanReturns').filter((x) => x.line === l.id).map((x) => (COND[x.condition] || [x.condition])[0]).join(', '); return [i + 1, a.code, a.name, num(l.qty), num(l.returned), r]; }), [3, 4])}
+    <div class="sign"><div>ผู้ยืม</div><div>ผู้ให้ยืม</div><div>ผู้รับคืน</div></div>`);
+}
+
+/* ================================================================ ย้าย / รับเข้าสถานที่ */
+PAGES.move = {
+  title: 'ย้าย / รับเข้าสถานที่',
+  render() {
+    const p = P();
+    const recent = T('Movements').filter((m) => ['MOVE', 'RECEIVE', 'RETURN'].includes(m.kind)).slice(-30).reverse();
+    return `<div class="grid g2" style="margin-top:8px"><div class="card">${p.register ? `<h2>ย้ายสิ่งของ / รับเข้าสถานที่</h2><p class="muted small">ย้ายบางส่วนของล็อต ระบบจะแบ่งล็อตให้อัตโนมัติ</p>
+      <form id="moveForm" data-form="move" novalidate><div class="form-grid">${pickerHtml('mvAsset', 'สิ่งของ', 'พิมพ์ชื่อ/รหัส หรือสแกน QR')}
+      <div id="mvQtyWrap" class="hidden full">${fieldHtml({ idp: 'p_', name: 'qty', label: 'จำนวนที่ย้าย', type: 'number', min: 1 })}</div>
+      <div class="field full"><label for="p_to" class="req">สถานที่ปลายทาง</label><div class="row"><select class="input" id="p_to" name="to" style="flex:1" required><option value="">— เลือก —</option>${locOptions().map(([k, v]) => `<option value="${esc(k)}">${esc(v)}</option>`).join('')}</select><button type="button" class="btn ghost" data-act="scan-location" title="สแกน QR สถานที่">📷</button></div></div>
+      ${fieldHtml({ idp: 'p_', name: 'note', label: 'เหตุผล', type: 'textarea', required: true, full: true, placeholder: 'เช่น ย้ายเข้าห้องพัก, รับเข้าจากสต๊อกกลาง' })}</div>
+      <div class="row" style="margin-top:14px;justify-content:flex-end"><button class="btn" type="submit">บันทึกการย้าย</button></div></form>` : `<h2>ย้ายสิ่งของ</h2>${empty('บทบาทของคุณไม่มีสิทธิ์ย้ายสิ่งของ (ต้องมีสิทธิ์ลงทะเบียนของ)')}`}</div>
+      <div class="card"><h2>QR สถานที่</h2><p class="muted small">สแกน QR ที่ติดหน้าห้อง/พื้นที่ เพื่อดูของในสถานที่นั้น</p><div class="row"><button class="btn ghost" data-act="scan-asset">📷 สแกน QR</button>${p.admin ? '<a class="btn ghost" href="#/admin?tab=locations">พิมพ์ QR สถานที่</a>' : ''}</div></div></div>
+      <div class="card" style="margin-top:16px"><h2>การเคลื่อนไหวล่าสุด</h2>${recent.length ? `<div class="table-wrap" style="margin-top:10px"><table class="t"><thead><tr><th>เวลา</th><th>สิ่งของ</th><th>รายการ</th><th class="num">จำนวน</th><th>จาก → ไป</th><th>โดย</th></tr></thead><tbody>
+      ${recent.map((m) => `<tr><td>${esc(fmtDT(m.at))}</td><td>${esc(m.name)}</td><td>${esc(MKIND[m.kind] || m.kind)}<div class="small muted">${esc(m.note || '')}</div></td><td class="num">${num(m.qty)}</td><td>${esc(m.from ? locName(m.from) : '—')} → ${esc(m.to ? locName(m.to) : '—')}</td><td>${esc(uname(m.owner))}</td></tr>`).join('')}</tbody></table></div>` : empty('ยังไม่มีการเคลื่อนไหว')}</div>`;
+  },
+  init(q) {
+    PICKERS.mvAsset = { filter: (a) => isAvailable(a), onPick: (a) => { $('#mvQtyWrap').classList.toggle('hidden', a.type !== 'QUANTITY'); const f = $('#moveForm [name=qty]'); f.value = a.type === 'QUANTITY' ? a.qty : ''; f.max = a.qty; } };
+    if (q.get('asset') && $('#moveForm')) pickerPick('mvAsset', q.get('asset'));
+  }
+};
+document.addEventListener('submit', async (e) => {
+  if (e.target.id !== 'moveForm') return;
+  e.preventDefault();
+  const v = readForm(e.target);
+  if (!v.mvAsset) return toast('กรุณาเลือกสิ่งของ', 'warning');
+  if (!v.to) return toast('กรุณาเลือกสถานที่ปลายทาง', 'warning');
+  if (!v.note) return toast('กรุณากรอกเหตุผล', 'warning');
+  const a = byId('Assets', v.mvAsset);
+  await act('moveAsset', { asset: v.mvAsset, qty: a && a.type === 'QUANTITY' ? v.qty : 1, to: v.to, note: v.note, version: a ? a.version : '' }, { success: `ย้าย ${a ? a.name : ''} ไป ${locName(v.to)} เรียบร้อย` });
+});
+
+/* ================================================================ จำหน่าย */
+const DISP_TABS = [['PENDING', 'รออนุมัติ'], ['APPROVED', 'อนุมัติแล้ว'], ['REJECTED', 'ไม่อนุมัติ'], ['all', 'ทั้งหมด']];
+PAGES.disposals = {
+  title: 'จำหน่าย',
+  render(q) {
+    const st = q.get('status') || 'PENDING';
+    return `<div class="page-head"><h2>จำหน่ายสิ่งของ</h2>${P().register ? '<button class="btn" data-act="disposal-new">＋ เสนอจำหน่าย</button>' : ''}</div>
+      <div class="tabs">${DISP_TABS.map(([k, l]) => `<button class="tab ${st === k ? 'on' : ''}" data-act="filter" data-key="status" data-val="${k}">${l}<span class="n">${T('Disposals').filter((d) => k === 'all' || d.status === k).length}</span></button>`).join('')}</div><div id="list">${this.list(q)}</div>`;
+  },
+  list(q) {
+    const st = q.get('status') || 'PENDING';
+    const all = T('Disposals').filter((d) => st === 'all' || d.status === st).sort((a, b) => String(b.created).localeCompare(String(a.created)));
+    if (!all.length) return `<div class="card">${empty('ไม่มีรายการ')}</div>`;
+    return `<div class="table-wrap"><table class="t"><thead><tr><th>เลขที่</th><th>สิ่งของ</th><th class="num">จำนวน</th><th>เหตุผล</th><th>ผู้เสนอ</th><th>สถานะ</th></tr></thead><tbody>
+      ${slicePage(all, q).map((d) => { const a = byId('Assets', d.disposedAsset); return `<tr class="click" data-act="disposal-show" data-id="${esc(d.id)}" tabindex="0"><td class="code">${esc(d.code)}<div class="small muted">${esc(fmtD(d.created))}</div></td><td>${esc(a ? a.name : '-')}<div class="code">${esc(a ? a.code : '')}</div></td><td class="num">${num(d.qty)}</td><td>${esc(optLabel('reasons', d.reason))}</td><td>${esc(uname(d.owner))}</td><td>${chip(DST, d.status)}</td></tr>`; }).join('')}
+      </tbody></table></div>${pager(all.length, pageOf(q), PAGE_SIZE)}`;
+  }
+};
+function disposalForm(d, assetId) {
+  if (d) return openForm({
+    title: 'แก้คำขอจำหน่าย ' + d.code, fields: [{ name: 'reason', label: 'เหตุผลจำหน่าย', type: 'select', required: true, options: optOptions('reasons'), value: optLabel('reasons', d.reason) }, { name: 'note', label: 'หมายเหตุ', type: 'textarea', full: true, value: d.note }],
+    onSubmit: (v) => act('saveDisposal', Object.assign(v, { id: d.id, version: d.version }), { success: 'แก้ไขคำขอจำหน่ายเรียบร้อย', after: () => showDisposal(d.id) })
+  });
+  PICKERS.dpAsset = { filter: (a) => isAvailable(a) && !openRepairOf(a.id) && !pendingDisposalOf(a.id), onPick: (a) => { $('#dpQtyWrap').classList.toggle('hidden', a.type !== 'QUANTITY'); const f = $('#f_qty'); f.value = a.type === 'QUANTITY' ? a.qty : ''; f.max = a.qty; } };
+  openForm({
+    title: 'เสนอจำหน่าย', fields: [
+      { type: 'html', full: true, html: pickerHtml('dpAsset', 'สิ่งของที่จะจำหน่าย') },
+      { type: 'html', full: true, html: `<div id="dpQtyWrap" class="hidden">${fieldHtml({ name: 'qty', label: 'จำนวนที่จำหน่าย', type: 'number', min: 1 })}</div>` },
+      { name: 'reason', label: 'เหตุผลจำหน่าย', type: 'select', required: true, options: optOptions('reasons') },
+      { name: 'note', label: 'หมายเหตุ', type: 'textarea', full: true }, { name: 'files', label: 'ภาพ / เอกสารประกอบ', type: 'files', full: true }],
+    submitText: 'ส่งคำขอจำหน่าย',
+    onSubmit: async (v, form) => {
+      if (!v.dpAsset) return toast('กรุณาเลือกสิ่งของ', 'warning');
+      const a = byId('Assets', v.dpAsset);
+      const c = await confirmBox('ยืนยันเสนอจำหน่าย', `${assetLabel(a)} จำนวน ${a.type === 'QUANTITY' ? v.qty : 1} ${a.unit || ''} จะถูกพักไว้จนกว่าผู้ดูแลจะอนุมัติ`, { icon: 'warning', confirmText: 'เสนอจำหน่าย' });
+      if (!c.ok) return;
+      const files = await filesFrom(form); if (files === null) return;
+      await act('saveDisposal', { asset: v.dpAsset, qty: v.qty, reason: v.reason, note: v.note }, { success: 'ส่งคำขอจำหน่ายเรียบร้อย', files, entity: 'Disposals', entityId: (x) => x.id });
+    }
+  });
+  if (assetId) pickerPick('dpAsset', assetId);
+}
+function showDisposal(id) {
+  const d = byId('Disposals', id); if (!d) return toast('ไม่พบคำขอ', 'warning');
+  const a = byId('Assets', d.disposedAsset), p = P();
+  openModal({
+    title: 'คำขอจำหน่าย ' + d.code,
+    body: `<dl class="kv"><dt>สิ่งของ</dt><dd>${a ? `<button class="linkbtn" data-act="asset-show" data-id="${esc(a.id)}">${esc(assetLabel(a))}</button>` : '-'}</dd><dt>จำนวน</dt><dd>${num(d.qty)} ${esc(a ? a.unit : '')}</dd>
+      <dt>เหตุผล</dt><dd>${esc(optLabel('reasons', d.reason))}</dd><dt>หมายเหตุ</dt><dd>${esc(d.note || '-')}</dd><dt>ผู้เสนอ</dt><dd>${esc(uname(d.owner))} • ${esc(fmtDT(d.created))}</dd>
+      <dt>สถานะ</dt><dd>${chip(DST, d.status)}</dd>${d.approvedBy ? `<dt>ผู้พิจารณา</dt><dd>${esc(uname(d.approvedBy))} • ${esc(fmtDT(d.approvedAt))}${d.approvalNote ? `<div class="small muted">${esc(d.approvalNote)}</div>` : ''}</dd>` : ''}</dl>
+      <h3 style="margin:18px 0 8px">ไฟล์แนบ</h3>${filesHtml('Disposals', id)}`,
+    footer: d.status === 'PENDING' ? `${p.register ? `<button class="btn ghost sm" data-act="disposal-edit" data-id="${esc(id)}">✏️ แก้คำขอ</button>` : ''}${p.admin ? `<button class="btn sm" data-act="disposal-approve" data-id="${esc(id)}">✔ อนุมัติ</button><button class="btn pink sm" data-act="disposal-reject" data-id="${esc(id)}">✖ ไม่อนุมัติ</button>` : ''}` : ''
+  });
+}
+async function decideDisposal(id, ok) {
+  const d = byId('Disposals', id); if (!d) return;
+  const a = byId('Assets', d.disposedAsset);
+  const c = await confirmBox((ok ? 'อนุมัติจำหน่าย ' : 'ไม่อนุมัติจำหน่าย ') + d.code, ok ? `${assetLabel(a)} จะถูกบันทึกเป็น "จำหน่ายแล้ว" และไม่สามารถยกเลิกได้` : 'สิ่งของจะกลับสู่สภาพก่อนเสนอ', { icon: 'warning', input: 'textarea', inputLabel: ok ? 'หมายเหตุ (ถ้ามี)' : 'เหตุผล', required: !ok, confirmText: ok ? 'อนุมัติจำหน่าย' : 'ไม่อนุมัติ', danger: true });
+  if (!c.ok) return;
+  await act('decideDisposal', { id, version: d.version, decision: ok ? 'APPROVE' : 'REJECT', note: c.value || '' }, { success: ok ? 'อนุมัติจำหน่ายเรียบร้อย' : 'บันทึกไม่อนุมัติเรียบร้อย', close: false, after: () => { if (modalOpen()) showDisposal(id); } });
+}
+
+/* ================================================================ รายงาน */
+const REPORTS = {
+  assets: { t: 'รายงานทะเบียนสิ่งของ', month: false },
+  repairs: { t: 'รายงานงานซ่อม', month: true },
+  budget: { t: 'รายงานงบซ่อม (วงเงินอนุมัติเทียบค่าใช้จ่ายจริง)', month: true, show: () => P().finance },
+  loans: { t: 'รายงานยืมคืน', month: true },
+  disposals: { t: 'รายงานจำหน่าย', month: true },
+  today: { t: 'รายงานกิจกรรมวันนี้', month: false, show: () => P().admin || P().manager }
+};
+function reportData(type, q) {
+  const month = q.get('month') || '', inMonth = (v) => !month || dayOf(v).slice(0, 7) === month, fin = P().finance;
+  if (type === 'assets') {
+    const rows = assetsFiltered(new URLSearchParams({ loc: q.get('loc') || '', cond: q.get('cond') || '' }));
+    const cols = ['รหัส', 'ชื่อ', 'หมวด', 'ยี่ห้อ', 'รูปแบบ', 'จำนวน', 'หน่วย', 'สถานที่', 'สภาพ', 'Serial', 'ผู้รับผิดชอบ'].concat(fin ? ['ราคา/หน่วย', 'มูลค่ารวม'] : []);
+    const data = rows.map((a) => [a.code, a.name, optLabel('groups', a.group), optLabel('brands', a.brand), a.type === 'QUANTITY' ? 'ล็อต' : 'รายชิ้น', num(a.qty), a.unit, locPath(a.location), COND[a.condition][0], a.serial, a.responsible ? uname(a.responsible) : ''].concat(fin ? [money(a.price), money(num(a.price) * num(a.qty))] : []));
+    if (fin) data.push(['', 'รวม', '', '', '', rows.reduce((s, a) => s + num(a.qty), 0), '', '', '', '', '', '', money(rows.reduce((s, a) => s + num(a.price) * num(a.qty), 0))]);
+    return { cols, rows: data, num: fin ? [5, 11, 12] : [5] };
+  }
+  if (type === 'repairs') {
+    const rows = T('Repairs').filter((r) => inMonth(r.created));
+    return { cols: ['รหัส', 'วันที่แจ้ง', 'สิ่งของ', 'อาการ', 'ช่าง', 'สถานะ', 'กำหนดเสร็จ'].concat(fin ? ['วงเงิน', 'ค่าใช้จ่ายจริง'] : []),
+      rows: rows.map((r) => { const a = byId('Assets', r.asset); return [r.code, fmtD(r.created), a ? a.name + ' (' + a.code + ')' : '', r.issue, uname(r.assigned), RST[r.status][0], fmtD(r.due)].concat(fin ? [money(r.approved), money(repairCost(r.id))] : []); }), num: fin ? [7, 8] : [] };
+  }
+  if (type === 'budget') {
+    const rows = T('Repairs').filter((r) => inMonth(r.created) && r.approved !== '' && r.approved != null);
+    const data = rows.map((r) => { const a = byId('Assets', r.asset), c = repairCost(r.id); return [r.code, fmtD(r.created), a ? a.name : '', RST[r.status][0], money(r.approved), money(c), money(num(r.approved) - c)]; });
+    const ta = rows.reduce((s, r) => s + num(r.approved), 0), tc = rows.reduce((s, r) => s + repairCost(r.id), 0);
+    data.push(['', '', 'รวม ' + rows.length + ' งาน', '', money(ta), money(tc), money(ta - tc)]);
+    return { cols: ['รหัส', 'วันที่แจ้ง', 'สิ่งของ', 'สถานะ', 'วงเงินอนุมัติ', 'ค่าใช้จ่ายจริง', 'คงเหลือ/เกิน'], rows: data, num: [4, 5, 6] };
+  }
+  if (type === 'loans') {
+    const rows = T('Loans').filter((l) => inMonth(l.start));
+    return { cols: ['เลขที่', 'ผู้ยืม', 'เบอร์โทร', 'วันยืม', 'กำหนดคืน', 'จำนวนรายการ', 'ยืม (หน่วย)', 'คืนแล้ว', 'สถานะ'],
+      rows: rows.map((l) => { const ls = T('LoanLines').filter((x) => x.loan === l.id); return [l.code, l.borrower, l.phone, fmtD(l.start), fmtD(l.due), ls.length, ls.reduce((s, x) => s + num(x.qty), 0), ls.reduce((s, x) => s + num(x.returned), 0), LST[loanStatus(l)][0]]; }), num: [5, 6, 7] };
+  }
+  if (type === 'disposals') {
+    const rows = T('Disposals').filter((d) => inMonth(d.created));
+    return { cols: ['เลขที่', 'วันที่เสนอ', 'สิ่งของ', 'จำนวน', 'เหตุผล', 'ผู้เสนอ', 'สถานะ', 'ผู้อนุมัติ', 'วันที่พิจารณา'],
+      rows: rows.map((d) => { const a = byId('Assets', d.disposedAsset); return [d.code, fmtD(d.created), a ? a.name + ' (' + a.code + ')' : '', num(d.qty), optLabel('reasons', d.reason), uname(d.owner), DST[d.status][0], d.approvedBy ? uname(d.approvedBy) : '', fmtD(d.approvedAt)]; }), num: [3] };
+  }
+  const rows = T('AuditLogs').filter((l) => l.day === todayStr()).reverse();
+  return { cols: ['เวลา', 'ผู้ใช้', 'รายการ'], rows: rows.map((l) => [fmtT(l.at), uname(l.owner), l.detail || ACTION_TH[l.action] || l.action]), num: [] };
+}
+PAGES.reports = {
+  title: 'รายงานและพิมพ์',
+  render(q) {
+    const types = Object.entries(REPORTS).filter(([, r]) => !r.show || r.show());
+    let type = q.get('type') || 'assets'; if (!types.some(([k]) => k === type)) type = 'assets';
+    const R = REPORTS[type];
+    return `<div class="tabs" style="margin-top:8px">${types.map(([k, r]) => `<button class="tab ${k === type ? 'on' : ''}" data-act="filter" data-key="type" data-val="${k}" data-reset="1">${esc(r.t.replace('รายงาน', '').split(' (')[0])}</button>`).join('')}</div>
+      <div class="card"><div class="spread"><div><h2>${esc(R.t)}</h2><div class="muted small">${R.month ? (q.get('month') ? 'เดือน ' + esc(thMonth(q.get('month'))) : 'ทุกเดือน') : ''}</div></div>
+      <div class="row">${R.month ? `<input type="month" class="input" style="width:170px" data-filter="month" value="${esc(q.get('month') || '')}" aria-label="เลือกเดือน">` : ''}${type === 'assets' ? sel('loc', locOptions(), q.get('loc'), 'ทุกสถานที่') + sel('cond', Object.entries(COND).map(([k, v]) => [k, v[0]]), q.get('cond'), 'ทุกสภาพ') : ''}
+      <button class="btn ghost" data-act="report-print" data-type="${type}">🖨️ พิมพ์ / PDF</button><button class="btn" data-act="report-csv" data-type="${type}">⬇ CSV</button></div></div>
+      <div id="list" style="margin-top:14px">${this.list(q)}</div></div>`;
+  },
+  list(q) {
+    const type = q.get('type') || 'assets', d = reportData(type, q);
+    if (!d.rows.length) return empty('ไม่มีข้อมูลในช่วงที่เลือก');
+    return `<div class="table-wrap"><table class="t"><thead><tr>${d.cols.map((c, i) => `<th class="${d.num.includes(i) ? 'num' : ''}">${esc(c)}</th>`).join('')}</tr></thead><tbody>${d.rows.slice(0, 300).map((r) => `<tr>${r.map((c, i) => `<td class="${d.num.includes(i) ? 'num' : ''}">${esc(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>
+      <div class="small muted" style="margin-top:8px">${d.rows.length > 300 ? `แสดงตัวอย่าง 300 จาก ${d.rows.length} แถว (พิมพ์/CSV ได้ครบ)` : `${d.rows.length} แถว`}</div>`;
+  }
+};
+function reportExport(type, kind) {
+  const { q } = parseHash(), d = reportData(type, q), R = REPORTS[type];
+  const title = R.t + (R.month && q.get('month') ? ' เดือน ' + thMonth(q.get('month')) : '');
+  if (kind === 'csv') downloadCsv(R.t.split(' (')[0].replace(/\s+/g, '_'), d.cols, d.rows);
+  else printDoc(title, tableHtml(d.cols, d.rows, d.num));
+}
+
+/* ================================================================ จัดการระบบ */
+const ADMIN_TABS = [['users', 'ผู้ใช้'], ['locations', 'สถานที่'], ['options', 'ตัวเลือก'], ['settings', 'ตั้งค่าระบบ'], ['notify', 'แจ้งเตือน'], ['history', 'ประวัติการทำรายการ']];
+let auditOlder = [], auditNext = null;
+PAGES.admin = {
+  title: 'จัดการระบบ',
+  render(q) {
+    const tab = q.get('tab') || 'users';
+    return `<div class="tabs" style="margin-top:8px">${ADMIN_TABS.map(([k, l]) => `<button class="tab ${k === tab ? 'on' : ''}" data-act="filter" data-key="tab" data-val="${k}" data-reset="1">${l}</button>`).join('')}</div><div id="list">${this.list(q)}</div>`;
+  },
+  list(q) {
+    const tab = q.get('tab') || 'users';
+    return (ADMIN[tab] || ADMIN.users)(q);
+  }
+};
+const ADMIN = {
+  users() {
+    const us = T('Users').slice().sort((a, b) => a.name.localeCompare(b.name, 'th'));
+    return `<div class="card"><div class="spread"><h2>ผู้ใช้ (${us.length})</h2><button class="btn" data-act="user-new">＋ เพิ่มผู้ใช้</button></div>
+      <div class="table-wrap" style="margin-top:12px"><table class="t"><thead><tr><th>ชื่อ</th><th>อีเมล / เบอร์</th><th>บทบาท</th><th>แผนก</th><th>สถานะ</th><th>จัดการ</th></tr></thead><tbody>
+      ${us.map((u) => `<tr><td>${esc(u.name)}${String(u.mustChangePassword).toUpperCase() === 'TRUE' ? '<div class="small muted">รอเปลี่ยนรหัสชั่วคราว</div>' : ''}</td><td>${esc(u.email || '-')}<div class="small">${esc(u.phone || '')}</div></td><td>${esc(roleName(u.role))}</td><td>${esc(u.department || '-')}</td><td>${chip(USTAT, u.status)}</td>
+      <td><div class="row">${u.status === 'PENDING' ? `<button class="btn sm" data-act="user-approve" data-id="${esc(u.id)}">อนุมัติ</button>` : ''}<button class="btn ghost sm" data-act="user-edit" data-id="${esc(u.id)}">แก้ไข</button><button class="btn peach sm" data-act="user-temp" data-id="${esc(u.id)}">ตั้งรหัสชั่วคราว</button></div></td></tr>`).join('')}
+      </tbody></table></div>
+      <h3 style="margin:20px 0 8px">สิทธิ์ตามบทบาท</h3><div class="table-wrap"><table class="t"><thead><tr><th>บทบาท</th><th>ดูการเงิน</th><th>ลงทะเบียนของ</th><th>มอบหมายงาน</th><th>ตรวจรับงาน</th></tr></thead><tbody>
+      ${T('Roles').map((r) => `<tr><td>${esc(r.name)} <span class="code">${esc(r.id)}</span></td>${['seeFinance', 'registerAssets', 'assignWork', 'inspectWork'].map((k) => `<td>${r.id === 'ADMIN' || String(r[k]).toUpperCase() === 'TRUE' ? '✔' : '—'}</td>`).join('')}</tr>`).join('')}</tbody></table></div>
+      <p class="small muted">ช่าง (TECH) เห็นเฉพาะงานซ่อมที่มอบหมายให้ตัวเอง • ผู้ที่ไม่มีสิทธิ์ดูการเงินจะไม่ได้รับราคา วงเงิน และค่าซ่อมจากเซิร์ฟเวอร์ • แก้สิทธิ์ของบทบาทได้ในแท็บ Roles ของ Google Sheet</p></div>`;
+  },
+  locations() {
+    const ls = T('Locations').slice().sort((a, b) => locPath(a.id).localeCompare(locPath(b.id), 'th'));
+    return `<div class="card"><div class="spread"><h2>สถานที่ (${ls.length})</h2><div class="row"><button class="btn ghost" data-act="loc-print">🏷️ พิมพ์ QR สถานที่ทั้งหมด</button><button class="btn" data-act="loc-new">＋ เพิ่มสถานที่</button></div></div>
+      <div class="table-wrap" style="margin-top:12px"><table class="t"><thead><tr><th>สถานที่</th><th>ประเภท</th><th class="num">จำนวนของ</th><th>สถานะ</th><th>จัดการ</th></tr></thead><tbody>
+      ${ls.map((l) => { const n = T('Assets').filter((a) => a.location === l.id && num(a.qty) > 0 && a.condition !== 'DISPOSED').reduce((s, a) => s + num(a.qty), 0); return `<tr><td>${esc(locPath(l.id))} <span class="code">${esc(l.id)}</span></td><td>${esc(LKIND[l.kind] || l.kind)}</td><td class="num"><button class="linkbtn" data-act="go" data-href="assets?loc=${esc(l.id)}">${n}</button></td><td>${String(l.active).toUpperCase() === 'TRUE' ? chip(USTAT, 'ACTIVE') : chip(USTAT, 'INACTIVE')}</td>
+      <td><div class="row"><button class="btn ghost sm" data-act="loc-edit" data-id="${esc(l.id)}">แก้ไข</button><button class="btn ghost sm" data-act="loc-qr" data-id="${esc(l.id)}">QR</button></div></td></tr>`; }).join('')}</tbody></table></div></div>`;
+  },
+  options() {
+    return `<div class="grid g2">${Object.entries(OKIND).map(([k, label]) => { const os = optList(k, true); return `<div class="card"><div class="spread"><h2>${esc(label)}</h2><button class="btn sm" data-act="opt-new" data-kind="${k}">＋ เพิ่ม</button></div>
+      <div style="margin-top:8px">${os.map((o) => { const on = String(o.active).toUpperCase() === 'TRUE', al = safeJson(o.aliases) || []; return `<div class="list-item" style="cursor:default"><div class="grow">${esc(o.label)} ${on ? '' : chip(USTAT, 'INACTIVE')}${al.length ? `<div class="small muted">ชื่อเดิม: ${esc(al.join(', '))}</div>` : ''}</div>
+      <button class="btn ghost sm" data-act="opt-rename" data-id="${esc(o.id)}">เปลี่ยนชื่อ</button><button class="btn ${on ? 'pink' : 'lav'} sm" data-act="opt-toggle" data-id="${esc(o.id)}">${on ? 'ปิด' : 'เปิด'}</button></div>`; }).join('') || empty()}</div></div>`; }).join('')}</div>`;
+  },
+  settings() {
+    const s = S.settings;
+    return `<div class="card"><h2>ตั้งค่าระบบ</h2><form id="settingsForm" novalidate style="margin-top:12px"><div class="form-grid">
+      ${fieldHtml({ idp: 'p_', name: 'businessName', label: 'ชื่อกิจการ', required: true, value: s.businessName })}
+      ${fieldHtml({ idp: 'p_', name: 'codePrefix', label: 'คำนำหน้ารหัส', required: true, value: s.codePrefix, help: 'A-Z/0-9 2-6 ตัว เช่น WYA → WYA-20261013-00001' })}
+      ${fieldHtml({ idp: 'p_', name: 'dueAlertDays', label: 'แจ้งเตือนก่อนครบกำหนดคืน (วัน)', type: 'number', min: 0, max: 30, value: s.dueAlertDays })}
+      ${fieldHtml({ idp: 'p_', name: 'imageMaxPx', label: 'ขนาดภาพสูงสุด (px ด้านยาว)', type: 'number', min: 480, max: 4000, value: s.imageMaxPx })}
+      ${fieldHtml({ idp: 'p_', name: 'imageTargetKB', label: 'ขนาดไฟล์ภาพเป้าหมาย (KB)', type: 'number', min: 50, max: 500, value: s.imageTargetKB })}
+      ${fieldHtml({ idp: 'p_', name: 'webUrl', label: 'ที่อยู่เว็บ (ใช้ในลิงก์ QR และอีเมล)', type: 'url', value: s.webUrl, placeholder: 'https://wangyao.vercel.app' })}
+      ${fieldHtml({ idp: 'p_', name: 'allowRegister', label: 'เปิดรับสมัครสมาชิก (ต้องรออนุมัติ)', type: 'checkbox', value: s.allowRegister })}
+      ${fieldHtml({ idp: 'p_', name: 'googleEnabled', label: 'เปิดเข้าสู่ระบบด้วย Google', type: 'checkbox', value: s.googleEnabled })}
+      ${fieldHtml({ idp: 'p_', name: 'googleClientId', label: 'Google OAuth Client ID', value: s.googleClientId, full: true, placeholder: 'xxxx.apps.googleusercontent.com', help: 'สร้างที่ Google Cloud Console > Credentials > OAuth client ID (Web) และเพิ่มที่อยู่เว็บใน Authorized JavaScript origins' })}
+      </div><div class="row" style="justify-content:flex-end;margin-top:14px"><span class="small muted" style="margin-right:auto">เวอร์ชันระบบ ${esc(s.version || '')}</span><button class="btn" type="submit">บันทึกการตั้งค่า</button></div></form></div>`;
+  },
+  notify() {
+    const s = S.settings.notify || {}, ns = T('Notifications').slice().reverse().slice(0, 100);
+    return `<div class="grid g2"><div class="card"><h2>ช่องทางแจ้งเตือนเจ้าของ</h2><p class="small muted">token เก็บใน Script Properties ฝั่งเซิร์ฟเวอร์เท่านั้น ไม่ถูกส่งมาที่เบราว์เซอร์ • เว้นว่างไว้ = ไม่เปลี่ยน</p>
+      <div class="row" style="margin:6px 0 12px">Telegram ${s.telegram ? chip(NST, 'SENT').replace('ส่งแล้ว', 'เชื่อมต่อแล้ว') : chip(USTAT, 'INACTIVE').replace('ปิดใช้งาน', 'ยังไม่ตั้งค่า')} &nbsp; LINE ${s.line ? chip(NST, 'SENT').replace('ส่งแล้ว', 'เชื่อมต่อแล้ว') : chip(USTAT, 'INACTIVE').replace('ปิดใช้งาน', 'ยังไม่ตั้งค่า')}</div>
+      <form id="notifyForm" novalidate><div class="form-grid">
+      ${fieldHtml({ idp: 'p_', name: 'telegramToken', label: 'Telegram Bot Token', type: 'password', attrs: 'autocomplete="off"' })}${fieldHtml({ idp: 'p_', name: 'telegramChat', label: 'Telegram Chat ID' })}
+      ${fieldHtml({ idp: 'p_', name: 'lineToken', label: 'LINE Channel Access Token', type: 'password', attrs: 'autocomplete="off"' })}${fieldHtml({ idp: 'p_', name: 'lineTo', label: 'LINE User / Group ID' })}
+      </div><div class="row" style="margin-top:14px;justify-content:flex-end"><button class="btn" type="submit">บันทึก</button></div></form>
+      <div class="row" style="margin-top:14px"><button class="btn lav" data-act="notify-test">📨 ทดสอบส่ง</button><button class="btn pink sm" data-act="notify-clear" data-ch="TELEGRAM">ล้าง Telegram</button><button class="btn pink sm" data-act="notify-clear" data-ch="LINE">ล้าง LINE</button></div></div>
+      <div class="card"><h2>คิวแจ้งเตือนล่าสุด</h2><p class="small muted">ส่งอัตโนมัติทุก 1 นาที (สูงสุด 8 รายการ/นาที) ลองใหม่อัตโนมัติเมื่อถูกจำกัดอัตรา</p>
+      ${ns.length ? `<div class="table-wrap"><table class="t"><thead><tr><th>เวลา</th><th>ช่องทาง</th><th>ข้อความ</th><th>สถานะ</th></tr></thead><tbody>${ns.map((n) => `<tr><td>${esc(fmtDT(n.createdAt))}</td><td>${esc(n.channel)}</td><td style="max-width:280px">${esc(String(n.message).slice(0, 120))}${n.lastError ? `<div class="small" style="color:var(--pink-chip)">${esc(n.lastError)}</div>` : ''}</td>
+      <td>${chip(NST, n.status)}${['FAILED', 'UNKNOWN'].includes(n.status) ? ` <button class="btn ghost sm" data-act="notify-retry" data-id="${esc(n.id)}">ลองส่งใหม่</button>` : ''}</td></tr>`).join('')}</tbody></table></div>` : empty('ยังไม่มีรายการ')}</div></div>`;
+  },
+  history() {
+    const rows = T('AuditLogs').slice().reverse().concat(auditOlder);
+    return `<div class="card"><div class="spread"><h2>ประวัติการทำรายการ</h2><span class="small muted">AuditLogs ไม่ถูกลบ • แสดงล่าสุด ${rows.length} รายการ</span></div>
+      <div class="table-wrap" style="margin-top:12px"><table class="t"><thead><tr><th>เวลา</th><th>ผู้ใช้</th><th>การกระทำ</th><th>รายละเอียด</th></tr></thead><tbody>${rows.map((l) => `<tr><td>${esc(fmtDT(l.at))}</td><td>${esc(uname(l.owner))}</td><td class="code">${esc(l.action)}</td><td>${esc(l.detail || '')}</td></tr>`).join('')}</tbody></table></div>
+      ${auditNext !== 0 ? '<div class="row" style="justify-content:center;margin-top:12px"><button class="btn ghost" data-act="audit-more">โหลดรายการเก่ากว่า</button></div>' : ''}</div>`;
+  }
+};
+document.addEventListener('submit', async (e) => {
+  if (e.target.id === 'settingsForm') {
+    e.preventDefault();
+    const v = readForm(e.target);
+    await act('saveSettings', v, { success: 'บันทึกการตั้งค่าเรียบร้อย' });
+  } else if (e.target.id === 'notifyForm') {
+    e.preventDefault();
+    const v = readForm(e.target);
+    if (!Object.values(v).some(Boolean)) return toast('ยังไม่ได้กรอกข้อมูล', 'warning');
+    await act('notifySave', v, { success: 'บันทึกช่องทางแจ้งเตือนเรียบร้อย' });
+  }
+});
+function userForm(u) {
+  const isNew = !u;
+  u = u || { status: 'ACTIVE', role: 'STAFF' };
+  openForm({
+    title: isNew ? 'เพิ่มผู้ใช้' : 'แก้ไขผู้ใช้ ' + u.name, fields: [
+      { name: 'name', label: 'ชื่อ-นามสกุล', required: true, value: u.name, full: true },
+      { name: 'email', label: 'อีเมล', type: 'email', value: u.email }, { name: 'phone', label: 'เบอร์โทร', type: 'tel', value: u.phone },
+      { name: 'role', label: 'บทบาท', type: 'select', required: true, blank: false, options: T('Roles').map((r) => [r.id, r.name]), value: u.role },
+      { name: 'department', label: 'แผนก', type: 'select', options: optOptions('departments'), value: u.department },
+      { name: 'status', label: 'สถานะ', type: 'select', blank: false, options: Object.entries(USTAT).map(([k, v]) => [k, v[0]]), value: u.status },
+      { name: 'password', label: isNew ? 'รหัสผ่านชั่วคราว' : 'ตั้งรหัสผ่านชั่วคราวใหม่ (ไม่บังคับ)', type: 'password', required: isNew, attrs: 'autocomplete="new-password"', help: 'อย่างน้อย 8 ตัว มีทั้งตัวเลขและตัวอักษร • ผู้ใช้ต้องเปลี่ยนเมื่อเข้าสู่ระบบครั้งแรก' }],
+    onSubmit: (v) => { if (!isNew) { v.id = u.id; v.version = u.version; } return act('saveUser', v, { success: isNew ? 'เพิ่มผู้ใช้เรียบร้อย' : 'แก้ไขผู้ใช้เรียบร้อย' }); }
+  });
+}
+async function tempPassword(id) {
+  const u = byId('Users', id); if (!u) return;
+  const c = await confirmBox('ตั้งรหัสผ่านชั่วคราวให้ ' + u.name, 'ผู้ใช้จะถูกออกจากระบบทุกอุปกรณ์ และต้องเปลี่ยนรหัสเมื่อเข้าใช้ครั้งถัดไป', { icon: 'warning', input: 'text', inputLabel: 'รหัสผ่านชั่วคราว (อย่างน้อย 8 ตัว มีตัวเลขและตัวอักษร)', inputValue: 'Wy' + Math.floor(100000 + Math.random() * 899999), required: true, confirmText: 'ตั้งรหัสชั่วคราว', danger: true });
+  if (!c.ok) return;
+  await act('setTempPassword', { id, password: c.value }, { success: 'ตั้งรหัสชั่วคราวเรียบร้อย แจ้งรหัสให้ผู้ใช้ทราบ', close: false });
+}
+function locationForm(l) {
+  const isNew = !l; l = l || { kind: 'ROOM', active: 'TRUE' };
+  openForm({
+    title: isNew ? 'เพิ่มสถานที่' : 'แก้ไขสถานที่ ' + l.name, fields: [
+      { name: 'name', label: 'ชื่อสถานที่', required: true, value: l.name },
+      { name: 'kind', label: 'ประเภท', type: 'select', blank: false, options: Object.entries(LKIND), value: l.kind },
+      { name: 'parent', label: 'อยู่ภายใต้', type: 'select', options: T('Locations').filter((x) => x.id !== l.id).map((x) => [x.id, locPath(x.id)]), blank: '— ไม่มี —', value: l.parent },
+      { name: 'active', label: 'ใช้งานอยู่', type: 'checkbox', value: String(l.active).toUpperCase() === 'TRUE' }],
+    onSubmit: (v) => { if (!isNew) { v.id = l.id; v.version = l.version; } return act('saveLocation', v, { success: isNew ? 'เพิ่มสถานที่เรียบร้อย' : 'แก้ไขสถานที่เรียบร้อย' }); }
+  });
+}
+function printLocations(list) {
+  printDoc('ป้าย QR สถานที่', `<div class="labels">${list.map((l) => `<div class="lbl">${QR.svg(locQrUrl(l))}<b>${esc(locPath(l.id))}</b><small>${esc(l.id)}</small></div>`).join('')}</div>`);
+}
+async function optionAction(kind, id, op) {
+  const o = id ? byId('Options', id) : null;
+  if (op === 'new') {
+    const c = await confirmBox('เพิ่ม' + OKIND[kind], '', { input: 'text', inputLabel: 'ชื่อ', required: true, confirmText: 'เพิ่ม' });
+    if (c.ok) await act('saveOption', { kind, label: c.value.trim() }, { success: 'เพิ่มตัวเลือกเรียบร้อย', toast: true });
+  } else if (op === 'rename') {
+    const c = await confirmBox('เปลี่ยนชื่อ ' + o.label, 'ข้อมูลเดิมที่ใช้ชื่อนี้ยังอ้างอิงได้ (เก็บเป็นชื่อเดิม)', { input: 'text', inputLabel: 'ชื่อใหม่', inputValue: o.label, required: true, confirmText: 'บันทึก' });
+    if (c.ok) await act('saveOption', { id: o.id, version: o.version, kind: o.kind, label: c.value.trim(), active: o.active, sortOrder: o.sortOrder }, { success: 'เปลี่ยนชื่อเรียบร้อย', toast: true });
+  } else {
+    const on = String(o.active).toUpperCase() === 'TRUE';
+    if (on) { const c = await confirmBox('ปิดตัวเลือก "' + o.label + '"?', 'จะไม่แสดงให้เลือกในฟอร์มใหม่ แต่ข้อมูลเดิมไม่เปลี่ยน', { icon: 'warning', confirmText: 'ปิดตัวเลือก', danger: true }); if (!c.ok) return; }
+    await act('saveOption', { id: o.id, version: o.version, kind: o.kind, label: o.label, active: !on, sortOrder: o.sortOrder }, { success: on ? 'ปิดตัวเลือกแล้ว' : 'เปิดตัวเลือกแล้ว', toast: true });
+  }
+}
+
+/* ================================================================ โครงสร้างฐานข้อมูล */
+let schemaCache = null;
+PAGES.schema = {
+  title: 'โครงสร้างฐานข้อมูล',
+  render() {
+    return `<div class="page-head"><div><h2>โครงสร้างฐานข้อมูล (Google Sheet)</h2><div class="muted small">ทุกตารางมีคอลัมน์พื้นฐาน id, owner, createdAt, updatedAt, updatedBy, version</div></div><button class="btn" data-act="schema-load">${schemaCache ? 'โหลดใหม่' : 'โหลดโครงสร้าง'}</button></div><div id="list">${this.list()}</div>`;
+  },
+  list() {
+    if (!schemaCache) return `<div class="card">${empty('กด "โหลดโครงสร้าง" เพื่ออ่านจากเซิร์ฟเวอร์')}</div>`;
+    const s = schemaCache;
+    return `<div class="card" style="margin-bottom:14px"><div class="row"><a class="btn ghost sm" href="${esc(s.dbUrl)}" target="_blank" rel="noopener">เปิด Google Sheet ↗</a><span class="small muted">snapshot rev ${esc(s.rev)} • สร้างเมื่อ ${esc(fmtDT(new Date(Number(s.snapshotAt)).toISOString()))}</span></div></div>
+      <div class="table-wrap"><table class="t"><thead><tr><th>แท็บ</th><th class="num">แถว</th><th>โหมด</th><th>คอลัมน์</th></tr></thead><tbody>${s.tables.map((t) => `<tr><td><b>${esc(t.name)}</b></td><td class="num">${Number(t.rows).toLocaleString('th-TH')}</td><td class="small">${esc(t.mode)}</td><td class="small code" style="white-space:normal">${esc(t.columns.slice(6).join(', '))}</td></tr>`).join('')}</tbody></table></div>`;
+  }
+};
+
+/* ================================================================ ตัวจัดการคลิก (event delegation) */
+const ACT = {
+  go: (el) => go(el.dataset.href),
+  page: (el) => { updateQuery({ page: el.dataset.page }); const l = $('#list'); if (l) l.scrollIntoView({ behavior: 'smooth', block: 'start' }); },
+  filter: (el) => { const patch = { [el.dataset.key]: el.dataset.val }; if (el.dataset.reset) { const { page } = parseHash(); history.replaceState(null, '', '#/' + page + '?' + el.dataset.key + '=' + el.dataset.val); render(true); return; } updateQuery(patch); $$('.tab', el.parentNode).forEach((t) => t.classList.toggle('on', t === el)); },
+  'close-modal': () => closeModal(),
+  'open-item': (el) => openItem(el.dataset.k, el.dataset.id),
+  'open-file': (el) => openFile(el.dataset.id),
+  attach: async (el) => {
+    const inp = document.createElement('input'); inp.type = 'file'; inp.multiple = true; inp.accept = 'image/*,application/pdf';
+    inp.onchange = async () => {
+      const list = Array.from(inp.files || []); if (!list.length) return;
+      if (list.length > 6) return toast('แนบได้สูงสุด 6 ไฟล์ต่อครั้ง', 'warning');
+      busy('กำลังเตรียมไฟล์…');
+      try {
+        const files = await prepareFiles(list);
+        for (let i = 0; i < files.length; i++) { busyStep(`กำลังอัปโหลดไฟล์ ${i + 1} / ${files.length}…`); const st = await uploadFile(el.dataset.entity, el.dataset.id, files[i]); if (st) applyState(st); }
+        busyStep('บันทึกสำเร็จ กำลังอัปเดตข้อมูลล่าสุด…');
+        render(true);
+        const ent = el.dataset.entity, id = el.dataset.id;
+        await done('แนบไฟล์เรียบร้อย');
+        ({ Assets: showAsset, Repairs: showRepair, Loans: showLoan, Disposals: showDisposal })[ent](id);
+      } catch (e) { failBox(e); }
+    };
+    inp.click();
+  },
+  'asset-show': (el) => showAsset(el.dataset.id),
+  'asset-new': () => assetForm(),
+  'asset-edit': (el) => assetForm(byId('Assets', el.dataset.id)),
+  'asset-move': (el) => { closeModal(); go('move?asset=' + el.dataset.id); },
+  'print-label': (el) => printLabels([byId('Assets', el.dataset.id)]),
+  'print-labels': () => { const { q } = parseHash(); printLabels(assetsFiltered(q)); },
+  'scan-asset': () => openScanner((r) => { if (r.type === 'asset') showAsset(r.id); else go('assets?loc=' + r.id); }),
+  'scan-location': () => openScanner((r) => { if (r.type !== 'location') return toast('QR นี้ไม่ใช่สถานที่', 'warning'); const s = $('#p_to'); if (s) s.value = r.id; toast('เลือก ' + locName(r.id)); }, 'สแกน QR สถานที่ปลายทาง'),
+  'picker-pick': (el) => pickerPick(el.dataset.picker, el.dataset.id),
+  'picker-scan': (el) => { const id = el.dataset.picker, keep = $('#modalRoot').innerHTML ? null : null; void keep; scanIntoPicker(id); },
+  'repair-show': (el) => showRepair(el.dataset.id),
+  'repair-new': (el) => repairForm(el.dataset.id),
+  'repair-assess': (el) => repairAction(el.dataset.id, 'assess'),
+  'repair-issue': (el) => repairAction(el.dataset.id, 'issue'),
+  'repair-forward': (el) => repairAction(el.dataset.id, 'forward'),
+  'repair-note': (el) => repairAction(el.dataset.id, 'note'),
+  'repair-budget': (el) => repairAction(el.dataset.id, 'budget'),
+  'repair-complete': (el) => repairAction(el.dataset.id, 'complete'),
+  'repair-costs': (el) => repairAction(el.dataset.id, 'costs'),
+  'repair-approve': (el) => decideRepair(el.dataset.id, true),
+  'repair-reject': (el) => decideRepair(el.dataset.id, false),
+  'repair-accept': (el) => acceptRepair(el.dataset.id, true),
+  'repair-return': (el) => acceptRepair(el.dataset.id, false),
+  'repair-print': (el) => printRepair(el.dataset.id),
+  'budget-approve': (el) => decideBudget(el.dataset.id, true),
+  'budget-reject': (el) => decideBudget(el.dataset.id, false),
+  'cost-add': () => { const tb = $('#costRows'); tb.insertAdjacentHTML('beforeend', window.__costRow({ kind: 'OTHER' }, tb.children.length)); },
+  'cost-remove': (el) => el.closest('tr').remove(),
+  'loan-show': (el) => showLoan(el.dataset.id),
+  'loan-new': (el) => loanForm(null, el.dataset.id),
+  'loan-edit': (el) => loanForm(byId('Loans', el.dataset.id)),
+  'loan-return': (el) => returnForm(el.dataset.id),
+  'loan-print': (el) => printLoan(el.dataset.id),
+  'loan-line-remove': (el) => { const L = window.__loanLines; $$('[data-line-qty]').forEach((x) => { L.lines[Number(x.dataset.lineQty)]._q = x.value; }); L.lines.splice(Number(el.dataset.i), 1); L.drawLines(); },
+  'disposal-show': (el) => showDisposal(el.dataset.id),
+  'disposal-new': (el) => disposalForm(null, el.dataset.id),
+  'disposal-edit': (el) => disposalForm(byId('Disposals', el.dataset.id)),
+  'disposal-approve': (el) => decideDisposal(el.dataset.id, true),
+  'disposal-reject': (el) => decideDisposal(el.dataset.id, false),
+  'user-new': () => userForm(),
+  'user-edit': (el) => userForm(byId('Users', el.dataset.id)),
+  'user-approve': (el) => approveUser(el.dataset.id, true),
+  'user-reject': (el) => approveUser(el.dataset.id, false),
+  'user-temp': (el) => tempPassword(el.dataset.id),
+  'loc-new': () => locationForm(),
+  'loc-edit': (el) => locationForm(byId('Locations', el.dataset.id)),
+  'loc-qr': (el) => { const l = byId('Locations', el.dataset.id); openModal({ title: 'QR ' + l.name, body: `<div class="qrbox">${QR.svg(locQrUrl(l), 'QR ' + l.name)}<div><b>${esc(locPath(l.id))}</b><div class="small code" style="word-break:break-all">${esc(locQrUrl(l))}</div></div></div>`, footer: `<button class="btn" data-act="loc-print-one" data-id="${esc(l.id)}">🖨️ พิมพ์</button>` }); },
+  'loc-print-one': (el) => printLocations([byId('Locations', el.dataset.id)]),
+  'loc-print': () => printLocations(activeLocs()),
+  'opt-new': (el) => optionAction(el.dataset.kind, null, 'new'),
+  'opt-rename': (el) => optionAction(null, el.dataset.id, 'rename'),
+  'opt-toggle': (el) => optionAction(null, el.dataset.id, 'toggle'),
+  'notify-test': () => act('notifyTest', {}, { success: 'ส่งข้อความทดสอบแล้ว ตรวจสถานะในคิว', loading: 'กำลังส่งข้อความทดสอบ…' }),
+  'notify-retry': (el) => act('notifyRetry', { id: el.dataset.id }, { success: 'ส่งใหม่แล้ว', toast: true }),
+  'notify-clear': async (el) => { const c = await confirmBox('ล้างการเชื่อมต่อ ' + el.dataset.ch + '?', 'ระบบจะหยุดส่งแจ้งเตือนทางช่องทางนี้', { icon: 'warning', confirmText: 'ล้างการเชื่อมต่อ', danger: true }); if (c.ok) act('notifyClear', { channel: el.dataset.ch }, { success: 'ล้างการเชื่อมต่อแล้ว' }); },
+  'audit-more': async () => {
+    busy('กำลังโหลดประวัติ…');
+    try {
+      const before = auditNext || (T('AuditLogs')[0] ? 0 : 0);
+      const r = await API.api('auditPage', { before });
+      const d = r.data; auditNext = d.next;
+      auditOlder = auditOlder.concat(d.rows.map((row) => Object.fromEntries(d.h.map((c, i) => [c, row[i]]))).reverse());
+      clearTimeout(busyTimer); Swal.close(); render(true); toast(d.rows.length ? `โหลดเพิ่ม ${d.rows.length} รายการ` : 'ไม่มีรายการเก่ากว่านี้', 'info');
+    } catch (e) { failBox(e); }
+  },
+  'schema-load': async () => { busy('กำลังอ่านโครงสร้างฐานข้อมูล…'); try { schemaCache = (await API.api('getSchema', {})).data; clearTimeout(busyTimer); Swal.close(); render(true); toast('โหลดโครงสร้างแล้ว'); } catch (e) { failBox(e); } },
+  'report': (el) => { go('reports?type=' + el.dataset.type); },
+  'report-print': (el) => reportExport(el.dataset.type, 'print'),
+  'report-csv': (el) => reportExport(el.dataset.type, 'csv'),
+  refresh: () => refresh(true),
+  logout: () => logout(),
+  'change-password': () => changePassword(false)
+};
+function scanIntoPicker(id) {
+  const holder = $('#modalRoot').innerHTML;
+  const inModal = !!holder;
+  if (!inModal) return openScanner((r) => { if (r.type === 'asset') pickerPick(id, r.id); else toast('QR นี้ไม่ใช่สิ่งของ', 'warning'); });
+  // ในโมดอล: ใช้ช่องพิมพ์รหัสแทนการเปิดโมดอลซ้อน + กล้องถ้ามี
+  const hasBD = 'BarcodeDetector' in window;
+  Swal.fire({
+    title: 'สแกน / พิมพ์รหัสสิ่งของ', input: 'text', inputPlaceholder: 'รหัสสิ่งของ หรือ ลิงก์จาก QR', confirmButtonText: 'เลือก', showCancelButton: true, cancelButtonText: 'ยกเลิก',
+    html: hasBD ? '<video class="scan" id="swScan" playsinline muted></video>' : '',
+    didOpen: () => {
+      if (!hasBD) return;
+      const v = $('#swScan');
+      navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } }).then((s) => {
+        v.srcObject = s; v.play(); window.__scanStream = s;
+        const det = new window.BarcodeDetector({ formats: ['qr_code'] });
+        window.__scanTimer = setInterval(async () => { try { const c = await det.detect(v); if (c[0]) { const inp = Swal.getInput(); inp.value = c[0].rawValue; Swal.clickConfirm(); } } catch (e) { } }, 350);
+      }).catch(() => { });
+    },
+    willClose: () => { clearInterval(window.__scanTimer); if (window.__scanStream) window.__scanStream.getTracks().forEach((t) => t.stop()); }
+  }).then((r) => {
+    if (!r.isConfirmed) return;
+    const x = resolveScan(r.value);
+    if (x && x.type === 'asset') pickerPick(id, x.id); else toast('ไม่พบสิ่งของรหัสนี้', 'warning');
+  });
+}
+document.addEventListener('click', (e) => {
+  const el = e.target.closest('[data-act]');
+  if (!el || el.disabled) return;
+  const fn = ACT[el.dataset.act];
+  if (!fn) return;
+  if (el.tagName === 'A' && !el.getAttribute('href')) e.preventDefault();
+  if (el.closest('#nav')) document.body.classList.remove('nav-open');
+  fn(el, e);
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Enter' && e.key !== ' ') return;
+  const el = e.target.closest && e.target.closest('tr[data-act],.list-item[data-act]');
+  if (el && e.target === el) { e.preventDefault(); el.click(); }
+});
+document.addEventListener('input', debounce((e) => { const f = e.target.dataset && e.target.dataset.filter; if (f && e.target.type === 'search') updateQuery({ [f]: e.target.value }); }, 250));
+document.addEventListener('change', (e) => { const f = e.target.dataset && e.target.dataset.filter; if (f && e.target.type !== 'search') updateQuery({ [f]: e.target.value }); });
+$('#menuBtn').addEventListener('click', () => document.body.classList.toggle('nav-open'));
+document.addEventListener('click', (e) => { if (document.body.classList.contains('nav-open') && ((!e.target.closest('#side') && !e.target.closest('#menuBtn')) || e.target.closest('#nav a'))) document.body.classList.remove('nav-open'); });
+
+/* ================================================================ เข้าสู่ระบบ / บัญชี */
+let publicCfg = null;
+function showLogin(mode, token) {
+  stopPolling();
+  $('#app').classList.add('hidden'); $('#login').classList.remove('hidden');
+  document.title = 'เข้าสู่ระบบ • วังยาว';
+  const body = $('#loginBody');
+  const cfg = publicCfg || {};
+  if (cfg.businessName) $('#loginTitle').textContent = cfg.businessName;
+  if (mode === 'register') {
+    $('#loginSub').textContent = 'สมัครสมาชิก (ผู้ดูแลต้องอนุมัติก่อนใช้งาน)';
+    body.innerHTML = `<form id="regForm" class="stack" novalidate>${fieldHtml({ idp: 'l_', name: 'name', label: 'ชื่อ-นามสกุล', required: true })}${fieldHtml({ idp: 'l_', name: 'email', label: 'อีเมล', type: 'email', attrs: 'autocomplete="email"' })}
+      ${fieldHtml({ idp: 'l_', name: 'phone', label: 'เบอร์โทร', type: 'tel', attrs: 'autocomplete="tel"' })}${fieldHtml({ idp: 'l_', name: 'department', label: 'แผนก', type: 'select', options: (cfg.departments || []).map((d) => [d, d]) })}
+      ${fieldHtml({ idp: 'l_', name: 'password', label: 'รหัสผ่าน', type: 'password', required: true, attrs: 'autocomplete="new-password"', help: 'อย่างน้อย 8 ตัว มีทั้งตัวเลขและตัวอักษร' })}${fieldHtml({ idp: 'l_', name: 'password2', label: 'ยืนยันรหัสผ่าน', type: 'password', required: true, attrs: 'autocomplete="new-password"' })}
+      <button class="btn block" type="submit">สมัครสมาชิก</button><button class="linkbtn" type="button" data-login="login">← กลับไปหน้าเข้าสู่ระบบ</button></form>`;
+    $('#l_department').closest('.field').classList.toggle('hidden', !(cfg.departments || []).length);
+  } else if (mode === 'forgot') {
+    $('#loginSub').textContent = 'ลืมรหัสผ่าน';
+    body.innerHTML = `<form id="forgotForm" class="stack" novalidate><p class="muted small">กรอกอีเมลหรือเบอร์โทรที่ใช้สมัคร ระบบจะส่งลิงก์ตั้งรหัสผ่านใหม่ไปที่อีเมล (ใช้ได้ครั้งเดียว ภายใน 15 นาที)</p>
+      ${fieldHtml({ idp: 'l_', name: 'identifier', label: 'อีเมลหรือเบอร์โทร', required: true, attrs: 'autocomplete="username"' })}<button class="btn block" type="submit">ส่งลิงก์ตั้งรหัสผ่าน</button><button class="linkbtn" type="button" data-login="login">← กลับไปหน้าเข้าสู่ระบบ</button></form>`;
+  } else if (mode === 'reset') {
+    $('#loginSub').textContent = 'ตั้งรหัสผ่านใหม่';
+    body.innerHTML = `<form id="resetForm" class="stack" novalidate data-token="${esc(token)}">${fieldHtml({ idp: 'l_', name: 'password', label: 'รหัสผ่านใหม่', type: 'password', required: true, attrs: 'autocomplete="new-password"', help: 'อย่างน้อย 8 ตัว มีทั้งตัวเลขและตัวอักษร' })}
+      ${fieldHtml({ idp: 'l_', name: 'password2', label: 'ยืนยันรหัสผ่านใหม่', type: 'password', required: true, attrs: 'autocomplete="new-password"' })}<button class="btn block" type="submit">ตั้งรหัสผ่านใหม่</button><button class="linkbtn" type="button" data-login="login">← กลับไปหน้าเข้าสู่ระบบ</button></form>`;
+  } else {
+    $('#loginSub').textContent = 'ทะเบียนสิ่งของ แจ้งซ่อม และยืมคืน';
+    body.innerHTML = `<form id="loginForm" class="stack" novalidate>${fieldHtml({ idp: 'l_', name: 'identifier', label: 'อีเมลหรือเบอร์โทร', required: true, attrs: 'autocomplete="username" inputmode="email"' })}
+      ${fieldHtml({ idp: 'l_', name: 'password', label: 'รหัสผ่าน', type: 'password', required: true, attrs: 'autocomplete="current-password"' })}<button class="btn block" type="submit">เข้าสู่ระบบ</button></form>
+      <div id="gbtn"></div><div class="login-links">${cfg.allowRegister === false ? '<span></span>' : '<button class="linkbtn" type="button" data-login="register">สมัครสมาชิก</button>'}<button class="linkbtn" type="button" data-login="forgot">ลืมรหัสผ่าน?</button></div>`;
+    setupGoogle();
+  }
+  if (!publicCfg) API.call('ping').then((d) => { publicCfg = Object.assign({}, d.config || {}); if (!$('#app').classList.contains('hidden')) return; if (publicCfg.businessName) $('#loginTitle').textContent = publicCfg.businessName; if (mode !== 'reset' && mode !== 'forgot' && mode !== 'register') showLogin(mode); }).catch(() => { publicCfg = {}; });
+}
+function setupGoogle() {
+  const g = publicCfg && publicCfg.googleLogin;
+  if (!g || !g.enabled || !g.clientId) return;
+  const init = () => {
+    if (!window.google || !google.accounts) return;
+    google.accounts.id.initialize({ client_id: g.clientId, callback: (r) => loginWith('loginGoogle', { credential: r.credential }) });
+    const el = $('#gbtn'); if (el) google.accounts.id.renderButton(el, { theme: 'outline', size: 'large', shape: 'pill', text: 'signin_with', locale: 'th' });
+  };
+  if (window.google && google.accounts) return init();
+  const s = document.createElement('script'); s.src = 'https://accounts.google.com/gsi/client'; s.async = true; s.onload = init; document.head.appendChild(s);
+}
+document.addEventListener('click', (e) => { const b = e.target.closest('[data-login]'); if (b) showLogin(b.dataset.login); });
+async function loginWith(method, payload) {
+  busy('กำลังตรวจบัญชี…');
+  try {
+    const d = await API.call(method, payload);
+    busyStep('เข้าสู่ระบบสำเร็จ กำลังโหลดข้อมูล…');
+    API.setToken(d.token);
+    applyState(d.state);
+    clearTimeout(busyTimer); Swal.close();
+    enterApp();
+    toast('ยินดีต้อนรับ ' + d.user.name);
+  } catch (e) { failBox(e); }
+}
+document.addEventListener('submit', async (e) => {
+  const f = e.target, v = () => readForm(f);
+  if (f.id === 'loginForm') {
+    e.preventDefault(); const x = v();
+    if (!x.identifier || !x.password) return toast('กรุณากรอกอีเมล/เบอร์โทร และรหัสผ่าน', 'warning');
+    return loginWith('login', x);
+  }
+  if (f.id === 'regForm') {
+    e.preventDefault(); const x = v();
+    if (!x.name || !x.password) return toast('กรุณากรอกข้อมูลให้ครบ', 'warning');
+    if (!x.email && !x.phone) return toast('กรุณากรอกอีเมลหรือเบอร์โทร', 'warning');
+    if (x.password !== x.password2) return toast('รหัสผ่านสองช่องไม่ตรงกัน', 'warning');
+    busy('กำลังส่งใบสมัคร…');
+    try { await API.call('register', x); await done('สมัครสมาชิกเรียบร้อย กรุณารอผู้ดูแลอนุมัติ'); showLogin('login'); } catch (err) { failBox(err); }
+  }
+  if (f.id === 'forgotForm') {
+    e.preventDefault(); const x = v();
+    if (!x.identifier) return toast('กรุณากรอกอีเมลหรือเบอร์โทร', 'warning');
+    busy('กำลังส่งลิงก์…');
+    try { const d = await API.call('requestPasswordReset', x); clearTimeout(busyTimer); await Swal.fire({ icon: 'success', title: 'ส่งคำขอแล้ว', text: d.message, confirmButtonText: 'ตกลง' }); showLogin('login'); } catch (err) { failBox(err); }
+  }
+  if (f.id === 'resetForm') {
+    e.preventDefault(); const x = v();
+    if (x.password !== x.password2) return toast('รหัสผ่านสองช่องไม่ตรงกัน', 'warning');
+    busy('กำลังตั้งรหัสผ่านใหม่…');
+    try { await API.call('resetPassword', { token: f.dataset.token, password: x.password }); await done('ตั้งรหัสผ่านใหม่เรียบร้อย'); showLogin('login'); } catch (err) { failBox(err); }
+  }
+});
+function changePassword(force) {
+  openForm({
+    title: force ? 'กรุณาเปลี่ยนรหัสผ่านชั่วคราว' : 'เปลี่ยนรหัสผ่าน', locked: force,
+    before: force ? '<p class="muted">บัญชีนี้ใช้รหัสผ่านชั่วคราว กรุณาตั้งรหัสผ่านใหม่ก่อนใช้งาน</p>' : '',
+    fields: [{ name: 'current', label: 'รหัสผ่านปัจจุบัน', type: 'password', required: true, full: true, attrs: 'autocomplete="current-password"' },
+      { name: 'next', label: 'รหัสผ่านใหม่', type: 'password', required: true, attrs: 'autocomplete="new-password"', help: 'อย่างน้อย 8 ตัว มีทั้งตัวเลขและตัวอักษร' },
+      { name: 'next2', label: 'ยืนยันรหัสผ่านใหม่', type: 'password', required: true, attrs: 'autocomplete="new-password"' }],
+    submitText: 'เปลี่ยนรหัสผ่าน',
+    onSubmit: (v) => {
+      if (v.next !== v.next2) return toast('รหัสผ่านใหม่สองช่องไม่ตรงกัน', 'warning');
+      if (v.next.length < 8) return toast('รหัสผ่านใหม่ต้องมีอย่างน้อย 8 ตัวอักษร', 'warning');
+      return act('changePassword', { current: v.current, next: v.next }, { success: 'เปลี่ยนรหัสผ่านเรียบร้อย' });
+    }
+  });
+  if (force) $('#modalRoot .modal-f').insertAdjacentHTML('afterbegin', '<button class="btn lav" type="button" data-act="logout">ออกจากระบบ</button>');
+}
+async function logout(skipConfirm) {
+  if (!skipConfirm) { const c = await confirmBox('ออกจากระบบ?', 'คุณต้องเข้าสู่ระบบใหม่เพื่อใช้งานต่อ', { confirmText: 'ออกจากระบบ' }); if (!c.ok) return; }
+  const t = API.token;
+  API.setToken(''); closeModal(); S.me = null; S.t = {}; S.rev = '';
+  showLogin('login');
+  toast('ออกจากระบบแล้ว', 'info');
+  if (t) API.post({ method: 'logout', token: t, payload: {} }).catch(() => { });
+}
+function sessionExpired(msg) {
+  stopPolling();
+  API.setToken(''); closeModal(); S.me = null; S.rev = '';
+  return Swal.fire({ icon: 'warning', title: 'เซสชันหมดอายุ', text: msg || 'กรุณาเข้าสู่ระบบใหม่', confirmButtonText: 'เข้าสู่ระบบ', allowOutsideClick: false }).then(() => showLogin('login'));
+}
+
+/* ================================================================ รีเฟรช / poll / ออนไลน์ */
+let pollTimer = null;
+async function refresh(manual) {
+  if (!API.token) return;
+  try {
+    const r = await API.post({ method: 'api', token: API.token, action: 'getState', payload: {}, rev: S.rev });
+    if (r.unchanged) { S.at = new Date(); updateChrome(); }
+    else { applyState(r.state); if (!modalOpen()) render(true); }
+    if (manual) toast('อัปเดตข้อมูลล่าสุดแล้ว');
+  } catch (e) { if (manual || e.code === 'E_AUTH') failBox(e); }
+}
+function startPolling() {
+  stopPolling();
+  pollTimer = setInterval(() => {
+    if (document.visibilityState !== 'visible' || modalOpen() || (Swal.isVisible && Swal.isVisible()) || !navigator.onLine) return;
+    refresh(false);
+  }, 120000);
+}
+function stopPolling() { clearInterval(pollTimer); pollTimer = null; }
+function setNet(on) { const d = $('#netDot'), t = $('#netText'); if (d) d.classList.toggle('off', !on); if (t) t.textContent = on ? 'ออนไลน์' : 'ออฟไลน์'; }
+window.addEventListener('offline', () => { setNet(false); toast('อินเทอร์เน็ตหลุด การบันทึกจะทำไม่ได้จนกว่าจะกลับมา', 'warning'); });
+window.addEventListener('online', () => { setNet(true); toast('อินเทอร์เน็ตกลับมาแล้ว'); refresh(false); });
+
+/* ================================================================ เริ่มต้น */
+function enterApp() {
+  $('#loginBody').innerHTML = '';
+  $('#login').classList.add('hidden'); $('#app').classList.remove('hidden');
+  if (!location.hash || location.hash === '#') history.replaceState(null, '', '#/dashboard');
+  updateChrome(); render();
+  setNet(navigator.onLine);
+  startPolling();
+  const dl = safeJson(sessionStorage.getItem('wy_deeplink'));
+  if (dl) { sessionStorage.removeItem('wy_deeplink'); if (dl.asset) showAsset(dl.asset); else if (dl.location) go('assets?loc=' + encodeURIComponent(dl.location)); }
+  if (S.me && S.me.mustChangePassword) changePassword(true);
+}
+(async function boot() {
+  const params = new URLSearchParams(location.search);
+  if (params.get('asset') || params.get('location')) sessionStorage.setItem('wy_deeplink', JSON.stringify({ asset: params.get('asset'), location: params.get('location') }));
+  const reset = params.get('reset');
+  if ([...params.keys()].length) history.replaceState(null, '', location.pathname + location.hash);
+  if (reset) return showLogin('reset', reset);
+  if (!API.token) return showLogin('login');
+  try {
+    const r = await API.post({ method: 'api', token: API.token, action: 'getState', payload: {} });
+    applyState(r.state); enterApp();
+  } catch (e) {
+    API.setToken('');
+    showLogin('login');
+    if (e.code !== 'E_AUTH') failBox(e);
+  }
+})();
+</script>
+</body>
+</html>
