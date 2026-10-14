@@ -636,8 +636,9 @@ function resolveScan(text) {
   text = String(text || '').trim();
   try {
     const u = new URL(text);
-    if (u.searchParams.get('asset')) return { type: 'asset', id: u.searchParams.get('asset') };
-    if (u.searchParams.get('location')) return { type: 'location', id: u.searchParams.get('location') };
+    const qa = u.searchParams.get('asset'), ql = u.searchParams.get('location');
+    if (qa && byId('Assets', qa)) return { type: 'asset', id: qa };
+    if (ql && byId('Locations', ql)) return { type: 'location', id: ql };
   } catch (e) { }
   const a = T('Assets').find((x) => x.code.toLowerCase() === text.toLowerCase() || x.id === text);
   if (a) return { type: 'asset', id: a.id };
@@ -645,32 +646,93 @@ function resolveScan(text) {
   if (l) return { type: 'location', id: l.id };
   return null;
 }
+let jsqrPromise = null;
+/** ถอดรหัส QR สำรองเมื่อเบราว์เซอร์ไม่มี BarcodeDetector (Edge/Chrome บน Windows, Firefox): โหลด jsQR เมื่อเปิดกล้องครั้งแรกเท่านั้น */
+function loadJsQR() {
+  if (window.jsQR) return Promise.resolve(window.jsQR);
+  if (!jsqrPromise) jsqrPromise = new Promise((resolve, reject) => {
+    const sc = document.createElement('script');
+    sc.src = 'https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js';
+    sc.integrity = 'sha384-b5Ya4Bq3qCyz39m2ISh+4DxjAIljdeFwK/BsXLuj9gugaNwAcj/ia15fxNZL9Nlx';
+    sc.crossOrigin = 'anonymous';
+    sc.onload = () => resolve(window.jsQR);
+    sc.onerror = () => { jsqrPromise = null; reject(new Error('โหลดตัวอ่าน QR ไม่ได้')); };
+    document.head.appendChild(sc);
+  });
+  return jsqrPromise;
+}
+/**
+ * เปิดกล้องหลังแล้วอ่าน QR ต่อเนื่อง เรียก onText(ข้อความ) เมื่อเจอ
+ * status(ข้อความ) แจ้งสถานะให้ผู้ใช้เห็น  คืนฟังก์ชันปิดกล้อง
+ */
+function startCamera(video, onText, status) {
+  let stream = null, timer = null, stopped = false, busyFrame = false;
+  const stop = () => { stopped = true; clearInterval(timer); if (stream) { stream.getTracks().forEach((t) => t.stop()); stream = null; } };
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    status('เปิดกล้องไม่ได้: ต้องเปิดเว็บผ่าน https:// และใช้เบราว์เซอร์ที่รองรับกล้อง กรุณาพิมพ์รหัสแทน');
+    return stop;
+  }
+  status('กำลังเปิดกล้อง… (กด "อนุญาต" เมื่อเบราว์เซอร์ถาม)');
+  const cv = document.createElement('canvas'), cx = cv.getContext('2d', { willReadFrequently: true });
+  (async () => {
+    try {
+      let detect;
+      if ('BarcodeDetector' in window) {
+        const det = new window.BarcodeDetector({ formats: ['qr_code'] });
+        detect = async () => { const c = await det.detect(video); return c[0] ? c[0].rawValue : ''; };
+      } else {
+        const jsQR = await loadJsQR();
+        detect = async () => {
+          const w = video.videoWidth, h = video.videoHeight;
+          if (!w || !h) return '';
+          const k = Math.min(1, 720 / Math.max(w, h));
+          cv.width = Math.round(w * k); cv.height = Math.round(h * k);
+          cx.drawImage(video, 0, 0, cv.width, cv.height);
+          const r = jsQR(cx.getImageData(0, 0, cv.width, cv.height).data, cv.width, cv.height, { inversionAttempts: 'dontInvert' });
+          return r ? r.data : '';
+        };
+      }
+      const s = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } }, audio: false });
+      if (stopped) { s.getTracks().forEach((t) => t.stop()); return; }
+      stream = s; video.srcObject = s; video.setAttribute('playsinline', ''); video.muted = true;
+      await video.play().catch(() => { });
+      status('เล็งกล้องไปที่ QR บนสิ่งของ หรือป้ายสถานที่');
+      timer = setInterval(async () => {
+        if (stopped || busyFrame || video.readyState < 2) return;
+        busyFrame = true;
+        try { const t = await detect(); if (t && !stopped) onText(t); } catch (e) { } finally { busyFrame = false; }
+      }, 250);
+    } catch (e) {
+      const n = e && e.name;
+      status(n === 'NotAllowedError' || n === 'SecurityError' ? 'เบราว์เซอร์ไม่อนุญาตให้ใช้กล้อง — กดไอคอนกุญแจ/กล้องข้างช่องที่อยู่เว็บเพื่ออนุญาต แล้วเปิดสแกนใหม่ หรือพิมพ์รหัสแทน'
+        : n === 'NotFoundError' || n === 'OverconstrainedError' ? 'ไม่พบกล้องในอุปกรณ์นี้ กรุณาพิมพ์รหัสแทน'
+          : n === 'NotReadableError' ? 'กล้องกำลังถูกใช้โดยโปรแกรมอื่น กรุณาปิดแล้วลองใหม่ หรือพิมพ์รหัสแทน'
+            : (e && e.message) || 'เปิดกล้องไม่สำเร็จ กรุณาพิมพ์รหัสแทน');
+    }
+  })();
+  return stop;
+}
 function openScanner(onResult, title) {
-  let stream = null, timer = null, stopped = false;
-  const stop = () => { stopped = true; clearInterval(timer); if (stream) stream.getTracks().forEach((t) => t.stop()); };
-  const hasBD = 'BarcodeDetector' in window;
+  let stop = () => { };
   openModal({
-    title: title || 'สแกน QR', onClose: stop,
-    body: `<div class="stack">${hasBD ? '<video class="scan" playsinline muted></video><p class="muted small" id="scanMsg">เล็งกล้องไปที่ QR</p>' : '<p class="muted">เบราว์เซอร์นี้ยังไม่รองรับการสแกนด้วยกล้อง กรุณาพิมพ์รหัสแทน</p>'}
+    title: title || 'สแกน QR', onClose: () => stop(),
+    body: `<div class="stack"><video class="scan" playsinline muted></video><p class="muted small" id="scanMsg" role="status"></p>
       <div class="field"><label for="scanCode">หรือพิมพ์รหัสสิ่งของ / รหัสสถานที่</label><div class="row"><input id="scanCode" class="input" style="flex:1" placeholder="เช่น WYA-20261013-00001"><button class="btn" id="scanGo" type="button">ค้นหา</button></div></div></div>`,
     footer: '<button class="btn lav" data-act="close-modal" type="button">ปิด</button>'
   });
-  const finish = (txt) => {
+  let last = '', lastAt = 0;
+  const finish = (txt, fromCamera) => {
     const r = resolveScan(txt);
-    if (!r) { toast('ไม่พบรหัส "' + txt + '"', 'warning'); return; }
+    if (!r) {
+      if (fromCamera && txt === last && Date.now() - lastAt < 3000) return;   // QR อื่นที่ไม่ใช่ของระบบ: เตือนครั้งเดียวต่อ 3 วินาที
+      last = txt; lastAt = Date.now();
+      toast(fromCamera ? 'QR นี้ไม่ใช่ของระบบวังยาว' : 'ไม่พบรหัส "' + txt + '"', 'warning'); return;
+    }
     stop(); closeModal(); onResult(r);
   };
   $('#scanGo').onclick = () => finish($('#scanCode').value);
   $('#scanCode').onkeydown = (e) => { if (e.key === 'Enter') { e.preventDefault(); finish(e.target.value); } };
-  if (hasBD) {
-    const video = $('video.scan');
-    navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } }).then((s) => {
-      if (stopped) { s.getTracks().forEach((t) => t.stop()); return; }
-      stream = s; video.srcObject = s; video.play();
-      const det = new window.BarcodeDetector({ formats: ['qr_code'] });
-      timer = setInterval(async () => { try { const c = await det.detect(video); if (c[0]) finish(c[0].rawValue); } catch (e) { } }, 350);
-    }).catch(() => { const m = $('#scanMsg'); if (m) m.textContent = 'เปิดกล้องไม่ได้ (ไม่ได้อนุญาต) กรุณาพิมพ์รหัสแทน'; });
-  }
+  stop = startCamera($('video.scan'), (t) => finish(t, true), (m) => { const el = $('#scanMsg'); if (el) el.textContent = m; });
 }
 
 /* ---------------------------------------------------------------- โมดอล + ฟอร์ม */
@@ -1850,24 +1912,17 @@ const ACT = {
   'change-password': () => changePassword(false)
 };
 function scanIntoPicker(id) {
-  const holder = $('#modalRoot').innerHTML;
-  const inModal = !!holder;
-  if (!inModal) return openScanner((r) => { if (r.type === 'asset') pickerPick(id, r.id); else toast('QR นี้ไม่ใช่สิ่งของ', 'warning'); });
-  // ในโมดอล: ใช้ช่องพิมพ์รหัสแทนการเปิดโมดอลซ้อน + กล้องถ้ามี
-  const hasBD = 'BarcodeDetector' in window;
+  if (!$('#modalRoot').innerHTML) return openScanner((r) => { if (r.type === 'asset') pickerPick(id, r.id); else toast('QR นี้ไม่ใช่สิ่งของ', 'warning'); });
+  // อยู่ในฟอร์ม (โมดอลเปิดอยู่): เปิดกล้องในกล่องป๊อปอัปแทนการซ้อนโมดอล
+  let stop = () => { };
   Swal.fire({
-    title: 'สแกน / พิมพ์รหัสสิ่งของ', input: 'text', inputPlaceholder: 'รหัสสิ่งของ หรือ ลิงก์จาก QR', confirmButtonText: 'เลือก', showCancelButton: true, cancelButtonText: 'ยกเลิก',
-    html: hasBD ? '<video class="scan" id="swScan" playsinline muted></video>' : '',
+    title: 'สแกน QR สิ่งของ', input: 'text', inputPlaceholder: 'หรือพิมพ์รหัสสิ่งของ / วางลิงก์จาก QR', confirmButtonText: 'เลือก', showCancelButton: true, cancelButtonText: 'ยกเลิก',
+    html: '<video class="scan" id="swScan" playsinline muted></video><p class="muted small" id="swScanMsg" role="status"></p>',
     didOpen: () => {
-      if (!hasBD) return;
-      const v = $('#swScan');
-      navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } }).then((s) => {
-        v.srcObject = s; v.play(); window.__scanStream = s;
-        const det = new window.BarcodeDetector({ formats: ['qr_code'] });
-        window.__scanTimer = setInterval(async () => { try { const c = await det.detect(v); if (c[0]) { const inp = Swal.getInput(); inp.value = c[0].rawValue; Swal.clickConfirm(); } } catch (e) { } }, 350);
-      }).catch(() => { });
+      stop = startCamera($('#swScan'), (t) => { const r = resolveScan(t); if (r && r.type === 'asset') { Swal.getInput().value = t; Swal.clickConfirm(); } else if (!r) toast('QR นี้ไม่ใช่ของระบบวังยาว', 'warning'); },
+        (m) => { const el = $('#swScanMsg'); if (el) el.textContent = m; });
     },
-    willClose: () => { clearInterval(window.__scanTimer); if (window.__scanStream) window.__scanStream.getTracks().forEach((t) => t.stop()); }
+    willClose: () => stop()
   }).then((r) => {
     if (!r.isConfirmed) return;
     const x = resolveScan(r.value);

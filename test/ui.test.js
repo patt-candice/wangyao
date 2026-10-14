@@ -15,7 +15,7 @@ const { startStack, OWNER } = require('./server');
 
 const SHOTS = process.env.SHOTS || path.join(__dirname, 'shots');
 fs.mkdirSync(SHOTS, { recursive: true });
-const BROWSER = ['C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe', 'C:/Program Files/Google/Chrome/Application/chrome.exe'].find((p) => fs.existsSync(p));
+const BROWSER = [process.env.BROWSER_PATH, 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe', 'C:/Program Files/Google/Chrome/Application/chrome.exe'].filter(Boolean).find((p) => fs.existsSync(p));
 
 let pass = 0, failN = 0;
 const timings = {};
@@ -354,6 +354,79 @@ const SWAL_SPY = `(() => {
     await mp.screenshot({ path: path.join(SHOTS, '24-form-mobile.png') });
     assert.deepStrictEqual(merr, []);
   });
+
+  console.log('\n[UI] สแกน QR ด้วยกล้อง (ไม่มี BarcodeDetector เหมือน Edge/Chrome บน Windows)');
+  const camCtx = await browser.newContext({ viewport: { width: 1280, height: 800 }, locale: 'th-TH' });
+  await camCtx.addInitScript(() => { delete window.BarcodeDetector; });
+  const cp = await camCtx.newPage();
+  const cerr = []; cp.on('pageerror', (e) => cerr.push(e.message));
+  const firstAsset = () => new S.env.ctx.Db_(S.env.ctx.loadSnapshot_()).rows('Assets').find((x) => x.condition === 'READY' && Number(x.qty) > 0);
+  /** จำลองกล้อง: สตรีมจาก canvas ที่วาด QR ของ url ที่กำหนด */
+  const installCam = (url) => cp.evaluate((u) => {
+    window.__camStarts = 0; window.__stops = 0;
+    navigator.mediaDevices.getUserMedia = async () => {
+      window.__camStarts++;
+      const cv = document.createElement('canvas'); cv.width = 640; cv.height = 480; const x = cv.getContext('2d');
+      const img = new Image(); img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(QR.svg(u));
+      await img.decode();
+      const draw = () => { x.fillStyle = '#fff'; x.fillRect(0, 0, 640, 480); x.drawImage(img, 80, 0, 480, 480); };
+      draw(); setInterval(draw, 100);
+      const s = cv.captureStream(10);
+      s.getTracks().forEach((t) => { const o = t.stop.bind(t); t.stop = () => { window.__stops++; o(); }; });
+      return s;
+    };
+  }, url);
+  await t('กดสแกน -> เปิดกล้อง -> ถอดรหัส QR ของสิ่งของ -> เปิดรายละเอียด (ผ่าน jsQR)', async () => {
+    await cp.goto(S.webUrl); await cp.waitForSelector('#loginForm');
+    await cp.fill('#l_identifier', OWNER.email); await cp.fill('#l_password', OWNER.password); await cp.click('#loginForm button[type=submit]');
+    await cp.waitForSelector('#page .stat');
+    const a = firstAsset();
+    assert(a, 'ต้องมีสิ่งของ');
+    assert.strictEqual(await cp.evaluate(() => 'BarcodeDetector' in window), false);
+    await cp.goto(S.webUrl + '/#/assets'); await cp.waitForSelector('[data-act="scan-asset"]');
+    await installCam(S.webUrl + '/?asset=' + a.id);
+    await cp.click('[data-act="scan-asset"]');
+    await cp.waitForSelector('video.scan');
+    await cp.waitForSelector('.modal .qrbox svg', { timeout: 20000 });
+    assert((await cp.textContent('.modal .kv .code')).trim() === a.code, 'ต้องเปิดสิ่งของที่สแกน');
+    assert.strictEqual(await cp.evaluate(() => !!window.jsQR), true, 'ต้องโหลด jsQR สำรอง');
+    assert.strictEqual(await cp.evaluate(() => window.__camStarts), 1);
+    await cp.waitForFunction(() => window.__stops >= 1, null, { timeout: 5000 });
+    await cp.screenshot({ path: path.join(SHOTS, '40-scan-result.png') });
+  });
+  await t('QR ที่ไม่ใช่ของระบบ: เตือน แต่ไม่ปิดหน้าสแกน และปิดแล้วกล้องดับ', async () => {
+    await cp.click('.modal [data-act="close-modal"]');
+    await installCam('https://example.com/?asset=NOT-A-REAL-ASSET-ID');
+    await cp.click('[data-act="scan-asset"]');
+    await cp.waitForSelector('video.scan');
+    await cp.waitForFunction(() => /เล็งกล้อง/.test(document.querySelector('#scanMsg').textContent));
+    await cp.waitForSelector('.swal2-toast >> text=ไม่ใช่ของระบบวังยาว', { timeout: 15000 });
+    assert(await cp.isVisible('video.scan'), 'QR แปลกปลอมต้องไม่ปิดหน้าสแกน');
+    await cp.click('.modal [data-act="close-modal"]');
+    await cp.waitForFunction(() => window.__stops >= 1, null, { timeout: 5000 });
+  });
+  await t('สแกนจากช่อง 📷 ในฟอร์มแจ้งซ่อม -> เลือกสิ่งของให้อัตโนมัติ', async () => {
+    const a = firstAsset();
+    await installCam(S.webUrl + '/?asset=' + a.id);
+    await cp.goto(S.webUrl + '/#/repairs'); await cp.waitForSelector('[data-act="repair-new"]');
+    await cp.click('[data-act="repair-new"]'); await cp.waitForSelector('[data-picker="rpAsset"]');
+    await cp.click('[data-act="picker-scan"]');
+    await cp.waitForSelector('.picker-sel .chip', { timeout: 20000 });
+    assert((await cp.textContent('.picker-sel .chip')).includes(a.code));
+    await cp.screenshot({ path: path.join(SHOTS, '41-scan-in-form.png') });
+  });
+  await t('ไม่อนุญาตกล้อง -> แจ้งสาเหตุภาษาไทย แล้วพิมพ์รหัสแทนได้', async () => {
+    await cp.click('.modal [data-act="close-modal"]');
+    await cp.goto(S.webUrl + '/#/assets'); await cp.waitForSelector('[data-act="scan-asset"]');
+    await cp.evaluate(() => { navigator.mediaDevices.getUserMedia = async () => { const e = new Error('x'); e.name = 'NotAllowedError'; throw e; }; });
+    await cp.click('[data-act="scan-asset"]');
+    await cp.waitForFunction(() => /ไม่อนุญาตให้ใช้กล้อง/.test((document.querySelector('#scanMsg') || {}).textContent || ''));
+    await cp.screenshot({ path: path.join(SHOTS, '42-scan-denied.png') });
+    await cp.fill('#scanCode', firstAsset().code); await cp.click('#scanGo');
+    await cp.waitForSelector('.modal .qrbox svg');
+  });
+  await t('ไม่มี error ในหน้าสแกน', async () => { assert.deepStrictEqual(cerr, []); });
+  await camCtx.close();
 
   console.log('\n[UI] CDN ของ SweetAlert2 ล่ม');
   await t('ใช้ป๊อปอัปสำรองในหน้า (ไม่มี error) ยังแจ้งผิดพลาดได้', async () => {
